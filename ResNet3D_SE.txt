@@ -1,0 +1,384 @@
+ResNet3D_SE
+Device: cuda
+GPU   : NVIDIA GeForce RTX 3050 Ti Laptop GPU
+Loaded 1362 labelled scans from d:\CODE\DaT Parkinson's Challenge\Dataset\train_labels.csv
+Matched to disk: 1362 scans
+Matched to disk: 1362 scans
+Using 15 pseudo-site groups (from scanner spacing)
+
+============================================================
+FOLD 0  |  train=834  val=528
+============================================================
+  Train: 402 normal / 432 abnormal  (ratio=1.07)
+  Val  : 213 normal / 315 abnormal  (ratio=1.48)
+  Model: ResNet3D_SE  |  Total: 8.31M  |  Trainable: 8.31M
+  AMP=True  |  AccumSteps=2  |  EffBatch=8
+  Loss: Focal BCE  gamma=2.0  label_smooth=0.02  pos_weight=0.93
+  Epoch 001/100 | lr=1.28e-05 | train_ll=0.6977 | val_ll=0.6998  val_auc=0.5686 | 469s
+    *** New best val_log_loss=0.6998  checkpoint saved ***
+  Epoch 002/100 | lr=1.52e-05 | train_ll=0.6845 | val_ll=0.6963  val_auc=0.5218 | 427s
+    *** New best val_log_loss=0.6963  checkpoint saved ***
+  Epoch 003/100 | lr=1.92e-05 | train_ll=0.6778 | val_ll=0.7117  val_auc=0.5139 | 412s
+  Epoch 004/100 | lr=2.47e-05 | train_ll=0.6507 | val_ll=0.7034  val_auc=0.5243 | 416s
+  Epoch 005/100 | lr=3.17e-05 | train_ll=0.6433 | val_ll=0.7178  val_auc=0.4309 | 427s
+  Epoch 006/100 | lr=4.00e-05 | train_ll=0.6319 | val_ll=0.7285  val_auc=0.4842 | 407s
+  Epoch 007/100 | lr=4.97e-05 | train_ll=0.6131 | val_ll=0.7083  val_auc=0.4085 | 407s
+  Epoch 008/100 | lr=6.05e-05 | train_ll=0.6168 | val_ll=0.6971  val_auc=0.4815 | 397s
+  Epoch 009/100 | lr=7.25e-05 | train_ll=0.6231 | val_ll=0.6800  val_auc=0.5176 | 395s
+    *** New best val_log_loss=0.6800  checkpoint saved ***
+  Epoch 010/100 | lr=8.53e-05 | train_ll=0.6395 | val_ll=0.7024  val_auc=0.4746 | 425s
+  Epoch 011/100 | lr=9.89e-05 | train_ll=0.6431 | val_ll=0.6730  val_auc=0.5526 | 427s
+    *** New best val_log_loss=0.6730  checkpoint saved ***
+  Epoch 012/100 | lr=1.13e-04 | train_ll=0.6288 | val_ll=0.6836  val_auc=0.5047 | 427s
+  Epoch 013/100 | lr=1.28e-04 | train_ll=0.6068 | val_ll=0.6867  val_auc=0.5260 | 427s
+  Epoch 014/100 | lr=1.43e-04 | train_ll=0.6126 | val_ll=0.6714  val_auc=0.5397 | 428s
+    *** New best val_log_loss=0.6714  checkpoint saved ***
+  Epoch 015/100 | lr=1.58e-04 | train_ll=0.6070 | val_ll=0.6792  val_auc=0.5344 | 426s
+  Epoch 016/100 | lr=1.73e-04 | train_ll=0.5726 | val_ll=0.6778  val_auc=0.5292 | 424s
+  Epoch 017/100 | lr=1.88e-04 | train_ll=0.5479 | val_ll=0.7047  val_auc=0.5391 | 425s
+  Epoch 018/100 | lr=2.03e-04 | train_ll=0.5565 | val_ll=0.6827  val_auc=0.5126 | 427s
+  Epoch 019/100 | lr=2.17e-04 | train_ll=0.5072 | val_ll=0.7093  val_auc=0.5285 | 431s
+  Epoch 020/100 | lr=2.31e-04 | train_ll=0.5250 | val_ll=0.6861  val_auc=0.5446 | 431s
+  Epoch 021/100 | lr=2.43e-04 | train_ll=0.5069 | val_ll=0.7398  val_auc=0.4867 | 434s
+  Epoch 022/100 | lr=2.55e-04 | train_ll=0.4893 | val_ll=0.7056  val_auc=0.5145 | 436s
+  Epoch 023/100 | lr=2.65e-04 | train_ll=0.4646 | val_ll=0.7060  val_auc=0.5300 | 433s
+  Epoch 024/100 | lr=2.75e-04 | train_ll=0.4095 | val_ll=0.7353  val_auc=0.5259 | 433s
+  Epoch 025/100 | lr=2.83e-04 | train_ll=0.4007 | val_ll=0.7439  val_auc=0.5081 | 433s
+  Epoch 026/100 | lr=2.89e-04 | train_ll=0.4001 | val_ll=0.7118  val_auc=0.5229 | 434s
+  Epoch 027/100 | lr=2.94e-04 | train_ll=0.3306 | val_ll=0.8006  val_auc=0.4869 | 436s
+  Epoch 028/100 | lr=2.98e-04 | train_ll=0.3558 | val_ll=0.7154  val_auc=0.5266 | 437s
+  Epoch 029/100 | lr=3.00e-04 | train_ll=0.3627 | val_ll=0.7678  val_auc=0.5191 | 436s
+  Epoch 030/100 | lr=3.00e-04 | train_ll=0.3192 | val_ll=0.7189  val_auc=0.5336 | 439s
+  Epoch 031/100 | lr=3.00e-04 | train_ll=0.3028 | val_ll=0.7644  val_auc=0.5035 | 462s
+  Epoch 032/100 | lr=2.99e-04 | train_ll=0.2700 | val_ll=0.7514  val_auc=0.5348 | 484s
+  Epoch 033/100 | lr=2.98e-04 | train_ll=0.2972 | val_ll=0.7256  val_auc=0.5559 | 490s
+  Epoch 034/100 | lr=2.97e-04 | train_ll=0.2558 | val_ll=0.7822  val_auc=0.5284 | 481s
+  Early stopping at epoch 34 (patience=20)
+
+  ── Fold 0 End-of-Training Diagnostics ──────────────────
+  Confusion matrix (threshold=0.5):
+    TN=8  FP=205
+    FN=5  TP=310
+    Sensitivity=0.984  Specificity=0.038
+  ECE (pre-calibration): 0.0345
+  Prediction spread: min=0.410  max=0.734  mean=0.613  frac>0.5=0.975
+
+  [Calibration] Loading best checkpoint for fold 0...
+  Calibration: T=1.1740  |  BCE=0.670660  |  ECE=0.0141
+    mean(p)=0.597  frac>0.5=0.975  range=[0.423, 0.704]
+
+============================================================
+FOLD 1  |  train=1037  val=325
+============================================================
+  Train: 479 normal / 558 abnormal  (ratio=1.16)
+  Val  : 136 normal / 189 abnormal  (ratio=1.39)
+  Model: ResNet3D_SE  |  Total: 8.31M  |  Trainable: 8.31M
+  AMP=True  |  AccumSteps=2  |  EffBatch=8
+  Loss: Focal BCE  gamma=2.0  label_smooth=0.02  pos_weight=0.86
+  Epoch 001/100 | lr=1.28e-05 | train_ll=0.7005 | val_ll=0.6828  val_auc=0.5175 | 470s
+    *** New best val_log_loss=0.6828  checkpoint saved ***
+  Epoch 002/100 | lr=1.52e-05 | train_ll=0.6748 | val_ll=0.6836  val_auc=0.5155 | 462s
+  Epoch 003/100 | lr=1.92e-05 | train_ll=0.6772 | val_ll=0.7239  val_auc=0.5305 | 419s
+  Epoch 004/100 | lr=2.46e-05 | train_ll=0.6660 | val_ll=0.6870  val_auc=0.5779 | 461s
+  Epoch 005/100 | lr=3.16e-05 | train_ll=0.6503 | val_ll=0.7124  val_auc=0.5998 | 454s
+  Epoch 006/100 | lr=3.99e-05 | train_ll=0.6248 | val_ll=0.7272  val_auc=0.5863 | 500s
+  Epoch 007/100 | lr=4.96e-05 | train_ll=0.6291 | val_ll=0.6901  val_auc=0.5528 | 492s
+  Epoch 008/100 | lr=6.04e-05 | train_ll=0.6114 | val_ll=0.6799  val_auc=0.5736 | 448s
+    *** New best val_log_loss=0.6799  checkpoint saved ***
+  Epoch 009/100 | lr=7.22e-05 | train_ll=0.6377 | val_ll=0.6838  val_auc=0.5762 | 426s
+  Epoch 010/100 | lr=8.50e-05 | train_ll=0.6295 | val_ll=0.8685  val_auc=0.5685 | 438s
+  Epoch 011/100 | lr=9.86e-05 | train_ll=0.6213 | val_ll=0.6955  val_auc=0.5785 | 452s
+  Epoch 012/100 | lr=1.13e-04 | train_ll=0.6140 | val_ll=0.6815  val_auc=0.5402 | 450s
+  Epoch 013/100 | lr=1.28e-04 | train_ll=0.6082 | val_ll=0.6693  val_auc=0.5964 | 451s
+    *** New best val_log_loss=0.6693  checkpoint saved ***
+  Epoch 014/100 | lr=1.43e-04 | train_ll=0.6154 | val_ll=0.7293  val_auc=0.5544 | 439s
+  Epoch 015/100 | lr=1.58e-04 | train_ll=0.5966 | val_ll=0.6674  val_auc=0.6106 | 447s
+    *** New best val_log_loss=0.6674  checkpoint saved ***
+  Epoch 016/100 | lr=1.73e-04 | train_ll=0.5665 | val_ll=0.6614  val_auc=0.6290 | 454s
+    *** New best val_log_loss=0.6614  checkpoint saved ***
+  Epoch 017/100 | lr=1.88e-04 | train_ll=0.6029 | val_ll=0.7000  val_auc=0.5462 | 468s
+  Epoch 018/100 | lr=2.03e-04 | train_ll=0.5648 | val_ll=0.6782  val_auc=0.5747 | 458s
+  Epoch 019/100 | lr=2.17e-04 | train_ll=0.5536 | val_ll=0.7800  val_auc=0.6127 | 429s
+  Epoch 014/100 | lr=1.43e-04 | train_ll=0.6154 | val_ll=0.7293  val_auc=0.5544 | 439s
+  Epoch 015/100 | lr=1.58e-04 | train_ll=0.5966 | val_ll=0.6674  val_auc=0.6106 | 447s
+    *** New best val_log_loss=0.6674  checkpoint saved ***
+  Epoch 016/100 | lr=1.73e-04 | train_ll=0.5665 | val_ll=0.6614  val_auc=0.6290 | 454s
+    *** New best val_log_loss=0.6614  checkpoint saved ***
+  Epoch 017/100 | lr=1.88e-04 | train_ll=0.6029 | val_ll=0.7000  val_auc=0.5462 | 468s
+  Epoch 018/100 | lr=2.03e-04 | train_ll=0.5648 | val_ll=0.6782  val_auc=0.5747 | 458s
+  Epoch 019/100 | lr=2.17e-04 | train_ll=0.5536 | val_ll=0.7800  val_auc=0.6127 | 429s
+  Epoch 015/100 | lr=1.58e-04 | train_ll=0.5966 | val_ll=0.6674  val_auc=0.6106 | 447s
+    *** New best val_log_loss=0.6674  checkpoint saved ***
+  Epoch 016/100 | lr=1.73e-04 | train_ll=0.5665 | val_ll=0.6614  val_auc=0.6290 | 454s
+    *** New best val_log_loss=0.6614  checkpoint saved ***
+  Epoch 017/100 | lr=1.88e-04 | train_ll=0.6029 | val_ll=0.7000  val_auc=0.5462 | 468s
+  Epoch 018/100 | lr=2.03e-04 | train_ll=0.5648 | val_ll=0.6782  val_auc=0.5747 | 458s
+  Epoch 019/100 | lr=2.17e-04 | train_ll=0.5536 | val_ll=0.7800  val_auc=0.6127 | 429s
+    *** New best val_log_loss=0.6674  checkpoint saved ***
+  Epoch 016/100 | lr=1.73e-04 | train_ll=0.5665 | val_ll=0.6614  val_auc=0.6290 | 454s
+    *** New best val_log_loss=0.6614  checkpoint saved ***
+  Epoch 017/100 | lr=1.88e-04 | train_ll=0.6029 | val_ll=0.7000  val_auc=0.5462 | 468s
+  Epoch 018/100 | lr=2.03e-04 | train_ll=0.5648 | val_ll=0.6782  val_auc=0.5747 | 458s
+  Epoch 019/100 | lr=2.17e-04 | train_ll=0.5536 | val_ll=0.7800  val_auc=0.6127 | 429s
+  Epoch 017/100 | lr=1.88e-04 | train_ll=0.6029 | val_ll=0.7000  val_auc=0.5462 | 468s
+  Epoch 018/100 | lr=2.03e-04 | train_ll=0.5648 | val_ll=0.6782  val_auc=0.5747 | 458s
+  Epoch 019/100 | lr=2.17e-04 | train_ll=0.5536 | val_ll=0.7800  val_auc=0.6127 | 429s
+  Epoch 018/100 | lr=2.03e-04 | train_ll=0.5648 | val_ll=0.6782  val_auc=0.5747 | 458s
+  Epoch 019/100 | lr=2.17e-04 | train_ll=0.5536 | val_ll=0.7800  val_auc=0.6127 | 429s
+  Epoch 019/100 | lr=2.17e-04 | train_ll=0.5536 | val_ll=0.7800  val_auc=0.6127 | 429s
+  Epoch 020/100 | lr=2.30e-04 | train_ll=0.4883 | val_ll=0.6869  val_auc=0.6020 | 404s
+  Epoch 021/100 | lr=2.43e-04 | train_ll=0.4788 | val_ll=0.6713  val_auc=0.5822 | 434s
+  Epoch 028/100 | lr=2.98e-04 | train_ll=0.3216 | val_ll=0.6861  val_auc=0.6051 | 470s
+  Epoch 029/100 | lr=3.00e-04 | train_ll=0.3119 | val_ll=0.7808  val_auc=0.5809 | 446s
+  Epoch 030/100 | lr=3.00e-04 | train_ll=0.2933 | val_ll=0.8334  val_auc=0.5499 | 466s
+  Epoch 031/100 | lr=3.00e-04 | train_ll=0.3106 | val_ll=0.6891  val_auc=0.6164 | 458s
+  Epoch 032/100 | lr=2.99e-04 | train_ll=0.2528 | val_ll=0.7754  val_auc=0.5553 | 451s
+  Epoch 033/100 | lr=2.98e-04 | train_ll=0.2610 | val_ll=0.7747  val_auc=0.5606 | 467s
+  Epoch 028/100 | lr=2.98e-04 | train_ll=0.3216 | val_ll=0.6861  val_auc=0.6051 | 470s
+  Epoch 029/100 | lr=3.00e-04 | train_ll=0.3119 | val_ll=0.7808  val_auc=0.5809 | 446s
+  Epoch 030/100 | lr=3.00e-04 | train_ll=0.2933 | val_ll=0.8334  val_auc=0.5499 | 466s
+  Epoch 028/100 | lr=2.98e-04 | train_ll=0.3216 | val_ll=0.6861  val_auc=0.6051 | 470s
+  Epoch 029/100 | lr=3.00e-04 | train_ll=0.3119 | val_ll=0.7808  val_auc=0.5809 | 446s
+  Epoch 030/100 | lr=3.00e-04 | train_ll=0.2933 | val_ll=0.8334  val_auc=0.5499 | 466s
+  Epoch 031/100 | lr=3.00e-04 | train_ll=0.3106 | val_ll=0.6891  val_auc=0.6164 | 458s
+  Epoch 032/100 | lr=2.99e-04 | train_ll=0.2528 | val_ll=0.7754  val_auc=0.5553 | 451s
+  Epoch 033/100 | lr=2.98e-04 | train_ll=0.2610 | val_ll=0.7747  val_auc=0.5606 | 467s
+  Epoch 028/100 | lr=2.98e-04 | train_ll=0.3216 | val_ll=0.6861  val_auc=0.6051 | 470s
+  Epoch 029/100 | lr=3.00e-04 | train_ll=0.3119 | val_ll=0.7808  val_auc=0.5809 | 446s
+  Epoch 030/100 | lr=3.00e-04 | train_ll=0.2933 | val_ll=0.8334  val_auc=0.5499 | 466s
+  Epoch 031/100 | lr=3.00e-04 | train_ll=0.3106 | val_ll=0.6891  val_auc=0.6164 | 458s
+  Epoch 028/100 | lr=2.98e-04 | train_ll=0.3216 | val_ll=0.6861  val_auc=0.6051 | 470s
+  Epoch 029/100 | lr=3.00e-04 | train_ll=0.3119 | val_ll=0.7808  val_auc=0.5809 | 446s
+  Epoch 028/100 | lr=2.98e-04 | train_ll=0.3216 | val_ll=0.6861  val_auc=0.6051 | 470s
+  Epoch 029/100 | lr=3.00e-04 | train_ll=0.3119 | val_ll=0.7808  val_auc=0.5809 | 446s
+  Epoch 028/100 | lr=2.98e-04 | train_ll=0.3216 | val_ll=0.6861  val_auc=0.6051 | 470s
+  Epoch 028/100 | lr=2.98e-04 | train_ll=0.3216 | val_ll=0.6861  val_auc=0.6051 | 470s
+  Epoch 028/100 | lr=2.98e-04 | train_ll=0.3216 | val_ll=0.6861  val_auc=0.6051 | 470s
+  Epoch 029/100 | lr=3.00e-04 | train_ll=0.3119 | val_ll=0.7808  val_auc=0.5809 | 446s
+  Epoch 030/100 | lr=3.00e-04 | train_ll=0.2933 | val_ll=0.8334  val_auc=0.5499 | 466s
+  Epoch 031/100 | lr=3.00e-04 | train_ll=0.3106 | val_ll=0.6891  val_auc=0.6164 | 458s
+  Epoch 032/100 | lr=2.99e-04 | train_ll=0.2528 | val_ll=0.7754  val_auc=0.5553 | 451s
+  Epoch 033/100 | lr=2.98e-04 | train_ll=0.2610 | val_ll=0.7747  val_auc=0.5606 | 467s
+  Epoch 034/100 | lr=2.97e-04 | train_ll=0.2426 | val_ll=0.7519  val_auc=0.5810 | 469s
+  Epoch 035/100 | lr=2.96e-04 | train_ll=0.2312 | val_ll=0.7648  val_auc=0.5800 | 512s
+  Epoch 036/100 | lr=2.94e-04 | train_ll=0.2385 | val_ll=0.8220  val_auc=0.5669 | 490s
+  Early stopping at epoch 36 (patience=20)
+
+  ── Fold 1 End-of-Training Diagnostics ──────────────────
+  Confusion matrix (threshold=0.5):
+    TN=62  FP=74
+    FN=49  TP=140
+    Sensitivity=0.741  Specificity=0.456
+  ECE (pre-calibration): 0.0665
+  Prediction spread: min=0.283  max=0.742  mean=0.528  frac>0.5=0.652
+
+  [Calibration] Loading best checkpoint for fold 1...
+  Calibration: T=0.7059  |  BCE=0.658404  |  ECE=0.0433
+    mean(p)=0.538  frac>0.5=0.655  range=[0.212, 0.817]
+
+============================================================
+FOLD 2  |  train=1281  val=81
+============================================================
+  Train: 571 normal / 710 abnormal  (ratio=1.24)
+  Val  : 44 normal / 37 abnormal  (ratio=0.84)
+  Model: ResNet3D_SE  |  Total: 8.31M  |  Trainable: 8.31M
+  AMP=True  |  AccumSteps=2  |  EffBatch=8
+  Loss: Focal BCE  gamma=2.0  label_smooth=0.02  pos_weight=0.80
+  Epoch 001/100 | lr=1.28e-05 | train_ll=0.7063 | val_ll=0.8016  val_auc=0.3246 | 446s
+    *** New best val_log_loss=0.8016  checkpoint saved ***
+  Epoch 002/100 | lr=1.51e-05 | train_ll=0.6885 | val_ll=0.6452  val_auc=0.6545 | 436s
+    *** New best val_log_loss=0.6452  checkpoint saved ***
+  Epoch 003/100 | lr=1.91e-05 | train_ll=0.6874 | val_ll=0.6699  val_auc=0.6391 | 429s
+  Epoch 004/100 | lr=2.45e-05 | train_ll=0.6720 | val_ll=0.6715  val_auc=0.6256 | 440s
+  Epoch 005/100 | lr=3.13e-05 | train_ll=0.6730 | val_ll=0.6691  val_auc=0.6133 | 443s
+  Epoch 006/100 | lr=3.95e-05 | train_ll=0.6606 | val_ll=0.6696  val_auc=0.6232 | 457s
+  Epoch 007/100 | lr=4.90e-05 | train_ll=0.6413 | val_ll=0.6685  val_auc=0.6109 | 432s
+  Epoch 008/100 | lr=5.97e-05 | train_ll=0.6551 | val_ll=0.6313  val_auc=0.6818 | 432s
+    *** New best val_log_loss=0.6313  checkpoint saved ***
+  Epoch 009/100 | lr=7.14e-05 | train_ll=0.6453 | val_ll=0.6143  val_auc=0.7856 | 451s
+    *** New best val_log_loss=0.6143  checkpoint saved ***
+  Epoch 010/100 | lr=8.40e-05 | train_ll=0.6468 | val_ll=0.6219  val_auc=0.7509 | 468s
+  Epoch 011/100 | lr=9.75e-05 | train_ll=0.6594 | val_ll=0.6596  val_auc=0.6646 | 476s
+  Epoch 012/100 | lr=1.12e-04 | train_ll=0.6621 | val_ll=0.6393  val_auc=0.7101 | 464s
+  Epoch 013/100 | lr=1.26e-04 | train_ll=0.6657 | val_ll=0.6428  val_auc=0.6726 | 456s
+  Epoch 014/100 | lr=1.41e-04 | train_ll=0.6386 | val_ll=0.6301  val_auc=0.7248 | 457s
+  Epoch 015/100 | lr=1.56e-04 | train_ll=0.6493 | val_ll=0.6255  val_auc=0.7002 | 449s
+  Epoch 016/100 | lr=1.71e-04 | train_ll=0.6419 | val_ll=0.6349  val_auc=0.7101 | 428s
+  Epoch 017/100 | lr=1.86e-04 | train_ll=0.6092 | val_ll=0.6233  val_auc=0.7924 | 431s
+  Epoch 018/100 | lr=2.01e-04 | train_ll=0.5968 | val_ll=0.6235  val_auc=0.7405 | 451s
+  Epoch 019/100 | lr=2.15e-04 | train_ll=0.6064 | val_ll=0.6302  val_auc=0.7270 | 449s
+  Epoch 020/100 | lr=2.28e-04 | train_ll=0.5608 | val_ll=0.6822  val_auc=0.5946 | 474s
+  Epoch 021/100 | lr=2.41e-04 | train_ll=0.5081 | val_ll=0.6212  val_auc=0.7230 | 440s
+  Epoch 022/100 | lr=2.52e-04 | train_ll=0.5072 | val_ll=0.7003  val_auc=0.6705 | 445s
+  Epoch 023/100 | lr=2.63e-04 | train_ll=0.4910 | val_ll=0.6260  val_auc=0.7439 | 446s
+  Epoch 024/100 | lr=2.73e-04 | train_ll=0.4827 | val_ll=0.5906  val_auc=0.7577 | 512s
+    *** New best val_log_loss=0.5906  checkpoint saved ***
+  Epoch 025/100 | lr=2.81e-04 | train_ll=0.4574 | val_ll=0.5856  val_auc=0.7561 | 430s
+    *** New best val_log_loss=0.5856  checkpoint saved ***
+  Epoch 026/100 | lr=2.88e-04 | train_ll=0.4259 | val_ll=0.6224  val_auc=0.7291 | 419s
+  Epoch 027/100 | lr=2.93e-04 | train_ll=0.3813 | val_ll=0.6258  val_auc=0.7190 | 432s
+  Epoch 028/100 | lr=2.97e-04 | train_ll=0.3435 | val_ll=0.7003  val_auc=0.7408 | 447s
+  Epoch 029/100 | lr=2.99e-04 | train_ll=0.3366 | val_ll=0.6740  val_auc=0.6744 | 449s
+  Epoch 030/100 | lr=3.00e-04 | train_ll=0.3214 | val_ll=0.7209  val_auc=0.7064 | 450s
+  Epoch 031/100 | lr=3.00e-04 | train_ll=0.3058 | val_ll=0.6933  val_auc=0.6591 | 446s
+  Epoch 032/100 | lr=2.99e-04 | train_ll=0.2963 | val_ll=0.8963  val_auc=0.6511 | 447s
+  Epoch 033/100 | lr=2.99e-04 | train_ll=0.3099 | val_ll=0.6928  val_auc=0.6827 | 447s
+  Epoch 034/100 | lr=2.98e-04 | train_ll=0.2672 | val_ll=0.7826  val_auc=0.6692 | 446s
+  Epoch 035/100 | lr=2.96e-04 | train_ll=0.2504 | val_ll=0.7242  val_auc=0.7079 | 447s
+  Epoch 036/100 | lr=2.95e-04 | train_ll=0.2605 | val_ll=0.7024  val_auc=0.6886 | 447s
+  Epoch 037/100 | lr=2.93e-04 | train_ll=0.2421 | val_ll=0.7050  val_auc=0.6996 | 449s
+  Epoch 038/100 | lr=2.90e-04 | train_ll=0.2194 | val_ll=0.7438  val_auc=0.6385 | 448s
+  Epoch 039/100 | lr=2.88e-04 | train_ll=0.2269 | val_ll=0.8222  val_auc=0.6388 | 446s
+  Epoch 040/100 | lr=2.85e-04 | train_ll=0.2160 | val_ll=0.8332  val_auc=0.6400 | 445s
+  Epoch 041/100 | lr=2.82e-04 | train_ll=0.2188 | val_ll=0.7015  val_auc=0.6898 | 447s
+  Epoch 042/100 | lr=2.79e-04 | train_ll=0.2005 | val_ll=0.8061  val_auc=0.6609 | 446s
+  Epoch 043/100 | lr=2.75e-04 | train_ll=0.1870 | val_ll=0.8311  val_auc=0.6364 | 448s
+  Epoch 044/100 | lr=2.71e-04 | train_ll=0.1667 | val_ll=0.8845  val_auc=0.6904 | 446s
+  Epoch 045/100 | lr=2.67e-04 | train_ll=0.1995 | val_ll=0.8608  val_auc=0.6314 | 447s
+  Early stopping at epoch 45 (patience=20)
+
+  ── Fold 2 End-of-Training Diagnostics ──────────────────
+  Confusion matrix (threshold=0.5):
+    TN=34  FP=10
+    FN=12  TP=25
+    Sensitivity=0.676  Specificity=0.773
+  ECE (pre-calibration): 0.0834
+  Prediction spread: min=0.114  max=0.878  mean=0.453  frac>0.5=0.432
+
+  [Calibration] Loading best checkpoint for fold 2...
+  Calibration: T=1.0418  |  BCE=0.585492  |  ECE=0.0847
+    mean(p)=0.455  frac>0.5=0.432  range=[0.123, 0.869]
+
+============================================================
+FOLD 3  |  train=1211  val=151
+============================================================
+  Train: 535 normal / 676 abnormal  (ratio=1.26)
+  Val  : 80 normal / 71 abnormal  (ratio=0.89)
+  Model: ResNet3D_SE  |  Total: 8.31M  |  Trainable: 8.31M
+  AMP=True  |  AccumSteps=2  |  EffBatch=8
+  Loss: Focal BCE  gamma=2.0  label_smooth=0.02  pos_weight=0.79
+  Epoch 001/100 | lr=1.28e-05 | train_ll=0.7085 | val_ll=0.7067  val_auc=0.4956 | 448s
+    *** New best val_log_loss=0.7067  checkpoint saved ***
+  Epoch 002/100 | lr=1.52e-05 | train_ll=0.6841 | val_ll=0.7348  val_auc=0.5504 | 447s
+  Epoch 003/100 | lr=1.91e-05 | train_ll=0.6790 | val_ll=0.7357  val_auc=0.4965 | 445s
+  Epoch 004/100 | lr=2.46e-05 | train_ll=0.6599 | val_ll=0.7567  val_auc=0.5459 | 448s
+  Epoch 005/100 | lr=3.16e-05 | train_ll=0.6544 | val_ll=0.7225  val_auc=0.4529 | 446s
+  Epoch 006/100 | lr=3.99e-05 | train_ll=0.6442 | val_ll=0.8141  val_auc=0.5491 | 453s
+  Epoch 007/100 | lr=4.95e-05 | train_ll=0.6502 | val_ll=0.7335  val_auc=0.4790 | 418s
+  Epoch 008/100 | lr=6.03e-05 | train_ll=0.6527 | val_ll=0.7190  val_auc=0.5380 | 416s
+  Epoch 009/100 | lr=7.21e-05 | train_ll=0.6573 | val_ll=0.6881  val_auc=0.5084 | 450s
+    *** New best val_log_loss=0.6881  checkpoint saved ***
+  Epoch 010/100 | lr=8.49e-05 | train_ll=0.6451 | val_ll=0.7023  val_auc=0.5658 | 450s
+  Epoch 011/100 | lr=9.85e-05 | train_ll=0.6543 | val_ll=0.7677  val_auc=0.5261 | 447s
+  Epoch 012/100 | lr=1.13e-04 | train_ll=0.6288 | val_ll=0.7578  val_auc=0.5452 | 446s
+  Epoch 013/100 | lr=1.27e-04 | train_ll=0.6341 | val_ll=0.8730  val_auc=0.4751 | 448s
+  Epoch 014/100 | lr=1.42e-04 | train_ll=0.6153 | val_ll=0.7455  val_auc=0.5668 | 449s
+  Epoch 015/100 | lr=1.58e-04 | train_ll=0.6108 | val_ll=0.7700  val_auc=0.4905 | 448s
+  Epoch 016/100 | lr=1.73e-04 | train_ll=0.6002 | val_ll=0.6961  val_auc=0.4887 | 450s
+  Epoch 017/100 | lr=1.88e-04 | train_ll=0.6014 | val_ll=0.7191  val_auc=0.5256 | 447s
+  Epoch 018/100 | lr=2.02e-04 | train_ll=0.5748 | val_ll=0.7848  val_auc=0.5448 | 444s
+  Epoch 019/100 | lr=2.16e-04 | train_ll=0.5402 | val_ll=0.7354  val_auc=0.4904 | 415s
+  Epoch 020/100 | lr=2.30e-04 | train_ll=0.5374 | val_ll=0.7929  val_auc=0.4776 | 419s
+  Epoch 021/100 | lr=2.42e-04 | train_ll=0.5172 | val_ll=0.7767  val_auc=0.5201 | 447s
+  Epoch 022/100 | lr=2.54e-04 | train_ll=0.5073 | val_ll=0.7347  val_auc=0.5271 | 452s
+  Epoch 023/100 | lr=2.65e-04 | train_ll=0.4587 | val_ll=0.7297  val_auc=0.4732 | 451s
+  Epoch 024/100 | lr=2.74e-04 | train_ll=0.4488 | val_ll=0.6958  val_auc=0.6111 | 454s
+  Epoch 025/100 | lr=2.82e-04 | train_ll=0.3920 | val_ll=0.7900  val_auc=0.5344 | 453s
+  Epoch 026/100 | lr=2.89e-04 | train_ll=0.4048 | val_ll=0.7611  val_auc=0.5526 | 454s
+  Epoch 027/100 | lr=2.94e-04 | train_ll=0.3917 | val_ll=0.7910  val_auc=0.4859 | 455s
+  Epoch 028/100 | lr=2.97e-04 | train_ll=0.3629 | val_ll=0.8108  val_auc=0.5136 | 431s
+  Epoch 029/100 | lr=2.99e-04 | train_ll=0.3221 | val_ll=0.9270  val_auc=0.4903 | 418s
+  Early stopping at epoch 29 (patience=20)
+
+  ── Fold 3 End-of-Training Diagnostics ──────────────────
+  Confusion matrix (threshold=0.5):
+    TN=61  FP=19
+    FN=53  TP=18
+    Sensitivity=0.254  Specificity=0.762
+  ECE (pre-calibration): 0.0319
+  Prediction spread: min=0.373  max=0.574  mean=0.476  frac>0.5=0.245
+
+  [Calibration] Loading best checkpoint for fold 3...
+  Calibration: T=1.0000  |  BCE=0.688126  |  ECE=0.0319
+    mean(p)=0.476  frac>0.5=0.245  range=[0.373, 0.574]
+
+============================================================
+FOLD 4  |  train=1085  val=277
+============================================================
+  Train: 473 normal / 612 abnormal  (ratio=1.29)
+  Val  : 142 normal / 135 abnormal  (ratio=0.95)
+  Model: ResNet3D_SE  |  Total: 8.31M  |  Trainable: 8.31M
+  AMP=True  |  AccumSteps=2  |  EffBatch=8
+  Loss: Focal BCE  gamma=2.0  label_smooth=0.02  pos_weight=0.77
+  Epoch 001/100 | lr=1.28e-05 | train_ll=0.7082 | val_ll=0.7107  val_auc=0.5500 | 447s
+    *** New best val_log_loss=0.7107  checkpoint saved ***
+  Epoch 002/100 | lr=1.52e-05 | train_ll=0.6856 | val_ll=0.6836  val_auc=0.5981 | 451s
+    *** New best val_log_loss=0.6836  checkpoint saved ***
+  Epoch 003/100 | lr=1.92e-05 | train_ll=0.6747 | val_ll=0.6793  val_auc=0.6092 | 447s
+    *** New best val_log_loss=0.6793  checkpoint saved ***
+  Epoch 004/100 | lr=2.46e-05 | train_ll=0.6691 | val_ll=0.6655  val_auc=0.6406 | 444s
+    *** New best val_log_loss=0.6655  checkpoint saved ***
+  Epoch 005/100 | lr=3.16e-05 | train_ll=0.6640 | val_ll=0.6848  val_auc=0.6270 | 449s
+  Epoch 006/100 | lr=3.99e-05 | train_ll=0.6490 | val_ll=0.6702  val_auc=0.6380 | 447s
+  Epoch 007/100 | lr=4.95e-05 | train_ll=0.6423 | val_ll=0.6920  val_auc=0.5671 | 446s
+  Epoch 008/100 | lr=6.03e-05 | train_ll=0.6342 | val_ll=0.6940  val_auc=0.6165 | 449s
+  Epoch 009/100 | lr=7.22e-05 | train_ll=0.6437 | val_ll=0.6758  val_auc=0.6815 | 445s
+  Epoch 010/100 | lr=8.50e-05 | train_ll=0.6558 | val_ll=0.7259  val_auc=0.6323 | 447s
+  Epoch 011/100 | lr=9.86e-05 | train_ll=0.6523 | val_ll=0.6708  val_auc=0.6557 | 448s
+  Epoch 012/100 | lr=1.13e-04 | train_ll=0.6342 | val_ll=0.6749  val_auc=0.6464 | 447s
+  Epoch 013/100 | lr=1.28e-04 | train_ll=0.6291 | val_ll=0.6664  val_auc=0.6289 | 450s
+  Epoch 014/100 | lr=1.43e-04 | train_ll=0.6241 | val_ll=0.6709  val_auc=0.6592 | 446s
+  Epoch 015/100 | lr=1.58e-04 | train_ll=0.6307 | val_ll=0.6918  val_auc=0.5844 | 446s
+  Epoch 016/100 | lr=1.73e-04 | train_ll=0.6274 | val_ll=0.6637  val_auc=0.6771 | 448s
+    *** New best val_log_loss=0.6637  checkpoint saved ***
+  Epoch 017/100 | lr=1.88e-04 | train_ll=0.5995 | val_ll=0.7020  val_auc=0.6043 | 448s
+  Epoch 018/100 | lr=2.02e-04 | train_ll=0.6066 | val_ll=0.6698  val_auc=0.6245 | 449s
+  Epoch 019/100 | lr=2.17e-04 | train_ll=0.5731 | val_ll=0.6802  val_auc=0.6565 | 449s
+  Epoch 020/100 | lr=2.30e-04 | train_ll=0.5322 | val_ll=0.8004  val_auc=0.5370 | 445s
+  Epoch 021/100 | lr=2.43e-04 | train_ll=0.5358 | val_ll=0.6644  val_auc=0.6399 | 446s
+  Epoch 022/100 | lr=2.54e-04 | train_ll=0.5341 | val_ll=0.6698  val_auc=0.6338 | 450s
+  Epoch 023/100 | lr=2.65e-04 | train_ll=0.5193 | val_ll=0.6945  val_auc=0.5961 | 448s
+  Epoch 024/100 | lr=2.74e-04 | train_ll=0.4632 | val_ll=0.7337  val_auc=0.5618 | 446s
+  Epoch 025/100 | lr=2.82e-04 | train_ll=0.4627 | val_ll=0.7307  val_auc=0.6106 | 447s
+  Epoch 026/100 | lr=2.89e-04 | train_ll=0.4229 | val_ll=0.7161  val_auc=0.5864 | 446s
+  Epoch 027/100 | lr=2.94e-04 | train_ll=0.4000 | val_ll=0.7439  val_auc=0.5748 | 446s
+  Epoch 028/100 | lr=2.97e-04 | train_ll=0.3654 | val_ll=0.8280  val_auc=0.5469 | 444s
+  Epoch 029/100 | lr=3.00e-04 | train_ll=0.3292 | val_ll=0.8203  val_auc=0.6338 | 445s
+  Epoch 030/100 | lr=3.00e-04 | train_ll=0.3362 | val_ll=0.6892  val_auc=0.6517 | 447s
+  Epoch 031/100 | lr=3.00e-04 | train_ll=0.3457 | val_ll=0.7546  val_auc=0.6245 | 446s
+  Epoch 032/100 | lr=2.99e-04 | train_ll=0.3283 | val_ll=0.7712  val_auc=0.5491 | 445s
+  Epoch 033/100 | lr=2.98e-04 | train_ll=0.3098 | val_ll=0.6932  val_auc=0.6383 | 446s
+  Epoch 034/100 | lr=2.97e-04 | train_ll=0.2602 | val_ll=0.7479  val_auc=0.6400 | 446s
+  Epoch 035/100 | lr=2.96e-04 | train_ll=0.2784 | val_ll=0.7509  val_auc=0.6207 | 444s
+  Epoch 036/100 | lr=2.94e-04 | train_ll=0.2367 | val_ll=0.7894  val_auc=0.6346 | 428s
+  Early stopping at epoch 36 (patience=20)
+
+  ── Fold 4 End-of-Training Diagnostics ──────────────────
+  Confusion matrix (threshold=0.5):
+    TN=51  FP=91
+    FN=19  TP=116
+    Sensitivity=0.859  Specificity=0.359
+  ECE (pre-calibration): 0.0929
+  Prediction spread: min=0.351  max=0.812  mean=0.562  frac>0.5=0.744
+
+  [Calibration] Loading best checkpoint for fold 4...
+  Calibration: T=0.9240  |  BCE=0.663514  |  ECE=0.1101
+    mean(p)=0.567  frac>0.5=0.747  range=[0.339, 0.829]
+  Saved temperatures → checkpoints\temperatures.json
+
+Weights copied → submission_src\weights
+
+============================================================
+TRAINING COMPLETE
+============================================================
+  Fold 0:  val_log_loss=0.6714  val_auroc=0.5397  T=1.1740
+  Fold 1:  val_log_loss=0.6614  val_auroc=0.6290  T=0.7059
+  Fold 2:  val_log_loss=0.5856  val_auroc=0.7561  T=1.0418
+  Fold 3:  val_log_loss=0.6881  val_auroc=0.5084  T=1.0000
+  Fold 4:  val_log_loss=0.6637  val_auroc=0.6771  T=0.9240
+
+  Mean val_log_loss : 0.6540
+  Mean val_auroc    : 0.6221
+  Checkpoints in   : checkpoints
+  Submission weights: submission_src\weights
+PS D:\CODE\DaT Parkinson's Challenge> 

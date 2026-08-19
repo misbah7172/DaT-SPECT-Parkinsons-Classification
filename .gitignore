@@ -1,0 +1,18 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches and large precomputed intermediate arrays (>100MB GitHub limit)
+aligned_cache/
+cnn3d/
+cnn25_input.npz
+catboost_info/
+smoke_test/
+*.tmp
+
+# System and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
