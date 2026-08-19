@@ -1,0 +1,110 @@
+Cached: 1108/1362 samples
+Training 2.5D DenseNet121...
+  Seed 42, Fold 0: train=420, val=688
+    Epoch 3: LL=1.7475 AUC=0.5985
+    Epoch 6: LL=1.1900 AUC=0.4854
+    Epoch 9: LL=1.3401 AUC=0.5422
+    Epoch 12: LL=1.7850 AUC=0.5606
+    Epoch 15: LL=1.2810 AUC=0.5766
+    Epoch 18: LL=1.5333 AUC=0.5704
+    Epoch 20: LL=1.4833 AUC=0.5697
+    Early stop
+    Best LL=1.1900
+  Seed 42, Fold 1: train=790, val=318
+    Epoch 3: LL=0.7008 AUC=0.5265
+    Epoch 6: LL=0.7151 AUC=0.5431
+    Epoch 9: LL=1.1993 AUC=0.5776
+    Epoch 12: LL=1.5188 AUC=0.5233
+    Epoch 15: LL=1.6373 AUC=0.5293
+    Epoch 18: LL=1.7724 AUC=0.5178
+    Early stop
+    Best LL=0.7008
+  Seed 42, Fold 2: train=1063, val=45
+    Epoch 3: LL=0.6309 AUC=0.7004
+    Epoch 6: LL=0.5741 AUC=0.7565
+    Epoch 9: LL=0.6431 AUC=0.7112
+    Epoch 12: LL=0.8297 AUC=0.7522
+    Epoch 15: LL=1.1015 AUC=0.7371
+    Epoch 18: LL=1.1600 AUC=0.7306
+    Epoch 20: LL=1.1601 AUC=0.7328
+    Early stop
+    Best LL=0.5741
+  Seed 42, Fold 3: train=1076, val=32
+    Epoch 3: LL=0.6698 AUC=0.6710
+    Epoch 6: LL=0.7725 AUC=0.6537
+    Epoch 9: LL=0.7141 AUC=0.7446
+    Epoch 12: LL=1.2785 AUC=0.6190
+    Epoch 15: LL=1.6433 AUC=0.6753
+    Epoch 18: LL=1.7115 AUC=0.6537
+    Early stop
+    Best LL=0.6698
+  Seed 42, Fold 4: train=1083, val=25
+    Epoch 3: LL=0.8677 AUC=0.3766
+    Epoch 6: LL=0.5311 AUC=0.8442
+    Epoch 9: LL=0.6534 AUC=0.7143
+    Epoch 12: LL=0.6858 AUC=0.8117
+    Epoch 15: LL=0.8707 AUC=0.8442
+    Epoch 18: LL=1.0664 AUC=0.7922
+    Epoch 20: LL=0.8947 AUC=0.7922
+    Early stop
+    Best LL=0.5311
+  Seed 777, Fold 0: train=420, val=688
+    Epoch 3: LL=0.7132 AUC=0.5928
+    Epoch 6: LL=1.6676 AUC=0.4732
+    Epoch 9: LL=1.5243 AUC=0.5952
+    Epoch 12: LL=1.5304 AUC=0.6110
+    Epoch 15: LL=1.3466 AUC=0.5946
+    Epoch 18: LL=1.5193 AUC=0.6043
+    Early stop
+    Best LL=0.7132
+  Seed 777, Fold 1: train=790, val=318
+    Epoch 3: LL=0.6893 AUC=0.5853
+    Epoch 6: LL=0.7713 AUC=0.6054
+    Epoch 9: LL=0.9203 AUC=0.5278
+    Epoch 12: LL=1.4542 AUC=0.5250
+    Epoch 15: LL=1.5362 AUC=0.5516
+    Epoch 18: LL=1.7328 AUC=0.5499
+    Early stop
+    Best LL=0.6893
+  Seed 777, Fold 2: train=1063, val=45
+    Epoch 3: LL=0.6072 AUC=0.7953
+    Epoch 6: LL=0.6128 AUC=0.7177
+    Epoch 9: LL=0.5594 AUC=0.7845
+    Epoch 12: LL=0.7152 AUC=0.8103
+    Epoch 15: LL=1.3914 AUC=0.7629
+    Epoch 18: LL=1.2832 AUC=0.7629
+    Epoch 20: LL=1.3367 AUC=0.7586
+    Best LL=0.5594
+  Seed 777, Fold 3: train=1076, val=32
+    Epoch 3: LL=0.6264 AUC=0.7100
+    Epoch 6: LL=1.2150 AUC=0.6494
+    Epoch 9: LL=1.0216 AUC=0.6494
+    Epoch 12: LL=0.9404 AUC=0.6667
+    Epoch 15: LL=1.4452 AUC=0.6234
+    Epoch 18: LL=1.4104 AUC=0.6710
+    Early stop
+    Best LL=0.6264
+  Seed 777, Fold 4: train=1083, val=25
+    Epoch 3: LL=0.5654 AUC=0.9156
+    Epoch 6: LL=0.4544 AUC=0.8701
+    Epoch 9: LL=0.9412 AUC=0.7597
+    Epoch 12: LL=0.7046 AUC=0.8701
+    Epoch 15: LL=0.8571 AUC=0.8377
+    Epoch 18: LL=0.9775 AUC=0.8442
+    Epoch 20: LL=0.9652 AUC=0.8377
+    Early stop
+    Best LL=0.4544
+Image OOF: AUC=0.5609, LL=0.7406
+Image+Temp (T=3.2280): AUC=0.5609, LL=0.6775
+Training final models on all cached data...
+  Final seed 42, epoch 1 done
+  Final seed 42, epoch 2 done
+  Final seed 42, epoch 3 done
+  Final seed 42, epoch 4 done
+  Final seed 42, epoch 5 done
+  Final seed 777, epoch 1 done
+  Final seed 777, epoch 2 done
+  Final seed 777, epoch 3 done
+  Final seed 777, epoch 4 done
+  Final seed 777, epoch 5 done
+Done!
