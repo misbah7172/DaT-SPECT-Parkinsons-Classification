@@ -1,0 +1,51 @@
+Loading data...
+  n=1360, pos=746/1360 (54.9%)
+  X: (1360, 722)
+  X with site: (1360, 723)
+
+Training OOF...
+  7 models, 723 features
+  seed 42 done
+  seed 777 done
+  seed 2024 done
+  seed 12345 done
+  seed 999 done
+
+OOF matrix: (1360, 7)
+
+Per-stream metrics:
+  lr           AUC=0.8196  LL=0.9518
+  xgb1         AUC=0.8476  LL=0.5083
+  xgb2         AUC=0.8389  LL=0.5365
+  lgb1         AUC=0.8329  LL=0.5723
+  lgb2         AUC=0.8385  LL=0.5401
+  et           AUC=0.8396  LL=0.4968
+  hgb          AUC=0.8351  LL=0.5941
+
+BLEND AUC=0.8674  LL=0.4584
+TEMP=1.0975 -> AUC=0.8674  LL=0.4573
+SHRINK=0.0325 -> AUC=0.8674  LL=0.4577
+COMBINED -> AUC=0.8674  LL=0.4581
+
+BEST: temp AUC=0.8674  LL=0.4573
+
+--- Greedy elimination ---
+  Dropped xgb2 (blend) -> AUC=0.8684 LL=0.4546
+  Dropped xgb2 (temp) -> AUC=0.8684 LL=0.4546
+
+FINAL: AUC=0.8684  LL=0.4546
+  et           w=0.3645
+  xgb1         w=0.3421
+  lr           w=0.2934
+  lgb1         w=0.0000
+  lgb2         w=0.0000
+  hgb          w=0.0000
+
+Training final models on full data...
+  seed 42 done
+  seed 777 done
+  seed 2024 done
+  seed 12345 done
+  seed 999 done
+
+Saved to submission_v12

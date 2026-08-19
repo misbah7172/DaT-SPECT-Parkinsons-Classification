@@ -1,0 +1,104 @@
+Loading data...
+  n=1360, pos=746/1360 (54.9%)
+Adding asymmetry features...
+  Total columns: 396
+  X: (1360, 776)
+  X with site: (1360, 777)
+
+Training OOF...
+  8 models (incl MLP), 777 features
+  seed 42 done
+  seed 777 done
+  seed 2024 done
+  seed 12345 done
+  seed 999 done
+
+OOF matrix: (1360, 8)
+
+Per-stream metrics:
+  lr           AUC=0.8315  LL=0.8543
+  xgb1         AUC=0.8452  LL=0.5147
+  xgb2         AUC=0.8350  LL=0.5465
+  lgb1         AUC=0.8251  LL=0.5906
+  lgb2         AUC=0.8339  LL=0.5564
+  et           AUC=0.8392  LL=0.4987
+  hgb          AUC=0.8228  LL=0.6277
+  mlp          AUC=0.8205  LL=0.5491
+
+BLEND AUC=0.8725  LL=0.4449
+TEMP=0.9775 -> AUC=0.8725  LL=0.4448
+SHRINK=0.0000 -> AUC=0.8725  LL=0.4449
+COMBINED -> AUC=0.8725  LL=0.4448
+
+BEST: combined AUC=0.8725  LL=0.4448
+
+--- Greedy elimination ---
+  Dropped xgb2 (temp) -> AUC=0.8725 LL=0.4448
+  Dropped xgb2 (combined) -> AUC=0.8725 LL=0.4448
+  Dropped lgb1 (temp) -> AUC=0.8725 LL=0.4448
+  Dropped lgb1 (combined) -> AUC=0.8725 LL=0.4448
+  Dropped lgb2 (combined) -> AUC=0.8725 LL=0.4448
+  Dropped hgb (temp) -> AUC=0.8725 LL=0.4448
+  Dropped hgb (combined) -> AUC=0.8725 LL=0.4448
+
+FINAL: AUC=0.8725  LL=0.4448
+  lr           w=0.3459
+  et           w=0.2908
+  xgb1         w=0.2278
+  mlp          w=0.1355
+
+Training final models on full data...
+Traceback (most recent call last):
+  File "E:\DaT\train_v11.py", line 523, in <module>
+    joblib.dump(mlp, os.path.join(out_dir, f"weights/s{si}_mlp.pkl"))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\misba\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\joblib\numpy_pickle.py", line 600, in dump
+    NumpyPickler(f, protocol=protocol).dump(value)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\pickle.py", line 484, in dump
+    self.save(obj)
+    ~~~~~~~~~^^^^^
+  File "C:\Users\misba\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\joblib\numpy_pickle.py", line 395, in save
+    return Pickler.save(self, obj)
+           ~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\pickle.py", line 601, in save
+    self.save_reduce(obj=obj, *rv)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\pickle.py", line 715, in save_reduce
+    save(state)
+    ~~~~^^^^^^^
+  File "C:\Users\misba\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\joblib\numpy_pickle.py", line 395, in save
+    return Pickler.save(self, obj)
+           ~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\pickle.py", line 558, in save
+    f(self, obj)  # Call unbound method with explicit self
+    ~^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\pickle.py", line 984, in save_dict
+    self._batch_setitems(obj.items())
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\pickle.py", line 1008, in _batch_setitems
+    save(v)
+    ~~~~^^^
+  File "C:\Users\misba\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\joblib\numpy_pickle.py", line 395, in save
+    return Pickler.save(self, obj)
+           ~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\pickle.py", line 601, in save
+    self.save_reduce(obj=obj, *rv)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\pickle.py", line 685, in save_reduce
+    save(cls)
+    ~~~~^^^^^
+  File "C:\Users\misba\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\joblib\numpy_pickle.py", line 395, in save
+    return Pickler.save(self, obj)
+           ~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\pickle.py", line 558, in save
+    f(self, obj)  # Call unbound method with explicit self
+    ~^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\pickle.py", line 1166, in save_type
+    return self.save_global(obj)
+           ~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\pickle.py", line 1081, in save_global
+    raise PicklingError(
+        "Can't pickle %r: it's not found as %s.%s" %
+        (obj, module_name, name)) from None
+_pickle.PicklingError: Can't pickle <class '__main__.MLPWrapper._build_model.<locals>.MLP'>: it's not found as __main__.MLPWrapper._build_model.<locals>.MLP

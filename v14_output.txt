@@ -1,0 +1,96 @@
+Loading ALL 4 feature sets...
+  n=1360, pos=746/1360 (54.9%)
+  Total columns: 379
+  sbr: (1360, 204)
+  phys: (1360, 218)
+  morph: (1360, 250)
+  atlas: (1360, 68)
+
+Training OOF...
+  seed 42 done
+  seed 777 done
+  seed 2024 done
+  seed 12345 done
+  seed 999 done
+
+OOF matrix: (1360, 24)
+
+Per-stream metrics:
+  sbr_lr               AUC=0.8561  LL=0.5107
+  sbr_xgb              AUC=0.8422  LL=0.5282
+  sbr_lgb              AUC=0.8307  LL=0.5637
+  sbr_cb               AUC=0.8521  LL=0.4956
+  sbr_et               AUC=0.8371  LL=0.4964
+  sbr_ridge            AUC=0.8446  LL=0.5444
+  phys_lr              AUC=0.8741  LL=0.4801
+  phys_xgb             AUC=0.8371  LL=0.5419
+  phys_lgb             AUC=0.8308  LL=0.5601
+  phys_cb              AUC=0.8376  LL=0.5182
+  phys_et              AUC=0.8467  LL=0.4833
+  phys_ridge           AUC=0.7811  LL=0.6093
+  morph_lr             AUC=0.8337  LL=0.6962
+  morph_xgb            AUC=0.8433  LL=0.5581
+  morph_lgb            AUC=0.8437  LL=0.5740
+  morph_cb             AUC=0.8448  LL=0.5274
+  morph_et             AUC=0.8495  LL=0.4887
+  morph_ridge          AUC=0.7913  LL=0.6951
+  atlas_lr             AUC=0.6949  LL=0.7195
+  atlas_xgb            AUC=0.6761  LL=0.7946
+  atlas_lgb            AUC=0.6699  LL=0.8014
+  atlas_cb             AUC=0.6705  LL=0.7817
+  atlas_et             AUC=0.6715  LL=0.6751
+  atlas_ridge          AUC=0.6610  LL=0.7053
+
+BLEND AUC=0.8883  LL=0.4218
+TEMP (T=0.8289): AUC=0.8883  LL=0.4171
+PLATT (a=1.2136, b=0.1387): AUC=0.8883  LL=0.4158
+SHRINK (a=0.0000): AUC=0.8883  LL=0.4218
+PLATT+SHRINK: AUC=0.8883  LL=0.4158
+TEMP+SHRINK: AUC=0.8883  LL=0.4171
+AGG_SHRINK (a=0.1): AUC=0.8883  LL=0.4341
+AGG_SHRINK (a=0.15): AUC=0.8883  LL=0.4419
+AGG_SHRINK (a=0.2): AUC=0.8883  LL=0.4506
+AGG_SHRINK (a=0.25): AUC=0.8883  LL=0.4600
+AGG_SHRINK (a=0.3): AUC=0.8883  LL=0.4702
+
+BEST: platt AUC=0.8883  LL=0.4158
+
+--- Greedy stream elimination ---
+
+FINAL: AUC=0.8883  LL=0.4158
+  phys_lr              w=0.3197
+  morph_lr             w=0.1335
+  sbr_ridge            w=0.1270
+  sbr_cb               w=0.1170
+  sbr_lr               w=0.1089
+  sbr_xgb              w=0.0991
+  phys_et              w=0.0382
+  morph_lgb            w=0.0363
+  atlas_lgb            w=0.0120
+  atlas_xgb            w=0.0084
+  sbr_lgb              w=0.0000
+  sbr_et               w=0.0000
+  phys_xgb             w=0.0000
+  phys_lgb             w=0.0000
+  phys_cb              w=0.0000
+  phys_ridge           w=0.0000
+  morph_xgb            w=0.0000
+  morph_cb             w=0.0000
+  morph_et             w=0.0000
+  morph_ridge          w=0.0000
+  atlas_lr             w=0.0000
+  atlas_cb             w=0.0000
+  atlas_et             w=0.0000
+  atlas_ridge          w=0.0000
+
+Training final models on full data...
+  seed 42 done
+  seed 777 done
+  seed 2024 done
+  seed 12345 done
+  seed 999 done
+Traceback (most recent call last):
+  File "E:\DaT\train_v14.py", line 480, in <module>
+    temp = optimize_temperature(M @ best_w, y)
+                                ^
+NameError: name 'M' is not defined

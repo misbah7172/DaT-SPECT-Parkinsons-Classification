@@ -1,0 +1,89 @@
+Loading ALL 4 feature sets...
+  n=1360, pos=746/1360 (54.9%)
+  Total columns: 385
+  sbr: (1360, 216)
+  phys: (1360, 218)
+  morph: (1360, 250)
+  atlas: (1360, 68)
+
+Training OOF...
+  seed 42 done
+  seed 777 done
+  seed 2024 done
+  seed 12345 done
+  seed 999 done
+
+OOF matrix: (1360, 24)
+
+--- Site Performance Analysis ---
+  Worst sites: [('1.5x1.5x3.0', '0.784'), ('3.5x3.5x3.5', '0.818'), ('1.5x1.5x1.5', '0.855'), ('2.5x2.5x2.5', '0.872'), ('4.0x4.0x4.0', '0.891')]
+  Best sites: [('3.5x3.5x3.5', '0.818'), ('1.5x1.5x1.5', '0.855'), ('2.5x2.5x2.5', '0.872'), ('4.0x4.0x4.0', '0.891'), ('3.5x3.5x3.0', '0.955')]
+
+Per-stream metrics:
+  sbr_lr               AUC=0.8307  LL=0.5853
+  sbr_xgb              AUC=0.8422  LL=0.5283
+  sbr_lgb              AUC=0.8334  LL=0.5534
+  sbr_cb               AUC=0.8504  LL=0.4976
+  sbr_et               AUC=0.8375  LL=0.4959
+  sbr_ridge            AUC=0.8115  LL=0.5551
+  phys_lr              AUC=0.8741  LL=0.4801
+  phys_xgb             AUC=0.8371  LL=0.5419
+  phys_lgb             AUC=0.8308  LL=0.5601
+  phys_cb              AUC=0.8376  LL=0.5182
+  phys_et              AUC=0.8467  LL=0.4833
+  phys_ridge           AUC=0.7811  LL=0.6093
+  morph_lr             AUC=0.8337  LL=0.6962
+  morph_xgb            AUC=0.8433  LL=0.5581
+  morph_lgb            AUC=0.8437  LL=0.5740
+  morph_cb             AUC=0.8448  LL=0.5274
+  morph_et             AUC=0.8495  LL=0.4887
+  morph_ridge          AUC=0.7913  LL=0.6951
+  atlas_lr             AUC=0.6949  LL=0.7195
+  atlas_xgb            AUC=0.6761  LL=0.7946
+  atlas_lgb            AUC=0.6699  LL=0.8014
+  atlas_cb             AUC=0.6705  LL=0.7817
+  atlas_et             AUC=0.6715  LL=0.6751
+  atlas_ridge          AUC=0.6610  LL=0.7053
+
+BLEND AUC=0.8871  LL=0.4222
+PLATT (a=1.1908, b=0.1035): AUC=0.8871  LL=0.4175
+TEMP (T=0.8426): AUC=0.8871  LL=0.4182
+
+BEST: platt AUC=0.8871  LL=0.4175
+
+--- Greedy stream elimination ---
+  Dropped sbr_et (platt) -> AUC=0.8871 LL=0.4175
+  Dropped phys_xgb (platt) -> AUC=0.8871 LL=0.4175
+  Dropped atlas_xgb (platt) -> AUC=0.8871 LL=0.4174
+
+FINAL: AUC=0.8871  LL=0.4174
+  phys_lr              w=0.3578
+  morph_lr             w=0.1595
+  sbr_cb               w=0.1360
+  sbr_xgb              w=0.0851
+  morph_lgb            w=0.0609
+  phys_ridge           w=0.0545
+  sbr_ridge            w=0.0541
+  atlas_lgb            w=0.0367
+  sbr_lr               w=0.0347
+  phys_et              w=0.0206
+  sbr_lgb              w=0.0002
+  phys_lgb             w=0.0000
+  phys_cb              w=0.0000
+  morph_xgb            w=0.0000
+  morph_cb             w=0.0000
+  morph_et             w=0.0000
+  morph_ridge          w=0.0000
+  atlas_lr             w=0.0000
+  atlas_cb             w=0.0000
+  atlas_et             w=0.0000
+  atlas_ridge          w=0.0000
+
+Training final models on full data...
+  seed 42 done
+  seed 777 done
+  seed 2024 done
+  seed 12345 done
+  seed 999 done
+
+Saved to submission_v15
