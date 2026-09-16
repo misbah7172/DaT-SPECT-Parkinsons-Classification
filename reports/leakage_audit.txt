@@ -1,0 +1,24 @@
+PASS: 1. Global feature selection
+  No MI/RFE applied globally in current pipeline
+WARNING: 2. Global PCA
+  phase6_pca_emb.npy exists - was PCA fit on all data? Check if embeddings are pre-extracted from external model
+PASS: 3. Global scaling
+  Scaling done per-fold in preprocessing.py
+PASS: 4. Global imputation
+  Imputation done per-fold in preprocessing.py
+PASS: 5. Global normalization
+  No global normalization in current pipeline
+PASS: 6. Duplicate samples
+  No exact duplicates
+WARNING: 7. CNN OOF embeddings
+  12 CNN OOF files found. Verify these were generated with proper fold splits. Do NOT use supervised CNN embeddings trained on all data.
+PASS: 8. Calibration leakage
+  Calibration must use inner validation fold only
+PASS: 9. Ensemble weight leakage
+  Ensemble weights must be learned on training fold only
+PASS: 10. Power-gamma leakage
+  Power sharpening gamma must be learned on training fold only
+PASS: 11. Site information
+  15 groups: ['1.5x1.5x1.5', '1.5x1.5x3.0', '2.0x2.0x2.5', '2.0x2.0x3.0', '2.0x2.0x4.0', '2.5x2.0x2.0', '2.5x2.0x2.5', '2.5x2.5x2.5', '2.5x2.5x3.0', '3.5x3.5x3.0', '3.5x3.5x3.5', '3.5x3.5x4.0', '4.0x3.5x4.0', '4.0x4.0x4.0', '4.5x4.5x4.5']
+WARNING: 12. Target-derived features
+  label column present in sbr_features_train.csv - ensure it is dropped before training

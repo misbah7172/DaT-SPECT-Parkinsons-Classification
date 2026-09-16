@@ -1,0 +1,90 @@
+# DaT-SPECT Parkinson's Classification Pipeline Configuration
+# All "changeable" parameters in one place — edit here, not in code.
+
+# ─── Paths ──────────────────────────────────────────────────────────────
+paths:
+  data_dir: "Dataset"                  # raw data root (contains train_labels.csv, niftis zip)
+  nifti_zip: "Dataset/DaT_Parkinsons_Challenge_-_niftis.zip"
+  output_dir: "pipeline_output"        # all artifacts write here
+  cache_dir: "pipeline_output/cache"   # harmonized volumes
+  oof_dir: "pipeline_output/oof"       # OOF predictions
+  model_dir: "pipeline_output/models"  # trained weights
+  submission_dir: "pipeline_output/submission"
+
+# ─── Preprocessing ──────────────────────────────────────────────────────
+preprocessing:
+  target_spacing: [2.46, 2.46, 2.46]  # isotropic mm (largest scanner group)
+  crop_size: [64, 64, 48]             # [H, W, D] centered on basal ganglia
+  interpolation: "linear"             # "linear" for intensity, "nearest" for labels
+  normalize: "occipital"              # "occipital" | "percentile" | "zscore"
+  occipital_pct: 0.10                 # bottom 10% of posterior axial slices as ref
+  persist: true                       # save harmonized volumes to disk
+  format: "npy"                       # "npy" or "nii.gz"
+
+# ─── SBR Features ──────────────────────────────────────────────────────
+sbr:
+  sigma_list: [0.5, 2.0]             # Gaussian smoothing sigmas
+  thresholds: [0.95, 0.97, 0.98, 0.99]  # percentile thresholds for ROI definition
+  use_atlas_rois: true               # use atlas-template ROI masks if available
+  output_csv: "sbr_features.csv"
+
+# ─── CNN ────────────────────────────────────────────────────────────────
+cnn:
+  backbone: "resnet18"                # "resnet18" | "resnet34" | "densenet121"
+  in_channels: 1
+  embed_dim: 512                      # penultimate layer width (resnet18=512, densenet121=1024)
+  pretrained: true                    # ImageNet pretraining for encoder weights
+  amp: true                           # automatic mixed precision
+  gradient_checkpointing: false       # save VRAM at ~30% speed cost
+  batch_size: 16                      # reduce to 8 for 4GB VRAM local
+  num_workers: 4
+  epochs: 100
+  lr: 1.0e-4
+  weight_decay: 1.0e-4
+  warmup_epochs: 5
+  early_stop_patience: 15
+  ema_decay: 0.999
+  label_smoothing: 0.0               # keep at 0 — hurts log loss calibration
+  seed: 42
+  n_seeds: 3                          # train multiple seeds for ensemble
+  checkpoint_every: 5                 # save every N epochs
+  tta_views: 7                        # base + 6 translation rolls
+
+# ─── Tabular Classifier ────────────────────────────────────────────────
+gbm:
+  model: "lightgbm"                   # "lightgbm" | "xgboost"
+  n_folds: 5
+  stratified: true                    # stratify by label
+  group_by: "scanner_group"           # group by scanner protocol (shape+voxel)
+  objective: "binary"                 # binary classification
+  metric: "binary_logloss"            # optimize for log loss, NOT AUC
+  num_leaves: 31
+  learning_rate: 0.05
+  n_estimators: 1000
+  early_stop_rounds: 50
+  min_child_samples: 20
+  feature_fraction: 0.8
+  bagging_fraction: 0.8
+  bagging_freq: 5
+  reg_alpha: 0.1
+  reg_lambda: 0.1
+
+# ─── Calibration ────────────────────────────────────────────────────────
+calibration:
+  method: "isotonic"                  # "platt" | "isotonic" | "temperature" | "none"
+  apply_to: "oof"                    # calibrate on OOF predictions
+  clip_min: 0.005                    # clip predictions to avoid log(0)
+  clip_max: 0.995
+
+# ─── Cross-Validation ──────────────────────────────────────────────────
+cv:
+  n_folds: 5
+  group_by: "scanner_group"          # StratifiedGroupKFold by scanner protocol
+  shuffle: true
+  random_state: 42
+
+# ─── Environment ────────────────────────────────────────────────────────
+env:
+  device: "auto"                     # "auto" | "cuda" | "cpu"
+  num_threads: 4                     # CPU threads for GBM
+  competition_mode: false            # true = Kaggle paths, no internet

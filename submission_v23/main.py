@@ -77,7 +77,7 @@ def sbr_stream_prob(extracted, vvol):
     Xs = sc.transform(X)
     Xt = Xs[:, sel]
     scores = []
-    for name in ["lr", "xgb", "lgb", "cb", "et", "ridge"]:
+    for name in ["lr", "xgb", "lgb", "et", "ridge"]:
         m = joblib.load(os.path.join(W, f"sbr_full_{name}.pkl"))
         if name in ("lr", "ridge"):
             # NOTE: lr/ridge were fit on FULL scaled X in v47

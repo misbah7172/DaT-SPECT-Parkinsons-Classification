@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression, RidgeClassifier
 from sklearn.feature_selection import mutual_info_classif
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import log_loss, roc_auc_score
-import xgboost as xgb, lightgbm as lgb, catboost as cb
+import xgboost as xgb, lightgbm as lgb
 from sklearn.ensemble import ExtraTreesClassifier
 
 PVE_REF = 15.625
@@ -75,8 +75,6 @@ models['xgb'] = xgb.XGBClassifier(n_estimators=500, max_depth=4, learning_rate=0
 models['lgb'] = lgb.LGBMClassifier(n_estimators=500, max_depth=4, learning_rate=0.05,
     subsample=0.8, colsample_bytree=0.8, reg_lambda=2.0, min_child_samples=10,
     random_state=SEED, n_jobs=-1, verbose=-1).fit(Xt, y)
-models['cb'] = cb.CatBoostClassifier(iterations=500, depth=4, learning_rate=0.05,
-    l2_leaf_reg=3.0, random_seed=SEED, verbose=0).fit(Xt, y)
 models['et'] = ExtraTreesClassifier(700, max_depth=9, n_jobs=-1, random_state=SEED).fit(Xt, y)
 
 pred = np.zeros(len(y))

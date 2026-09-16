@@ -1,0 +1,19 @@
+{
+  "best_single_model": "Ridge + SBR_CNN",
+  "validation": "Site-aware StratifiedGroupKFold",
+  "auc": 0.9371295480023074,
+  "logloss": 0.45140519464395723,
+  "brier": 0.13297906692698244,
+  "auc_95ci": [
+    0.9240270753949877,
+    0.9500783322810363
+  ],
+  "ll_95ci": [
+    0.429152761708026,
+    0.48057795548197335
+  ],
+  "site_auc_mean": 0.9374843693738425,
+  "site_auc_std": 0.057749669892144785,
+  "site_logloss_mean": 0.47710744764647056,
+  "site_logloss_std": 0.1596235607542571
+}

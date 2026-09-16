@@ -1,0 +1,542 @@
+[
+  {
+    "model": "XGBoost",
+    "features": "SBR",
+    "calibration": "raw",
+    "n_features": 92,
+    "auc": 0.8338655434747118,
+    "ll": 0.5704697080969582,
+    "mean_fold_auc": 0.8201880776881791,
+    "std_fold_auc": 0.032996990095199186
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR",
+    "calibration": "platt",
+    "n_features": 92,
+    "auc": 0.8254524874566016,
+    "ll": 0.6800096403002924,
+    "mean_fold_auc": 0.8201880776881791,
+    "std_fold_auc": 0.032996990095199186
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR",
+    "calibration": "temp",
+    "n_features": 92,
+    "auc": 0.8338655434747118,
+    "ll": 1.3918974495421756,
+    "mean_fold_auc": 0.8201880776881791,
+    "std_fold_auc": 0.032996990095199186
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR",
+    "calibration": "raw",
+    "n_features": 92,
+    "auc": 0.8309160762290353,
+    "ll": 0.5941434540814511,
+    "mean_fold_auc": 0.8184804100463348,
+    "std_fold_auc": 0.02956977625416219
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR",
+    "calibration": "platt",
+    "n_features": 92,
+    "auc": 0.8226096799120601,
+    "ll": 0.6965374109097561,
+    "mean_fold_auc": 0.8184804100463348,
+    "std_fold_auc": 0.02956977625416219
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR",
+    "calibration": "temp",
+    "n_features": 92,
+    "auc": 0.8309160762290353,
+    "ll": 1.484743581178657,
+    "mean_fold_auc": 0.8184804100463348,
+    "std_fold_auc": 0.02956977625416219
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Phys",
+    "calibration": "raw",
+    "n_features": 109,
+    "auc": 0.8428706696705521,
+    "ll": 0.5445679628482918,
+    "mean_fold_auc": 0.8348584748525261,
+    "std_fold_auc": 0.02240447840916014
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Phys",
+    "calibration": "platt",
+    "n_features": 109,
+    "auc": 0.8377771247591994,
+    "ll": 0.6341103164959648,
+    "mean_fold_auc": 0.8348584748525261,
+    "std_fold_auc": 0.02240447840916014
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Phys",
+    "calibration": "temp",
+    "n_features": 109,
+    "auc": 0.8428706696705521,
+    "ll": 1.275591471720154,
+    "mean_fold_auc": 0.8348584748525261,
+    "std_fold_auc": 0.02240447840916014
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Phys",
+    "calibration": "raw",
+    "n_features": 109,
+    "auc": 0.8416429947432004,
+    "ll": 0.5598935794165906,
+    "mean_fold_auc": 0.8304218003233022,
+    "std_fold_auc": 0.027592231510384757
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Phys",
+    "calibration": "platt",
+    "n_features": 109,
+    "auc": 0.8371436967381722,
+    "ll": 0.6307558517389957,
+    "mean_fold_auc": 0.8304218003233022,
+    "std_fold_auc": 0.027592231510384757
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Phys",
+    "calibration": "temp",
+    "n_features": 109,
+    "auc": 0.8416429947432004,
+    "ll": 1.3449129552435501,
+    "mean_fold_auc": 0.8304218003233022,
+    "std_fold_auc": 0.027592231510384757
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Rad",
+    "calibration": "raw",
+    "n_features": 305,
+    "auc": 0.8572904082454478,
+    "ll": 0.545491617567352,
+    "mean_fold_auc": 0.8641627129507082,
+    "std_fold_auc": 0.027355777818690575
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Rad",
+    "calibration": "platt",
+    "n_features": 305,
+    "auc": 0.8503118163711758,
+    "ll": 0.6323640370437752,
+    "mean_fold_auc": 0.8641627129507082,
+    "std_fold_auc": 0.027355777818690575
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Rad",
+    "calibration": "temp",
+    "n_features": 305,
+    "auc": 0.8572904082454478,
+    "ll": 1.3638824688695796,
+    "mean_fold_auc": 0.8641627129507082,
+    "std_fold_auc": 0.027355777818690575
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Rad",
+    "calibration": "raw",
+    "n_features": 305,
+    "auc": 0.8545792927808795,
+    "ll": 0.5571264340063493,
+    "mean_fold_auc": 0.8582855336093113,
+    "std_fold_auc": 0.03015591384558773
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Rad",
+    "calibration": "platt",
+    "n_features": 305,
+    "auc": 0.847350377118229,
+    "ll": 0.6336277746926653,
+    "mean_fold_auc": 0.8582855336093113,
+    "std_fold_auc": 0.03015591384558773
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Rad",
+    "calibration": "temp",
+    "n_features": 305,
+    "auc": 0.8545792927808795,
+    "ll": 1.4117902416369428,
+    "mean_fold_auc": 0.8582855336093113,
+    "std_fold_auc": 0.03015591384558773
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_CNN_OOF",
+    "calibration": "raw",
+    "n_features": 108,
+    "auc": 0.9289646390439807,
+    "ll": 0.3699693941635459,
+    "mean_fold_auc": 0.9253237446515454,
+    "std_fold_auc": 0.024493053152113718
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_CNN_OOF",
+    "calibration": "platt",
+    "n_features": 108,
+    "auc": 0.9182769016445185,
+    "ll": 0.40849428800450777,
+    "mean_fold_auc": 0.9253237446515454,
+    "std_fold_auc": 0.024493053152113718
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_CNN_OOF",
+    "calibration": "temp",
+    "n_features": 108,
+    "auc": 0.9289646390439807,
+    "ll": 0.9356916038083231,
+    "mean_fold_auc": 0.9253237446515454,
+    "std_fold_auc": 0.024493053152113718
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_CNN_OOF",
+    "calibration": "raw",
+    "n_features": 108,
+    "auc": 0.9294827004494943,
+    "ll": 0.3749896592049001,
+    "mean_fold_auc": 0.9255461580685148,
+    "std_fold_auc": 0.021108226084104613
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_CNN_OOF",
+    "calibration": "platt",
+    "n_features": 108,
+    "auc": 0.9190735843101403,
+    "ll": 0.4144171929411411,
+    "mean_fold_auc": 0.9255461580685148,
+    "std_fold_auc": 0.021108226084104613
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_CNN_OOF",
+    "calibration": "temp",
+    "n_features": 108,
+    "auc": 0.9294827004494943,
+    "ll": 0.9634095244413493,
+    "mean_fold_auc": 0.9255461580685148,
+    "std_fold_auc": 0.021108226084104613
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Phys_CNN_OOF",
+    "calibration": "raw",
+    "n_features": 125,
+    "auc": 0.9271340102959263,
+    "ll": 0.36963556214713855,
+    "mean_fold_auc": 0.9115838919411304,
+    "std_fold_auc": 0.017993025039184988
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Phys_CNN_OOF",
+    "calibration": "platt",
+    "n_features": 125,
+    "auc": 0.9154166802712203,
+    "ll": 0.4035230684022445,
+    "mean_fold_auc": 0.9115838919411304,
+    "std_fold_auc": 0.017993025039184988
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Phys_CNN_OOF",
+    "calibration": "temp",
+    "n_features": 125,
+    "auc": 0.9271340102959263,
+    "ll": 0.9139571055175137,
+    "mean_fold_auc": 0.9115838919411304,
+    "std_fold_auc": 0.017993025039184988
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Phys_CNN_OOF",
+    "calibration": "raw",
+    "n_features": 125,
+    "auc": 0.9272667907401965,
+    "ll": 0.36589171426439265,
+    "mean_fold_auc": 0.9114655751361509,
+    "std_fold_auc": 0.02032391971086026
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Phys_CNN_OOF",
+    "calibration": "platt",
+    "n_features": 125,
+    "auc": 0.9171058216606263,
+    "ll": 0.4095990666957471,
+    "mean_fold_auc": 0.9114655751361509,
+    "std_fold_auc": 0.02032391971086026
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Phys_CNN_OOF",
+    "calibration": "temp",
+    "n_features": 125,
+    "auc": 0.9272667907401965,
+    "ll": 0.8735527434150657,
+    "mean_fold_auc": 0.9114655751361509,
+    "std_fold_auc": 0.02032391971086026
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_PCA",
+    "calibration": "raw",
+    "n_features": 142,
+    "auc": 0.9127327739140846,
+    "ll": 0.4028712767786613,
+    "mean_fold_auc": 0.9226615682655904,
+    "std_fold_auc": 0.0336273345810108
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_PCA",
+    "calibration": "platt",
+    "n_features": 142,
+    "auc": 0.9072800687846236,
+    "ll": 0.44990812233356875,
+    "mean_fold_auc": 0.9226615682655904,
+    "std_fold_auc": 0.0336273345810108
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_PCA",
+    "calibration": "temp",
+    "n_features": 142,
+    "auc": 0.9127327739140846,
+    "ll": 0.9603859139460911,
+    "mean_fold_auc": 0.9226615682655904,
+    "std_fold_auc": 0.0336273345810108
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_PCA",
+    "calibration": "raw",
+    "n_features": 142,
+    "auc": 0.9127218902711116,
+    "ll": 0.40976147332810225,
+    "mean_fold_auc": 0.9256720163967266,
+    "std_fold_auc": 0.030594748379392384
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_PCA",
+    "calibration": "platt",
+    "n_features": 142,
+    "auc": 0.9081420533080834,
+    "ll": 0.44786158147460126,
+    "mean_fold_auc": 0.9256720163967266,
+    "std_fold_auc": 0.030594748379392384
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_PCA",
+    "calibration": "temp",
+    "n_features": 142,
+    "auc": 0.9127218902711116,
+    "ll": 0.9949770140918395,
+    "mean_fold_auc": 0.9256720163967266,
+    "std_fold_auc": 0.030594748379392384
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Phys_PCA",
+    "calibration": "raw",
+    "n_features": 159,
+    "auc": 0.9199181550048431,
+    "ll": 0.37437685525832853,
+    "mean_fold_auc": 0.9273052227355203,
+    "std_fold_auc": 0.034344290611413135
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Phys_PCA",
+    "calibration": "platt",
+    "n_features": 159,
+    "auc": 0.9170971147462479,
+    "ll": 0.41544267913805233,
+    "mean_fold_auc": 0.9273052227355203,
+    "std_fold_auc": 0.034344290611413135
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Phys_PCA",
+    "calibration": "temp",
+    "n_features": 159,
+    "auc": 0.9199181550048431,
+    "ll": 0.8327073380867456,
+    "mean_fold_auc": 0.9273052227355203,
+    "std_fold_auc": 0.034344290611413135
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Phys_PCA",
+    "calibration": "raw",
+    "n_features": 159,
+    "auc": 0.9197592538174376,
+    "ll": 0.3863865622024378,
+    "mean_fold_auc": 0.9283562597706585,
+    "std_fold_auc": 0.03675215821733754
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Phys_PCA",
+    "calibration": "platt",
+    "n_features": 159,
+    "auc": 0.9178045515394913,
+    "ll": 0.42483329209251963,
+    "mean_fold_auc": 0.9283562597706585,
+    "std_fold_auc": 0.03675215821733754
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Phys_PCA",
+    "calibration": "temp",
+    "n_features": 159,
+    "auc": 0.9197592538174376,
+    "ll": 0.915844533101876,
+    "mean_fold_auc": 0.9283562597706585,
+    "std_fold_auc": 0.03675215821733754
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Emb_PCA",
+    "calibration": "raw",
+    "n_features": 242,
+    "auc": 0.9268205613783047,
+    "ll": 0.3732141302420639,
+    "mean_fold_auc": 0.9325382054652916,
+    "std_fold_auc": 0.027762697270566655
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Emb_PCA",
+    "calibration": "platt",
+    "n_features": 242,
+    "auc": 0.9236969558450604,
+    "ll": 0.4042378961611699,
+    "mean_fold_auc": 0.9325382054652916,
+    "std_fold_auc": 0.027762697270566655
+  },
+  {
+    "model": "XGBoost",
+    "features": "SBR_Emb_PCA",
+    "calibration": "temp",
+    "n_features": 242,
+    "auc": 0.9268205613783047,
+    "ll": 0.9014574578133652,
+    "mean_fold_auc": 0.9325382054652916,
+    "std_fold_auc": 0.027762697270566655
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Emb_PCA",
+    "calibration": "raw",
+    "n_features": 242,
+    "auc": 0.9295741230504674,
+    "ll": 0.37364679517865346,
+    "mean_fold_auc": 0.9343845102952522,
+    "std_fold_auc": 0.027661121769727588
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Emb_PCA",
+    "calibration": "platt",
+    "n_features": 242,
+    "auc": 0.9263395043588991,
+    "ll": 0.39443649910568945,
+    "mean_fold_auc": 0.9343845102952522,
+    "std_fold_auc": 0.027661121769727588
+  },
+  {
+    "model": "LightGBM",
+    "features": "SBR_Emb_PCA",
+    "calibration": "temp",
+    "n_features": 242,
+    "auc": 0.9295741230504674,
+    "ll": 0.918831484589587,
+    "mean_fold_auc": 0.9343845102952522,
+    "std_fold_auc": 0.027661121769727588
+  },
+  {
+    "model": "XGBoost",
+    "features": "Phys_Rad_CNN",
+    "calibration": "raw",
+    "n_features": 338,
+    "auc": 0.9225737638902493,
+    "ll": 0.3757501868085981,
+    "mean_fold_auc": 0.9026386300734666,
+    "std_fold_auc": 0.03692825255313438
+  },
+  {
+    "model": "XGBoost",
+    "features": "Phys_Rad_CNN",
+    "calibration": "platt",
+    "n_features": 338,
+    "auc": 0.9121864150368411,
+    "ll": 0.41733217751955637,
+    "mean_fold_auc": 0.9026386300734666,
+    "std_fold_auc": 0.03692825255313438
+  },
+  {
+    "model": "XGBoost",
+    "features": "Phys_Rad_CNN",
+    "calibration": "temp",
+    "n_features": 338,
+    "auc": 0.9225737638902493,
+    "ll": 0.9288510412358456,
+    "mean_fold_auc": 0.9026386300734666,
+    "std_fold_auc": 0.03692825255313438
+  },
+  {
+    "model": "LightGBM",
+    "features": "Phys_Rad_CNN",
+    "calibration": "raw",
+    "n_features": 338,
+    "auc": 0.9231005322101415,
+    "ll": 0.3805941099716888,
+    "mean_fold_auc": 0.9021581319554327,
+    "std_fold_auc": 0.03432138982589438
+  },
+  {
+    "model": "LightGBM",
+    "features": "Phys_Rad_CNN",
+    "calibration": "platt",
+    "n_features": 338,
+    "auc": 0.9126043469270034,
+    "ll": 0.4214597876903825,
+    "mean_fold_auc": 0.9021581319554327,
+    "std_fold_auc": 0.03432138982589438
+  },
+  {
+    "model": "LightGBM",
+    "features": "Phys_Rad_CNN",
+    "calibration": "temp",
+    "n_features": 338,
+    "auc": 0.9231005322101415,
+    "ll": 0.9611799724945005,
+    "mean_fold_auc": 0.9021581319554327,
+    "std_fold_auc": 0.03432138982589438
+  }
+]
