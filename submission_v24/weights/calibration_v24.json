@@ -1,0 +1,23 @@
+{
+  "version": "v24",
+  "w_deep": 1.0,
+  "w_sbr": 0.0,
+  "platt_a": 1.0174,
+  "platt_b": -0.0185,
+  "temperature": 0.98,
+  "input_resolution_mm": 2.0,
+  "crop_size": [32, 40, 48],
+  "n_ttaviews": 15,
+  "rotation_search_range": 5.0,
+  "rotation_search_step": 2.0,
+  "pve_intensity_k": 0.3,
+  "oof_logloss": 0.2996,
+  "oof_auroc": 0.9411,
+  "notes": {
+    "models": "6 CNN models (3 Net3dR + 3 Net3dBig), weights averaged across 5 folds",
+    "input": "2.0mm isotropic, 80x80x80 grid, crop 32x40x48",
+    "tta": "15 views per model (1 base + 6 translation + 8 rotation)",
+    "calibration": "Platt scaling (near-identity, models well-calibrated)",
+    "sbr": "Disabled for v24 (CNN-only submission)"
+  }
+}
