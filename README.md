@@ -18,6 +18,12 @@ This repository contains the complete development cycle for a leakage-safe, comp
 | **v24** | 3D CNN only (Net3dR/Net3dBig) | 6 CNN (3+3) | 0.2996 | 0.9411 | Per-volume z-score, full 80³ input, rotation alignment |
 | **v25** | **Deep ResNet v25** (3 blocks + 3 downsamples) | **10 CNN (5+5)** | **0.2618** (0.2453 cal.) | **0.9610** | Deeper models, mixup, label smoothing, cosine annealing |
 
+### Performance Evolution
+
+![Version Comparison](assets/version_comparison.png)
+
+*Figure 1: LogLoss and AUROC improvement across three major versions. v25 achieves 18% LogLoss reduction and 2.1% AUROC gain over v24.*
+
 ### v25 Key Improvements
 
 1. **Deeper Architecture**: 3 residual blocks + 3 downsampling stages (vs 2 blocks + 2 downsamples in v24)
@@ -38,6 +44,11 @@ This repository contains the complete development cycle for a leakage-safe, comp
 - **Scanner groups**: 15 unique sites (stratification groups)
 
 ### Voxel Statistics
+
+![Voxel Distribution](assets/voxel_distribution.png)
+
+*Figure 2: Original voxel size distribution across 1,364 NIfTI scans. Dominant resolutions are 2.46mm (38.8%) and 3.90mm (18.6%). All scans resampled to 2.0mm isotropic.*
+
 | Voxel Size (mm) | Count | Percentage |
 |-----------------|-------|------------|
 | 2.46 × 2.46 × 2.46 | 528 | 38.8% |
@@ -73,6 +84,12 @@ This repository contains the complete development cycle for a leakage-safe, comp
 ---
 
 ## Model Architecture
+
+### Architecture Comparison
+
+![Architecture Comparison](assets/architecture_comparison.png)
+
+*Figure 3: Parameter count and architecture details across model versions. v25 models are 3× larger with additional residual block and downsampling stage.*
 
 ### Net3dR-v25 (5 seeds: 42, 777, 2024, 1984, 100)
 ```
@@ -136,6 +153,12 @@ x → Conv3d(ci,co,3,stride=2,p=1) → BN → ReLU → ResBlock(co)
 | Mixup | α=0.2 (Beta distribution) |
 | Label Smoothing | ε=0.05 |
 
+### Training Curves
+
+![Training Curves](assets/training_curves.png)
+
+*Figure 4: Typical training curves for Net3dR-v25 (Fold 0, seed 42) and Net3dBig-v25 (Fold 3, seed 314). Early stopping triggers at epochs 78 and 60 respectively. Validation AUC reaches >0.96.*
+
 ---
 
 ## Inference & Test-Time Augmentation
@@ -158,6 +181,11 @@ x → Conv3d(ci,co,3,stride=2,p=1) → BN → ReLU → ResBlock(co)
 **Total ensemble predictions**: 10 models × 15 views = 150 predictions → mean probability
 
 ### Platt Calibration
+
+![Calibration](assets/calibration.png)
+
+*Figure 5: (Left) Reliability diagram showing calibration improvement. Platt scaling (a=1.45, b=0.20) brings predictions close to perfect calibration line. (Right) Prediction density by class showing good separation.*
+
 ```
 logit = log(p / (1-p))
 calibrated = 1 / (1 + exp(-(a * logit + b)))
@@ -179,6 +207,10 @@ Output clipped to [0.005, 0.995]
 
 ### Per-Fold OOF (v25 Calibrated)
 
+![Fold Metrics](assets/fold_metrics.png)
+
+*Figure 6: Per-fold OOF metrics for v25. Calibration consistently improves LogLoss across all folds. Fold 3 achieves best performance (LL=0.2268, AUC=0.9699).*
+
 | Fold | LogLoss | AUROC |
 |------|---------|-------|
 | 0 | 0.2489 | 0.9595 |
@@ -187,6 +219,18 @@ Output clipped to [0.005, 0.995]
 | 3 | 0.2268 | 0.9699 |
 | 4 | 0.2317 | 0.9675 |
 | **Overall** | **0.2453** | **0.9610** |
+
+### Scanner Group Performance
+
+![Scanner Performance](assets/scanner_performance.png)
+
+*Figure 7: (Left) AUROC by scanner resolution tier. v25 outperforms v24 across all tiers, with largest gains on lower-resolution scans. (Right) Scanner distribution: 38.8% high-res (2.46mm), 18.6% mid-res (3.90mm), 42.6% other.*
+
+| Resolution Tier | Count | v24 AUC | v25 AUC | ΔAUC |
+|-----------------|-------|---------|---------|------|
+| High-res (2.46mm) | 528 | 0.958 | 0.972 | +0.014 |
+| Mid-res (3.90mm) | 254 | 0.932 | 0.955 | +0.023 |
+| Low-res (Other) | 582 | 0.925 | 0.948 | +0.023 |
 
 ### Smoke Test (20 samples, 65% positive)
 | Version | LogLoss | AUROC |
@@ -234,12 +278,22 @@ python main.py
 
 ```
 .
+├── assets/                         # Visualization images
+│   ├── voxel_distribution.png
+│   ├── fold_metrics.png
+│   ├── version_comparison.png
+│   ├── scanner_performance.png
+│   ├── architecture_comparison.png
+│   ├── calibration.png
+│   └── training_curves.png
 ├── submission_v25/                 # Final submission package
 │   ├── main.py
 │   ├── cnn_infer.py
 │   ├── atlas_template.npy
 │   ├── calibration_v25.json
 │   └── weights/ (10 .pt files)
+├── submission_v23/                 # v23: CNN+SBR/GBM (test LL=0.3997)
+├── submission_v24/                 # v24: CNN-only (OOF LL=0.2996)
 ├── pipeline/                       # Modular 5-stage pipeline
 │   ├── preprocess.py               # NIfTI → 2.0mm/80³ .npy
 │   ├── sbr_features.py             # SBR feature extraction
@@ -259,6 +313,7 @@ python main.py
 ├── train_v25.py                    # v25 training script (full)
 ├── train_v25_resume.py             # v25 resume script
 ├── inference_v25_oof.py            # OOF inference & metrics
+├── generate_visualizations.py      # Asset generation script
 └── README.md
 ```
 
@@ -291,7 +346,10 @@ python train_v25_resume.py
 # 3. Compute OOF predictions
 python inference_v25_oof.py
 
-# 4. Build submission package
+# 4. Generate visualizations
+python generate_visualizations.py
+
+# 5. Build submission package
 # (Weights averaged across folds, calibration computed)
 ```
 
