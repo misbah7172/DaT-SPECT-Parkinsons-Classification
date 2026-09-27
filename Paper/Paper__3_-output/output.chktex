@@ -1,2 +1,0 @@
-main.tex:108:1: Error: `figure' expected, found `document'. \end{document} 
-main.tex:82:1: Warning: No match found for `document'. \begin{document}  
