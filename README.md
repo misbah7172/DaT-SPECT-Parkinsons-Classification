@@ -55,6 +55,22 @@ This repository contains the complete development cycle for a leakage-safe, comp
 | 3.90 × 3.90 × 3.90 | 254 | 18.6% |
 | Others (64 unique sizes) | 580 | 42.6% |
 
+### Before vs After Preprocessing
+
+![Preprocessing Before After](assets/preprocessing_before_after.png)
+
+*Figure 3: Complete before/after preprocessing analysis. (Top row) Raw data diversity: 66 unique voxel sizes, 66 unique shapes, physical coverage 96–284mm. (Bottom row) Preprocessing pipeline stages and uniform 80³×2.0mm output. (Right) Summary statistics table.*
+
+![Voxel Size Details](assets/voxel_size_details.png)
+
+*Figure 4: Detailed breakdown of top 20 raw voxel sizes (of 66 total) with counts, percentages, and typical shapes. 2.46mm³ and 3.90mm³ dominate at 57.4% combined.*
+
+| Voxel Size (mm) | Count | Percentage |
+|-----------------|-------|------------|
+| 2.46 × 2.46 × 2.46 | 528 | 38.8% |
+| 3.90 × 3.90 × 3.90 | 254 | 18.6% |
+| Others (64 unique sizes) | 580 | 42.6% |
+
 ### Preprocessing Pipeline
 1. **RAS reorientation** using nibabel
 2. **Resampling** to 2.0mm isotropic voxels (trilinear interpolation)
@@ -89,7 +105,7 @@ This repository contains the complete development cycle for a leakage-safe, comp
 
 ![Architecture Comparison](assets/architecture_comparison.png)
 
-*Figure 3: Parameter count and architecture details across model versions. v25 models are 3× larger with additional residual block and downsampling stage.*
+*Figure 5: Parameter count and architecture details across model versions. v25 models are 3× larger with additional residual block and downsampling stage.*
 
 ### Net3dR-v25 (5 seeds: 42, 777, 2024, 1984, 100)
 ```
@@ -157,7 +173,7 @@ x → Conv3d(ci,co,3,stride=2,p=1) → BN → ReLU → ResBlock(co)
 
 ![Training Curves](assets/training_curves.png)
 
-*Figure 4: Typical training curves for Net3dR-v25 (Fold 0, seed 42) and Net3dBig-v25 (Fold 3, seed 314). Early stopping triggers at epochs 78 and 60 respectively. Validation AUC reaches >0.96.*
+*Figure 6: Typical training curves for Net3dR-v25 (Fold 0, seed 42) and Net3dBig-v25 (Fold 3, seed 314). Early stopping triggers at epochs 78 and 60 respectively. Validation AUC reaches >0.96.*
 
 ---
 
@@ -184,7 +200,7 @@ x → Conv3d(ci,co,3,stride=2,p=1) → BN → ReLU → ResBlock(co)
 
 ![Calibration](assets/calibration.png)
 
-*Figure 5: (Left) Reliability diagram showing calibration improvement. Platt scaling (a=1.45, b=0.20) brings predictions close to perfect calibration line. (Right) Prediction density by class showing good separation.*
+*Figure 7: (Left) Reliability diagram showing calibration improvement. Platt scaling (a=1.45, b=0.20) brings predictions close to perfect calibration line. (Right) Prediction density by class showing good separation.*
 
 ```
 logit = log(p / (1-p))
@@ -209,7 +225,7 @@ Output clipped to [0.005, 0.995]
 
 ![Fold Metrics](assets/fold_metrics.png)
 
-*Figure 6: Per-fold OOF metrics for v25. Calibration consistently improves LogLoss across all folds. Fold 3 achieves best performance (LL=0.2268, AUC=0.9699).*
+*Figure 8: Per-fold OOF metrics for v25. Calibration consistently improves LogLoss across all folds. Fold 3 achieves best performance (LL=0.2268, AUC=0.9699).*
 
 | Fold | LogLoss | AUROC |
 |------|---------|-------|
@@ -224,7 +240,7 @@ Output clipped to [0.005, 0.995]
 
 ![Scanner Performance](assets/scanner_performance.png)
 
-*Figure 7: (Left) AUROC by scanner resolution tier. v25 outperforms v24 across all tiers, with largest gains on lower-resolution scans. (Right) Scanner distribution: 38.8% high-res (2.46mm), 18.6% mid-res (3.90mm), 42.6% other.*
+*Figure 9: (Left) AUROC by scanner resolution tier. v25 outperforms v24 across all tiers, with largest gains on lower-resolution scans. (Right) Scanner distribution: 38.8% high-res (2.46mm), 18.6% mid-res (3.90mm), 42.6% other.*
 
 | Resolution Tier | Count | v24 AUC | v25 AUC | ΔAUC |
 |-----------------|-------|---------|---------|------|
@@ -279,13 +295,15 @@ python main.py
 ```
 .
 ├── assets/                         # Visualization images
-│   ├── voxel_distribution.png
-│   ├── fold_metrics.png
-│   ├── version_comparison.png
-│   ├── scanner_performance.png
-│   ├── architecture_comparison.png
-│   ├── calibration.png
-│   └── training_curves.png
+│   ├── voxel_distribution.png          # Figure 2: Raw voxel size pie/bar chart
+│   ├── preprocessing_before_after.png  # Figure 3: Before/after preprocessing
+│   ├── voxel_size_details.png          # Figure 4: Top 20 voxel size table
+│   ├── version_comparison.png          # Figure 1: v23→v24→v25 evolution
+│   ├── architecture_comparison.png     # Figure 5: Model params & architecture
+│   ├── training_curves.png             # Figure 6: Loss/AUC curves (2 folds)
+│   ├── calibration.png                 # Figure 7: Reliability diagram + density
+│   ├── fold_metrics.png                # Figure 8: Per-fold OOF metrics
+│   └── scanner_performance.png         # Figure 9: AUC by resolution tier
 ├── submission_v25/                 # Final submission package
 │   ├── main.py
 │   ├── cnn_infer.py
