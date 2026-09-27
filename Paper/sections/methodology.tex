@@ -142,12 +142,12 @@ This ensures no scanner appears in both training and validation within any fold,
 \end{figure}
 
 \subsection{Calibration}
-\label{sec:calibration}
+\label{sec:calibration_method}
 Post-hoc Platt scaling is fit on the OOF ensemble predictions (1,362 samples) by grid search over $a \in [0.5, 2.0]$, $b \in [-1.0, 1.0]$ minimizing LogLoss. Optimal parameters: $a=1.45, b=0.20$. This improves LogLoss from 0.2618 to \textbf{0.2453} while AUROC remains 0.9610.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/calibration.png}
     \caption{Calibration analysis. (Left) Reliability diagram: uncalibrated predictions (blue) show overconfidence; Platt-calibrated (red) align with perfect calibration line. (Right) Prediction density by class: good separation between negative (red) and positive (blue) classes.}
-    \label{fig:calibration}
+    \label{fig:calibration_method}
 \end{figure}

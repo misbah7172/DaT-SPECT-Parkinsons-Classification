@@ -10,7 +10,7 @@ Our cohort comprises 1,362 usable 3D volumetric scans (1 scan failed QC) from 15
     \centering
     \includegraphics[width=0.95\linewidth]{figures/preprocessing_before_after.png}
     \caption{Before/after spatial standardization. (Top) Raw data diversity: 66 unique shapes, 66 voxel sizes, physical coverage 96--284~mm. (Middle) Pipeline stages. (Bottom) Uniform $80^3$ output at 2.0~\voxelunit~with summary statistics.}
-    \label{fig:preprocessing}
+    \label{fig:preprocessing_before_after}
 \end{figure}
 
 \begin{table}[H]
@@ -51,7 +51,7 @@ All scans undergo identical deterministic preprocessing:
 \begin{table}[H]
 \centering
 \caption{Preprocessing summary: before vs. after.}
-\label{tab:preprocessing_summary}
+\label{tab:preprocessing_summary_spatial}
 \begin{tabular}{lll}
 \toprule
 \textbf{Metric} & \textbf{Before} & \textbf{After} \\
