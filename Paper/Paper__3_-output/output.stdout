@@ -1,0 +1,49 @@
+chktex exit: 0
+Rc files read (in order):
+  /usr/local/share/latexmk/LatexMk
+Latexmk: This is Latexmk, John Collins, 9 March 2026. Version 4.88.
+Latexmk: Changing directory to '/compile/'
+Force *latex to be remade.
+------------
+Running 'internal overleaf_pre_process "main.tex" "output.pdf"'
+------------
+Latexmk: calling overleaf_pre_process( "main.tex" "output.pdf" )
+Latexmk: applying rule 'pdflatex'...
+Rule 'pdflatex':  Reasons for rerun
+Category 'other':
+  Rerun of 'pdflatex' forced or previously required:
+    Reason or flag: 'go_mode=3'
+
+------------
+Run number 1 of rule 'pdflatex'
+------------
+------------
+Running 'pdflatex  -synctex=1 -interaction=batchmode -recorder --jobname="output"  "main.tex"'
+------------
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex)
+ \write18 enabled.
+entering extended mode
+Latexmk: Getting log file 'output.log'
+Latexmk: Examining 'output.fls'
+Latexmk: Examining 'output.log'
+Latexmk: Found input bbl file 'output.bbl'
+  ===Source file 'output.bbl' for 'pdflatex'
+Latexmk: Found bibliography file(s):
+  ./references.bib
+Latexmk: Summary of warnings from last run of *latex:
+  Latex failed to resolve 14 reference(s)
+Latexmk: Errors, in force_mode: so I tried finishing targets
+------------
+Running 'internal overleaf_post_process "main.tex" "output.pdf"'
+------------
+Latexmk: calling overleaf_post_process( "main.tex" "output.pdf" )
+Collected error summary (may duplicate other messages):
+  bibtex output: gave an error in previous invocation of latexmk.
+  pdflatex: Command for 'pdflatex' gave return code 1
+      Refer to 'output.log' and/or above output for details
+Latexmk: Undoing directory change
+'pdflatex': time = 2.22
+Processing time = 2.63, of which invoked processes = 2.22, other = 0.41.
+Elapsed clock time = 3.07.
+Number of rules run = 1
+

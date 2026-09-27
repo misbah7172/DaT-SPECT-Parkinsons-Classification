@@ -21,7 +21,7 @@ We evaluate three progressively enhanced model configurations to isolate the con
 \begin{description}
     \item[\textbf{Config A -- Hybrid Baseline (CNN + Biomarkers):}] 6 CNN models (3 Net3dR + 3 Net3dBig, 280K/294K params) + 4 gradient-boosted tree models on 93 quantitative SBR/asymmetry features. Weighted ensemble blending. Performance: Test LogLoss=0.3997, AUROC=0.9163. Represents a clinical biomarker + shallow CNN hybrid approach.
     
-    \item[\textbf{Config B -- CNN-only Intermediate:}] 6 CNN models (same architecture as Config A but trained with per-volume z-score normalization, full 80$^3$ input volume, coarse rotation alignment). OOF: LogLoss=0.2996, AUROC=0.9411. Removes biomarker features; isolates the effect of spatial standardization and full-volume training.
+    \item[\textbf{Config B -- CNN-only Intermediate:}] 6 CNN models (same architecture as Config A but trained with per-volume z-score normalization, full 80$^3$ input volume, rotation alignment). OOF: LogLoss=0.2996, AUROC=0.9411. Removes biomarker features; isolates the effect of spatial standardization and full-volume training.
     
     \item[\textbf{Config C -- Deep ResNet Ensemble (Proposed Framework):}] 10 CNN models (5 Net3dR-v25 + 5 Net3dBig-v25, 845K/1.3M params). Architecture extended to 3 residual blocks + 3 downsampling stages. Trained with Mixup ($\alpha=0.2$), Label Smoothing ($\epsilon=0.05$), Cosine Annealing, 5 seeds per architecture. OOF: LogLoss=0.2618 (0.2453 calibrated), AUROC=0.9610.
 \end{description}

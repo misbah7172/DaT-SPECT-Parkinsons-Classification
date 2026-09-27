@@ -38,7 +38,7 @@ Total parameters: \textbf{845,089}.
 \end{align*}
 Total parameters: \textbf{1,319,721}.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/architecture_comparison.png}
     \caption{Architecture comparison across versions. (Left) Parameter count: v24 models (280K/294K) vs. v25 models (845K/1.3M). (Right) Architecture details table showing block counts, downsampling stages, and channel progressions.}
@@ -47,7 +47,7 @@ Total parameters: \textbf{1,319,721}.
 
 Table~\ref{tab:architecture} summarizes the evolution across versions.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Model architecture evolution from v23 to v25.}
 \label{tab:architecture}
@@ -134,7 +134,7 @@ This ensures no scanner appears in both training and validation within any fold,
     \item \textbf{Platt Calibration:} $p_{\text{cal}} = \sigma(a \cdot \text{logit}(p) + b)$ with $a=1.45, b=0.20$ fit on OOF ensemble.
 \end{enumerate}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/training_curves.png}
     \caption{Training curves for two representative models. (Top) Net3dR-v25 Fold 0 seed 42: early stop at epoch 78, val AUC reaches 0.96. (Bottom) Net3dBig-v25 Fold 3 seed 314: early stop at epoch 60, val AUC reaches 0.97. Shaded regions show typical variance across seeds.}
@@ -145,7 +145,7 @@ This ensures no scanner appears in both training and validation within any fold,
 \label{sec:calibration}
 Post-hoc Platt scaling is fit on the OOF ensemble predictions (1,362 samples) by grid search over $a \in [0.5, 2.0]$, $b \in [-1.0, 1.0]$ minimizing LogLoss. Optimal parameters: $a=1.45, b=0.20$. This improves LogLoss from 0.2618 to \textbf{0.2453} while AUROC remains 0.9610.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/calibration.png}
     \caption{Calibration analysis. (Left) Reliability diagram: uncalibrated predictions (blue) show overconfidence; Platt-calibrated (red) align with perfect calibration line. (Right) Prediction density by class: good separation between negative (red) and positive (blue) classes.}

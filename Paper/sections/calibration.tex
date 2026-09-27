@@ -29,26 +29,26 @@ where $z = \text{logit}(p) = \log(p / (1-p))$. Parameters $(a,b)$ are fit by min
 \subsection{Calibration Results}
 \label{sec:cal_results}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/calibration.png}
     \caption{Calibration analysis. (Left) Reliability diagram: uncalibrated (blue) shows overconfidence; Platt-calibrated (red, $a=1.45, b=0.20$) aligns with perfect calibration. (Right) Prediction density by class showing good separation.}
     \label{fig:calibration}
 \end{figure}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Calibration effect on OOF ensemble (1,362 samples).}
 \label{tab:calibration}
-\begin{tabular}{lcccc}
+\begin{tabular}{lcc}
 \toprule
-\textbf{Metric} & \textbf{Before Cal.} & \textbf{After Cal.} & \textbf{Improvement} \\
+\textbf{Metric} & \textbf{Before Cal.} & \textbf{After Cal.} \\
 \midrule
-LogLoss & 0.2618 & \textbf{0.2453} & -6.3\% (absolute) \\
-AUROC & 0.9610 & 0.9610 & 0.000 (preserved) \\
-Brier Score & 0.0821 & \textbf{0.0784} & -4.5\% \\
-ECE (10 bins) & 0.0142 & \textbf{0.0061} & \textbf{-57\%} \\
-MCE (10 bins) & 0.0418 & \textbf{0.0193} & \textbf{-54\%} \\
+LogLoss & 0.2618 & \textbf{0.2453} \\
+AUROC & 0.9610 & 0.9610 \\
+Brier Score & 0.0821 & \textbf{0.0784} \\
+ECE (10 bins) & 0.0142 & \textbf{0.0061} \\
+MCE (10 bins) & 0.0418 & \textbf{0.0193} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -58,13 +58,13 @@ Platt scaling reduces Expected Calibration Error (ECE) by \textbf{57\%} and Maxi
 \subsection{Calibration Method Comparison}
 \label{sec:cal_comparison}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Calibration method comparison (OOF ensemble, 1,362 samples).}
 \label{tab:cal_methods}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Method} & \textbf{LogLoss} & \textbf{AUROC} & \textbf{ECE} & \textbf{MCE} \\
+\textbf{Method} & \textbf{LL} & \textbf{AUC} & \textbf{ECE} & \textbf{MCE} \\
 \midrule
 Uncalibrated & 0.2618 & 0.9610 & 0.0142 & 0.0418 \\
 Platt Scaling & \textbf{0.2453} & 0.9610 & \textbf{0.0061} & \textbf{0.0193} \\
@@ -79,7 +79,7 @@ Platt scaling achieves the best LogLoss and ECE. Temperature scaling (single par
 \subsection{Clinical Impact of Calibration}
 \label{sec:cal_clinical}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Clinical decision impact: uncalibrated vs. calibrated probabilities at risk thresholds.}
 \label{tab:cal_clinical}

@@ -6,7 +6,7 @@ We systematically ablate key components of Config C to quantify individual contr
 \subsection{Architecture Depth Ablation}
 \label{sec:arch_ablation}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Architecture depth/width ablation. All trained with Config C training recipe.}
 \label{tab:arch_ablation}
@@ -30,7 +30,7 @@ Ensemble (5+5, Config C arch) & -- & -- & \textbf{0.2618} & \textbf{0.9610} \\
 \subsection{Training Recipe Ablation}
 \label{sec:training_ablation}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Training component ablation (Net3dR-Config C, seed 42, Fold 0).}
 \label{tab:training_ablation}
@@ -56,7 +56,7 @@ Early Stopping (full 100 ep) & 0.274 & 0.956 & +0.009 & -0.003 \\
 \subsection{Ensemble Size Ablation}
 \label{sec:ensemble_ablation}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Ensemble size vs. performance (Config C architecture, OOF).}
 \label{tab:ensemble_ablation}
@@ -78,7 +78,7 @@ Early Stopping (full 100 ep) & 0.274 & 0.956 & +0.009 & -0.003 \\
 \subsection{TTA Configuration Ablation}
 \label{sec:tta_ablation}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{TTA configuration ablation (Config C ensemble, OOF).}
 \label{tab:tta_ablation}
@@ -100,7 +100,7 @@ Translation + Rotation & 15 & \textbf{0.2618} & \textbf{0.9610} \\
 \subsection{Calibration Method Ablation}
 \label{sec:cal_ablation}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Calibration method comparison (Config C OOF ensemble).}
 \label{tab:cal_ablation}
@@ -121,13 +121,13 @@ Temperature Scaling & 0.2478 & 0.9610 & 0.0072 & 0.0234 \\
 \subsection{Input Resolution Ablation}
 \label{sec:res_ablation}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Input grid size ablation (Net3dR-Config C, Fold 0).}
 \label{tab:res_ablation}
 \begin{tabular}{cccc}
 \toprule
-\textbf{Grid} & \textbf{Voxel (\voxelunit)} & \textbf{LL} & \textbf{AUC} \\
+\textbf{Grid} & \textbf{Voxel (\ensuremath{\text{mm}^3})} & \textbf{LL} & \textbf{AUC} \\
 \midrule
 64$^3$ & 2.5 & 0.289 & 0.951 \\
 80$^3$ & 2.0 & \textbf{0.265} & \textbf{0.959} \\
@@ -141,7 +141,7 @@ Temperature Scaling & 0.2478 & 0.9610 & 0.0072 & 0.0234 \\
 \subsection{Ablation Summary}
 \label{sec:ablation_summary}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \begin{tabular}{cc}
     \includegraphics[width=0.45\linewidth]{figures/version_comparison.png} &
@@ -149,7 +149,7 @@ Temperature Scaling & 0.2478 & 0.9610 & 0.0072 & 0.0234 \\
     \end{tabular}
     \caption{Key ablation drivers: (Left) Configuration evolution shows cumulative gains. (Right) Architecture scaling (280K $\to$ 845K/1.3M) is the largest single factor.}
     \label{fig:ablation_summary}
-\end{figure}
+</figure>
 
 The largest contributors to Config C's improvement over Config B:
 \begin{enumerate}

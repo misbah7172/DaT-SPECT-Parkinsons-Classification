@@ -11,7 +11,7 @@ In multi-center medical imaging, scans from the same site share acquisition char
 
 We formalize \cvname~to prevent site-level leakage:
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \caption{Site-Aware Stratified Group K-Fold}
 \begin{algorithmic}
 \STATE \textbf{Input:} Dataset $\mathcal{D} = \{(\mathbf{x}_i, y_i, g_i)\}_{i=1}^N$ where $g_i$ = acquisition site ID
@@ -33,7 +33,7 @@ We formalize \cvname~to prevent site-level leakage:
     \item \textbf{Fold sizes:} 272--273 validation / 1,089--1,090 training
 \end{itemize}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Fold composition under site-aware group CV.}
 \label{tab:fold_composition}
@@ -53,7 +53,7 @@ We formalize \cvname~to prevent site-level leakage:
 \subsection{Leakage Benchmark: Naive CV vs. Group CV}
 \label{sec:leakage_benchmark}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Naive random CV vs. Site-Aware Group CV (Net3dR-v25, seed 42, Fold 0).}
 \label{tab:leakage_benchmark}

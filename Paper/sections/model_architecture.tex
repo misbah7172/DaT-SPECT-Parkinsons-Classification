@@ -51,7 +51,7 @@ Both convolutions use $3\times3\times3$ kernels with padding=1. Downsampling blo
 \subsection{Configuration Evolution}
 \label{sec:arch_evolution}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Model architecture evolution across configurations.}
 \label{tab:arch_evolution}
@@ -72,7 +72,7 @@ Crop/Full volume & Crop & Full & Full \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/architecture_comparison.png}
     \caption{Architecture comparison. (Left) Parameter count evolution. (Right) Architecture details table.}
@@ -84,7 +84,7 @@ Manca~\cite{manca2024dat} used a 48$^3$ crop 3D CNN with 4 residual blocks (988K
 \subsection{Training Configuration}
 \label{sec:training_config}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Complete training hyperparameters for Config C models.}
 \label{tab:training_hyperparams}
@@ -130,8 +130,9 @@ where $\text{Mix}_\alpha(\mathbf{x}) = \lambda \mathbf{x}_i + (1-\lambda)\mathbf
     \item Fold weights averaged for final inference models: $\theta_{\text{final}} = \frac{1}{5}\sum_{f=1}^5 \theta_f$
 \end{itemize}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/training_curves.png}
     \caption{Training curves. (Top) Net3dR-Config C Fold 0 seed 42: early stop epoch 78. (Bottom) Net3dBig-Config C Fold 3 seed 314: early stop epoch 60.}
     \label{fig:training_curves}
+\end{figure}

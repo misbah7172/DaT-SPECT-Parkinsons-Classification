@@ -6,20 +6,20 @@
 
 Our cohort comprises 1,362 usable 3D volumetric scans (1 scan failed QC) from 15 acquisition centers. The raw data exhibits substantial heterogeneity:
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/preprocessing_before_after.png}
     \caption{Before/after spatial standardization. (Top) Raw data diversity: 66 unique shapes, 66 voxel sizes, physical coverage 96--284~mm. (Middle) Pipeline stages. (Bottom) Uniform $80^3$ output at 2.0~\voxelunit~with summary statistics.}
     \label{fig:preprocessing}
 \end{figure}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Raw dataset voxel size distribution (1,362 scans).}
 \label{tab:voxel_dist}
 \begin{tabular}{lccc}
 \toprule
-\textbf{Voxel Size (\voxelunit)} & \textbf{Count} & \textbf{Percentage} & \textbf{Typical Matrix} \\
+\textbf{Voxel Size (\ensuremath{\text{mm}^3})} & \textbf{Count} & \textbf{Percentage} & \textbf{Typical Matrix} \\
 \midrule
 2.46 $\times$ 2.46 $\times$ 2.46 & 528 & 38.8\% & 256$\times$256$\times$256, 128$\times$128$\times$128 \\
 3.90 $\times$ 3.90 $\times$ 3.90 & 254 & 18.6\% & 128$\times$128$\times$128, 128$\times$128$\times$87 \\
@@ -48,7 +48,7 @@ All scans undergo identical deterministic preprocessing:
     \item \textbf{Inference Normalization:} Clip to [1st, 99th] percentile, min-max scale to [0, 1].
 \end{enumerate}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Preprocessing summary: before vs. after.}
 \label{tab:preprocessing_summary}
@@ -72,13 +72,13 @@ Normalization & Scanner-dependent & Per-volume z-score \\
 
 We evaluated input grid sizes at 2.0~\voxelunit~isotropic:
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Input grid size ablation (Net3dR-v25, Fold 0).}
 \label{tab:grid_ablation}
 \begin{tabular}{cccc}
 \toprule
-\textbf{Grid} & \textbf{Voxel (\voxelunit)} & \textbf{LogLoss} & \textbf{AUROC} \\
+\textbf{Grid} & \textbf{Voxel (\ensuremath{\text{mm}^3})} & \textbf{LogLoss} & \textbf{AUROC} \\
 \midrule
 64$^3$ & 2.5 & 0.289 & 0.951 \\
 80$^3$ & 2.0 & \textbf{0.265} & \textbf{0.959} \\

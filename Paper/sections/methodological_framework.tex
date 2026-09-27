@@ -1,7 +1,7 @@
 \section{Methodological Framework: A Four-Stage Pipeline}
 \label{sec:framework}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/method_pipeline.pdf}
     \caption{The four-stage methodological framework for robust multi-center 3D medical image classification. Stage 1: Spatial \& volumetric normalization standardizes heterogeneous inputs. Stage 2: Model exploration compares end-to-end 3D deep learning against quantitative ROI biomarkers. Stage 3: Site-aware leakage-free validation ensures unbiased generalization estimates. Stage 4: Post-hoc probability calibration produces clinically reliable risk scores.}
@@ -13,6 +13,7 @@ Our framework decomposes the problem into four modular stages, each addressing a
 \subsection{Stage 1: Spatial \& Volumetric Normalization}
 \label{sec:framework_stage1}
 Multi-center 3D scans arrive with heterogeneous voxel spacings (1.47--3.90~\voxelunit), matrix sizes (128--256), and slice counts (36--128). Stage 1 transforms all inputs into a canonical representation:
+
 \begin{enumerate}
     \item \textbf{Reorientation:} Rigid affine transform to RAS (Right-Anterior-Superior) coordinate space using NIfTI affine metadata.
     \item \textbf{Isotropic Resampling:} Trilinear interpolation to 2.0~\voxelunit~isotropic voxels. Scaling factor per dimension: $f_i = \text{voxel}_i / 2.0$.
@@ -31,7 +32,7 @@ We compare two complementary modeling paradigms:
     \item[\textbf{Track A: End-to-End 3D Deep Learning.}] 3D ResNet variants with residual skip connections, three downsampling stages, and channel scaling (Net3dR-v25: 845K params; Net3dBig-v25: 1.3M params). Regularized by Mixup, label smoothing, and multi-view TTA.
     
     \item[\textbf{Track B: Quantitative ROI Biomarkers.}] Anatomically-guided feature extraction: striatal sub-regional intensity percentiles, hemispheric asymmetry indices, putamen-to-caudate ratios, and caudate-to-putamen gradients (93 features total). Modeled with gradient-boosted trees (XGBoost, LightGBM) and linear models.
-\end{enumerate}
+\end{description}
 
 This dual-track design directly tests whether learned 3D representations outperform expert-engineered clinical biomarkers.
 

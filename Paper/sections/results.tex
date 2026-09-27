@@ -4,7 +4,7 @@
 \subsection{Overall Out-of-Fold Performance}
 \label{sec:overall_oof}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Overall OOF performance comparison across configurations. Config C calibrated: Platt $a=1.45, b=0.20$.}
 \label{tab:overall_oof}
@@ -21,7 +21,7 @@ Config B $\to$ Config C $\Delta$ & \textbf{-12.6\%} & \textbf{-18.1\%} & \textbf
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/version_comparison.png}
     \caption{Configuration comparison. (Left) LogLoss: raw (blue) and calibrated (purple) across configurations. (Right) AUROC evolution. Config C reduces LogLoss by 18.1\% and increases AUROC by 2.1\% over Config B.}
@@ -33,14 +33,14 @@ The \textbf{18.1\% relative LogLoss reduction} (0.2996 $\to$ 0.2453) and \textbf
 \subsection{Per-Fold Analysis}
 \label{sec:per_fold}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/fold_metrics.png}
     \caption{Per-fold OOF metrics for Config C. (Left) LogLoss: raw (blue) and calibrated (purple) per fold. Calibration consistently improves LogLoss across all folds. (Right) AUROC per fold. Fold 3 achieves best performance (LL=0.2268, AUC=0.9699).}
     \label{fig:fold_metrics}
 \end{figure}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Per-fold OOF metrics for Config C (calibrated). 95\% bootstrap CI (1,000 resamples).}
 \label{tab:per_fold}
@@ -66,14 +66,14 @@ Fold 3 achieves the best performance (Cal. LL=0.2268, AUC=0.9699), while Fold 1 
 
 Scanners grouped by resolution: High-res (2.46~mm, 528 scans), Mid-res (3.90~mm, 254 scans), Low-res (other, 582 scans).
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/scanner_performance.png}
     \caption{Scanner group performance. (Left) AUROC by resolution tier: Config C outperforms Config B across all tiers, with largest gains on lower-resolution scans (+2.3\%). (Right) Scanner distribution.}
     \label{fig:scanner_performance}
 \end{figure}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{AUROC by scanner resolution tier.}
 \label{tab:scanner_tier}
@@ -95,14 +95,14 @@ Config C shows consistent improvement across all tiers, with \textbf{largest gai
 \subsection{Calibration Analysis}
 \label{sec:calibration_results}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/calibration.png}
     \caption{Calibration analysis for Config C. (Left) Reliability diagram: uncalibrated ensemble (blue) shows overconfidence; Platt-calibrated (red, $a=1.45, b=0.20$) aligns with perfect calibration. (Right) Prediction density by class showing good separation.}
     \label{fig:calibration_results}
 \end{figure}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Calibration effect on Config C OOF ensemble (1,362 samples).}
 \label{tab:calibration}
@@ -126,7 +126,7 @@ Platt scaling ($a=1.45, b=0.20$) reduces ECE by 57\% and MCE by 54\% while prese
 
 A holdout test set of 20 scans with shifted class distribution (65\% positive vs. 55\% training) was used to evaluate distribution shift robustness.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Holdout test (20 samples, 65\% positive).}
 \label{tab:holdout_test}
@@ -145,7 +145,7 @@ Config C achieves superior ranking (AUC=0.9670 vs 0.9341). Higher LogLoss reflec
 \subsection{Statistical Significance}
 \label{sec:significance}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Statistical significance of improvements (paired tests across 5 folds).}
 \label{tab:significance}
