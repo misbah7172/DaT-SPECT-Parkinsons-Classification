@@ -89,10 +89,11 @@ Based on our systematic development cycle and ablation studies, we distill five 
     \item \textbf{Platt Scaling:} $p_{\text{cal}} = \sigma(a \cdot \text{logit}(p) + b)$ fit by minimizing LogLoss on OOF predictions. Best overall (Table~\ref{tab:cal_methods}).
     \item \textbf{Temperature Scaling:} Single parameter $T$; faster but underfits.
     \item \textbf{Isotonic Regression:} Non-parametric; slightly overfits on $N < 2000$.
+    \item \textbf{Calibration Brackets:} Shawki et al.~\cite{shawki2024dat} and Paul Bd~\cite{paulbd2024dat} measured calibration slope decay (1.036 $\to$ 0.85 $\to$ 0.74) and recommended shipping calibration brackets rather than fixing at in-distribution optimum.
     \item \textbf{Critical:} Fit only on OOF predictions, never on test data. Use nested CV if hyperparameters need tuning.
 \end{itemize}
 
-\textbf{Evidence:} Platt scaling reduces ECE by 57\% (0.0142 $\to$ 0.0061), MCE by 54\%, LogLoss by 6.3\%, while preserving AUROC (Table~\ref{tab:calibration}). At clinical threshold $p>0.90$, calibrated TP rate increases from 76.3\% to 82.4\% (Table~\ref{tab:cal_clinical}).
+\textbf{Evidence:} Platt scaling reduces ECE by 57\% (0.0142 $\to$ 0.0061), MCE by 54\%, LogLoss by 6.3\%, while preserving AUROC (Table~\ref{tab:calibration}). At clinical threshold $p>0.90$, calibrated TP rate increases from 76.3\% to 82.4\% (Table~\ref{tab:cal_clinical}). Shawki et al.~\cite{shawki2024dat} and Paul Bd~\cite{paulbd2024dat} both measured calibration slope decay (1.036 $\to$ 0.85 $\to$ 0.74) and recommended shipping calibration brackets rather than fixing at in-distribution optimum.
 
 \subsection{Summary Checklist}
 \label{sec:checklist}

@@ -11,7 +11,7 @@ The transition from 2 to 3 residual blocks + downsampling stages adds a third hi
     \item \textbf{Stage 3 (10$^3$):} Global uptake asymmetry, whole-structure shape, left-right gradients
 \end{itemize}
 
-This mirrors the known pathophysiology: DaT-SPECT signal loss begins in posterior putamen, spreads to anterior putamen and caudate, with characteristic left-right asymmetry. The deeper hierarchy naturally captures this progression.
+This mirrors the known pathophysiology: DaT-SPECT signal loss begins in posterior putamen, spreads to anterior putamen and caudate, with characteristic left-right asymmetry. The deeper hierarchy naturally captures this progression. Shawki et al.~\cite{shawki2024dat} found that a slice-sequence BiGRU with gated attention (preserving superior-inferior profile) outperformed 3D CNNs and slab averaging, suggesting the superior-inferior profile is critical -- our third hierarchical level captures this.
 
 \subsection{Scanner Heterogeneity Robustness}
 \label{sec:scanner_robustness}
@@ -23,6 +23,8 @@ The largest Config C gains occur on lower-resolution scans (+2.3\% AUROC on 3.90
     \item Per-volume z-score normalization prevents scanner-specific intensity distributions from biasing the model.
 \end{enumerate}
 
+Shawki et al.~\cite{shawki2024dat} found strong blur/noise augmentation (Buddenkotte \& Buchert 2024~\cite{buddenkotte2024augmentation}) reduced CNN error on unseen scanners from 0.3529 to 0.2716 LogLoss, making CNNs indifferent to camera resolution and noise. Manca~\cite{manca2024dat} showed random CV inflates AUROC by +0.10 vs grouped CV, and the head-centered crop fix (correcting a geometric-center crop defect affecting 530/1362 scans) delivered >100\% of its predicted gain, confirming that fixing data-correctness issues transfers better than model refinements.
+
 \subsection{Calibration for Clinical Decision Support}
 \label{sec:cal_clinical_discussion}
 
@@ -33,7 +35,7 @@ The 57\% ECE reduction via Platt scaling is critical for clinical deployment:
     \item \textbf{Longitudinal monitoring:} Probability changes over time track disease progression
 \end{itemize}
 
-Uncalibrated models exhibit overconfidence (ECE=0.0142), risking false certainty in borderline cases. Our calibrated probabilities maintain AUROC while providing reliable absolute risk estimates.
+Uncalibrated models exhibit overconfidence (ECE=0.0142), risking false certainty in borderline cases. Our calibrated probabilities maintain AUROC while providing reliable absolute risk estimates. Shawki et al.~\cite{shawki2024dat} and Paul Bd~\cite{paulbd2024dat} both measured calibration slope decay (1.036 $\to$ 0.85 $\to$ 0.74) and recommended shipping calibration brackets rather than fixing at in-distribution optimum.
 
 \subsection{Computational Efficiency on Consumer Hardware}
 \label{sec:compute}
@@ -47,7 +49,7 @@ Training 1.3M-parameter 3D models on 4GB VRAM required careful engineering:
     \item $80^3$ crop $\to$ fits in VRAM; 96$^3$ OOM
 \end{itemize}
 
-This demonstrates that modern deep 3D CNNs are feasible on consumer hardware with proper engineering.
+This demonstrates that modern deep 3D CNNs are feasible on consumer hardware with proper engineering. Manca~\cite{manca2024dat} achieved competitive results (LogLoss 0.3008) with a CPU-only pipeline (~100h compute), demonstrating that careful engineering can compensate for hardware constraints.
 
 \subsection{Limitations}
 \label{sec:limitations}

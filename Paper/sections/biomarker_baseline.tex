@@ -36,6 +36,8 @@ Gradients & 17 \\
 \end{tabular}
 \end{table}
 
+Shawki et al.~\cite{shawki2024dat} used a similar atlas-derived approach with ~173 left/right-invariant features (binding ratios, shape features, caudate/putamen intensity profiles) derived from a symmetric template built from normal scans, achieving a LogLoss reduction of 0.2319 $\to$ 0.2153 through template registration and regional binding ratios.
+
 \subsection{Gradient-Boosted Tree Modeling}
 \label{sec:gbt_modeling}
 
@@ -70,7 +72,7 @@ Net3dBig-v25 (ensemble) & 0.259 & 0.244 & 0.962 & 0.076 \\
 \end{tabular}
 \end{table}
 
-The 3D deep ensemble outperforms the best biomarker model (LightGBM) by \textbf{0.137 LogLoss} and \textbf{7.9\% AUROC}. The gap is largest on lower-resolution scans where handcrafted features degrade due to partial volume effects, while learned 3D representations are more robust through multi-scale processing and augmentation.
+The 3D deep ensemble outperforms the best biomarker model (LightGBM) by \textbf{0.137 LogLoss} and \textbf{7.9\% AUROC}. The gap is largest on lower-resolution scans where handcrafted features degrade due to partial volume effects, while learned 3D representations are more robust through multi-scale processing and augmentation. Shawki et al.~\cite{shawki2024dat} similarly found their 2D EfficientNet-B0 + BiGRU slice-sequence model with dual normalization outperformed 3D CNNs, but their template registration + regional binding ratio features alone improved LogLoss from 0.2319 to 0.2153.
 
 \subsection{Per-Scanner-Tier Performance}
 \label{sec:biomarker_scanner}

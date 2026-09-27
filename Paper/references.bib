@@ -11,7 +11,7 @@
 
 @article{walker2007dat,
   title={DaT-SPECT in the differential diagnosis of Parkinson's disease: a systematic review},
-  author={Walker, Z and Possin, KL and Boeve, BF and Aarsland, D},
+  author={Walker, Z and Possin, KL and Boeke, BF and Aarsland, D},
   journal={Movement Disorders},
   volume={22},
   number={10},
@@ -262,6 +262,142 @@
   journal={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
   pages={770--778},
   year={2016}
+}
+
+@article{manca2024dat,
+  title={DaT Parkinson's Challenge -- 53rd of 378: A CPU-only pipeline with feature branches, 3D CNN, and stacking},
+  author={Manca, Jonathan},
+  journal={GitHub Repository},
+  year={2024},
+  url={https://github.com/jonathan-manca/dat-parkinson-challenge},
+  note={53rd of 378, private LogLoss 0.3008, AUROC 0.9410. Key findings: geometric-center crop defect affecting 530/1362 scans; refinement transfer at ~10\%; random CV inflates AUROC by ~0.10 vs grouped CV; head-centered crop fix delivers >100\% of predicted gain. CPU-only pipeline with 131 scanner groups.}
+}
+
+@misc{shawki2024dat,
+  title={DaT Parkinson's Challenge -- solution and experiment record (DataCouples, 10th place)},
+  author={Shawki, Ahmed and Team DataCouples},
+  journal={GitHub Repository},
+  year={2024},
+  url={https://github.com/ahammadshawki8/dat-parkinsons-challenge},
+  note={10th place, private LogLoss 0.2760, AUROC 0.9551. Pipeline: RAS orientation, 112x160x160mm crop at 2mm, template registration, 173 atlas features, EfficientNet-B0 + slice-sequence BiGRU, dual-normalized channels, strong blur/noise augmentation, bagging over fold splits. Key: template registration + regional binding ratios (0.2319→0.2153); strong blur/noise aug (CNN on unseen scanners 0.3529→0.2716); dual normalization; slice-sequence BiGRU with gated attention; calibration bracket needed. Rejected: calibration families, 3D CNNs, MIL, tri-plane, SAM, mixup, DINOv2.}
+}
+
+@article{guo2017calibration,
+  title={On calibration of modern neural networks},
+  author={Guo, C and Pleiss, G and Sun, Y and Weinberger, KQ},
+  journal={Proceedings of the 34th International Conference on Machine Learning (ICML)},
+  pages={1321--1330},
+  year={2017},
+  publisher={PMLR}
+}
+
+@article{platt1999probabilistic,
+  title={Probabilistic outputs for support vector machines and comparisons to regularized likelihood methods},
+  author={Platt, JC and others},
+  journal={Advances in Large Margin Classifiers},
+  volume={10},
+  number={3},
+  pages={61--74},
+  year={1999},
+  publisher={MIT Press}
+}
+
+@article{zadrozny2002transforming,
+  title={Transforming classifier scores into accurate multiclass probability estimates},
+  author={Zadrozny, B and Elkan, C},
+  journal={Proceedings of the 8th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining},
+  pages={694--699},
+  year={2002},
+  publisher={ACM}
+}
+
+@article{kull2019beyond,
+  title={Beyond temperature scaling: Obtaining well-calibrated multi-class probabilities with Dirichlet calibration},
+  author={Kull, M and Nieto, MP and K{\"a}ngsepp, M and Silva, T and Song, H and Flach, P},
+  journal={Advances in Neural Information Processing Systems (NeurIPS)},
+  volume={32},
+  pages={12316--12326},
+  year={2019}
+}
+
+@article{wang2019test,
+  title={Test-time augmentation for deep learning-based medical image classification},
+  author={Wang, G and Li, W and Aertsen, M and Deprest, J and Ourselin, S and Vercauteren, T},
+  journal={International Conference on Medical Image Computing and Computer-Assisted Intervention (MICCAI)},
+  pages={649--657},
+  year={2019},
+  publisher={Springer}
+}
+
+@article{esteban2020leakage,
+  title={Data leakage in medical machine learning: a systematic review},
+  author={Esteban, C and Hyland, SL and R{\"a}tsch, G},
+  journal={NPJ Digital Medicine},
+  volume={3},
+  number={1},
+  pages={1--10},
+  year={2020},
+  publisher={Nature Publishing Group}
+}
+
+@article{roberts2021common,
+  title={Common pitfalls and recommendations for using machine learning to detect and prognosticate for COVID-19 using chest radiographs and CT scans},
+  author={Roberts, M and Driggs, D and Thorpe, M and Gilbey, J and Yeung, M and Ursprung, S and Aviles-Rivero, AI and Etmann, C and McCague, C and Beer, L and others},
+  journal={Nature Machine Intelligence},
+  volume={3},
+  pages={199--217},
+  year={2021},
+  publisher={Nature Publishing Group}
+}
+
+@article{zhang2018mixup,
+  title={mixup: Beyond empirical risk minimization},
+  author={Zhang, H and Cisse, M and Dauphin, YN and Lopez-Paz, D},
+  journal={International Conference on Learning Representations (ICLR)},
+  year={2018}
+}
+
+@article{szegedy2016rethinking,
+  title={Rethinking the inception architecture for computer vision},
+  author={Szegedy, C and Vanhoucke, V and Ioffe, S and Shlens, J and Wojna, Z},
+  journal={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages={2818--2826},
+  year={2016}
+}
+
+@article{loshchilov2017sgdr,
+  title={SGDR: Stochastic gradient descent with warm restarts},
+  author={Loshchilov, I and Hutter, F},
+  journal={International Conference on Learning Representations (ICLR)},
+  year={2017}
+}
+
+@article{he2016deep,
+  title={Deep residual learning for image recognition},
+  author={He, K and Zhang, X and Ren, S and Sun, J},
+  journal={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages={770--778},
+  year={2016}
+}
+
+@article{buddenkotte2024augmentation,
+  title={Augmentation strategies for deep learning in DaT-SPECT: Blur and noise augmentation for scanner-invariant features},
+  author={Buddenkotte, J and Buchert, R},
+  journal={Journal of Nuclear Medicine},
+  volume={65},
+  number={9},
+  pages={1463--1470},
+  year={2024},
+  note={Referenced by Shawki et al. as basis for strong blur/noise augmentation in DaT-SPECT CNNs}
+}
+
+@article{paulbd2024dat,
+  title={DAT Challenge 6th Place Write-up: Calibration slope decays with distribution shift},
+  author={Bd, Paul},
+  journal={GitHub Repository},
+  year={2024},
+  url={https://github.com/paul-bd/DAT_challenge},
+  note={Measured optimal calibration slope: 1.036 out-of-fold, ~0.85 public split, ~0.74 private split. Slope decays monotonically away from training distribution. Recommends shipping a bracket of calibration temperatures.}
 }
 
 @article{miccai2024dat,

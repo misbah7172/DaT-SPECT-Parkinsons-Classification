@@ -1,0 +1,82 @@
+[project]
+name = "competition-sfmn-parkinsons-runtime"
+version = "0.0.0"
+description = "Runtime for the SFMN Parkinsons Prediction Challenge"
+requires-python = ">=3.12,<3.13"
+
+dependencies = [
+    "accelerate",
+    "antspyx; platform_machine == 'x86_64'",  # ANTs registration for aligning scans to templates (PD/DaTscan standard); no linux/aarch64 wheels published, so restricted to x86_64
+    "attrs",
+    "certifi",
+    "cloudpickle",
+    "dill",
+    "diskcache",
+    "einops",
+    "filelock",
+    "fsspec",
+    "huggingface-hub",
+    "importlib-metadata",
+    "jsonpickle",
+    "lightgbm",
+    "loguru",
+    "matplotlib",
+    "monai",
+    "more-itertools",
+    "nibabel",
+    "ninja",
+    "numba",
+    "numpy",
+    "opencv-python-headless",
+    "packaging",
+    "pandas",
+    "peft",
+    "pillow",
+    "polars",
+    "psutil",
+    "pydantic-settings",
+    "pydantic",
+    "pytorch-lightning",
+    "pyyaml",
+    "regex",
+    "requests",
+    "safetensors",
+    "scikit-image",  # texture/GLCM and general image-processing features for feature-based classification
+    "scikit-learn",
+    "scipy",
+    "simpleitk",  # image registration, resampling, and DICOM series I/O for scan preprocessing
+    "statsmodels",
+    "timm",
+    "tokenizers",
+    "torch==2.12.1+cu129",
+    "torchio==1.2.1",  # 3D medical image loading, patch sampling, and augmentation for PyTorch; pure-Python, no separate CUDA build (runs on whatever torch backend is installed, compatible with torch>=1.9)
+    "torchvision==0.27.1+cu129",
+    "tqdm",
+    "transformers",
+    "urllib3",
+    "xarray",
+    "xgboost",
+]
+
+[tool.uv]
+required-version = ">=0.11.14"
+exclude-newer = "7 days"
+environments = ["sys_platform == 'linux'"]
+index-strategy = "unsafe-best-match"
+
+[[tool.uv.index]]
+name = "pytorch-cu129"
+url = "https://download.pytorch.org/whl/cu129"
+explicit = true
+
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cu129", marker = "sys_platform == 'linux'"},
+]
+torchvision = [
+  { index = "pytorch-cu129", marker = "sys_platform == 'linux'"},
+]
+
+[project.optional-dependencies]
+test = ["pytest>=9.0"]

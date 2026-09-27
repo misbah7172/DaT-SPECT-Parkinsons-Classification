@@ -1,18 +1,75 @@
-# Byte-compiled / optimized / DLL files
+# ==============================================================================
+# DaT SPECT Medical Imaging Research - Formal .gitignore
+# ==============================================================================
+
+# 1. Competition Data & Patient Scans (Never commit raw/derived medical scans)
+Dataset/
+data/
+data_privata/
+*.nii
+*.nii.gz
+*.dcm
+
+# 2. Large Data Archives & Submission Zips
+*.zip
+*.tar.gz
+*.gz
+*.7z
+*.rar
+
+# 3. Model Weights, Checkpoints & Serialized Estimators
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.h5
+*.onnx
+*.pkl
+*.joblib
+
+# 4. Cached Volumetric Arrays & Preprocessed Feature Arrays
+*.npy
+*.npz
+cnn3d/
+aligned_cache/
+norm_crops/
+striatum_crops/
+v24_models/
+v25_models/
+v24_oof/
+v25_oof/
+v26_oof/
+v30_oof/
+cache/
+cache_*/
+runs/
+catboost_info/
+
+# 5. Derived Feature CSVs & Large Data Tables
+*.csv
+
+# 6. Reference Repositories & Scratch Work
+Other_Repos/
+scratch/
+tmp/
+temp/
+
+# 7. Environment, IDE & OS Files
 __pycache__/
 *.py[cod]
-*$py.class
-
-# Caches and large precomputed intermediate arrays (>100MB GitHub limit)
-aligned_cache/
-cnn3d/
-cnn25_input.npz
-catboost_info/
-smoke_test/
-*.tmp
-
-# System and editor files
-.DS_Store
-Thumbs.db
+*\.class
+.venv/
+venv/
+env/
+ENV/
+.ipynb_checkpoints/
 .vscode/
 .idea/
+.DS_Store
+Thumbs.db
+
+# 8. Logs & Temporary Visual Artifacts
+*.log
+log_*.txt
+Screenshot*.png
+prompt.md
