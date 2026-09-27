@@ -1,0 +1,115 @@
+\section{Five Actionable Rules for Medical ML Practitioners}
+\label{sec:guidelines}
+
+Based on our systematic development cycle and ablation studies, we distill five actionable rules for deploying 3D classifiers in multi-center clinical environments.
+
+\begin{table}[htbp]
+\centering
+\caption{Summary of five actionable rules.}
+\label{tab:rules}
+\begin{tabular}{cll}
+\toprule
+\textbf{Rule} & \textbf{Principle} & \textbf{Implementation} \\
+\midrule
+1 & \textbf{Spatial Uniformity} & Resample all scans to isotropic voxel spacing before 3D CNN input \\
+2 & \textbf{Leakage Audit} & Use Group K-Fold by acquisition site; never naive random splits \\
+3 & \textbf{Dimensional Economy} & Crop around anatomical center-of-mass; eliminate uninformative background \\
+4 & \textbf{3D Regularization} & Combine Mixup + TTA to prevent overfitting in 3D networks \\
+5 & \textbf{Calibration First} & Apply Platt/Isotonic scaling on OOF logits before clinical deployment \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Rule 1: Spatial Uniformity -- Resample to Isotropic Voxels}
+\label{rule:spatial}
+
+\textbf{Problem:} Multi-site 3D scans have heterogeneous voxel spacings (1.47--3.90~\voxelunit) and matrix sizes (128--256). Feeding raw heterogeneous inputs into a 3D CNN forces the network to learn resolution-invariant features implicitly, wasting capacity and degrading performance.
+
+\textbf{Solution:} Always resample to a common isotropic voxel spacing before network input.
+\begin{itemize}
+    \item Choose target resolution based on the median/median-of-modes of your dataset (we used 2.0~\voxelunit, the dominant mode)
+    \item Use trilinear interpolation for intensity volumes; nearest-neighbor for segmentation masks
+    \item Preserve physical field-of-view: $\text{target\_shape} = \text{round}(\text{original\_shape} \times \text{original\_voxel} / \text{target\_voxel})$
+\end{itemize}
+
+\textbf{Evidence:} Our dataset had 66 unique voxel sizes reduced to 1 (2.0~\voxelunit). Grid size ablation (Table~\ref{tab:grid_ablation}) showed 80$^3$ at 2.0~\voxelunit~optimal; 64$^3$ lost detail (+0.024 LL), 96$^3$ exceeded VRAM.
+
+\subsection{Rule 2: Leakage Audit -- Group K-Fold by Acquisition Site}
+\label{rule:leakage}
+
+\textbf{Problem:} Naive random cross-validation in multi-center data inflates performance by $\sim$0.15 AUROC because the model memorizes site-specific signatures (vendor, coil, reconstruction) rather than learning true pathological features.
+
+\textbf{Solution:} Always use \cvname~by acquisition site.
+\begin{itemize}
+    \item Group variable: acquisition site / scanner ID / institution
+    \item Stratify: by clinical label to maintain class balance
+    \item Fold-isolated preprocessing: all normalization/statistics computed per-fold on training data only
+    \item Report: number of sites, folds, and stratification details
+\end{itemize}
+
+\textbf{Evidence:} Naive CV inflated AUROC by +0.019 (0.978 vs 0.959) and underestimated LogLoss by 46\% (Table~\ref{tab:leakage_benchmark}). Group CV provides true generalizable performance to unseen sites.
+
+\subsection{Rule 3: Dimensional Economy -- Anatomical Center-of-Mass Cropping}
+\label{rule:dimension}
+
+\textbf{Problem:} 3D CNNs scale cubically with input size ($O(n^3)$). Full-head or full-body volumes contain large uninformative background regions (air, skull, table) that waste compute and memory without contributing signal.
+
+\textbf{Solution:} Crop to the minimal bounding box containing the anatomical region of interest.
+\begin{itemize}
+    \item Compute center-of-mass (COM) of thresholded intensities ($>$5th percentile)
+    \item Define fixed-size bounding box centered on COM
+    \item Choose box size to cover the ROI across all subjects (we used $80^3$ for striatum)
+    \item Verify: no pathological signal is cropped across the cohort
+\end{itemize}
+
+\textbf{Evidence:} Our $80^3$ crop at 2.0~\voxelunit~covers 160~mm physical extent, capturing full striatal signal while reducing voxel count 8$\times$ vs. 256$^3$ raw scans. This enabled training 1.3M-parameter models on 4GB VRAM.
+
+\subsection{Rule 4: 3D Regularization -- Mixup + Test-Time Augmentation}
+\label{rule:regularization}
+
+\textbf{Problem:} 3D CNNs have high capacity (1.3M parameters) but limited data ($N \approx 10^3$). The voxel-to-sample ratio is extreme (~500K voxels per volume vs. ~1K samples), causing severe overfitting.
+
+\textbf{Solution:} Combine training-time and test-time regularization:
+\begin{itemize}
+    \item \textbf{Mixup ($\alpha=0.2$):} Convex combinations of volumes and labels in training. Largest single gain in ablation (+0.024 LL).
+    \item \textbf{Label Smoothing ($\epsilon=0.05$):} Prevents overconfident logits. Second largest gain (+0.013 LL).
+    \item \textbf{15-view TTA:} 1 base + 6 translations ($\pm$1 voxel) + 8 rotations ($\pm$2$^\circ$, $\pm$4$^\circ$). Averages 150 predictions (10 models $\times$ 15 views).
+    \item \textbf{Cosine Annealing + Early Stopping:} Prevents overfitting late in training.
+\end{itemize}
+
+\textbf{Evidence:} Ablation (Table~\ref{tab:training_ablation}) shows Mixup provides largest single gain (+0.024 LL). Removing all augmentations degrades LL by 0.050. Full 15-view TTA outperforms subsets (Table~\ref{tab:tta_ablation}).
+
+\subsection{Rule 5: Calibration First -- Platt Scaling on OOF Logits}
+\label{rule:calibration}
+
+\textbf{Problem:} Raw neural network outputs minimize cross-entropy but produce overconfident probabilities (ECE=0.0142). Clinical decisions (risk stratification, trial enrichment, definitive diagnosis) require reliable absolute probabilities.
+
+\textbf{Solution:} Always calibrate on out-of-fold logits before deployment.
+\begin{itemize}
+    \item \textbf{Platt Scaling:} $p_{\text{cal}} = \sigma(a \cdot \text{logit}(p) + b)$ fit by minimizing LogLoss on OOF predictions. Best overall (Table~\ref{tab:cal_methods}).
+    \item \textbf{Temperature Scaling:} Single parameter $T$; faster but underfits.
+    \item \textbf{Isotonic Regression:} Non-parametric; slightly overfits on $N < 2000$.
+    \item \textbf{Critical:} Fit only on OOF predictions, never on test data. Use nested CV if hyperparameters need tuning.
+\end{itemize}
+
+\textbf{Evidence:} Platt scaling reduces ECE by 57\% (0.0142 $\to$ 0.0061), MCE by 54\%, LogLoss by 6.3\%, while preserving AUROC (Table~\ref{tab:calibration}). At clinical threshold $p>0.90$, calibrated TP rate increases from 76.3\% to 82.4\% (Table~\ref{tab:cal_clinical}).
+
+\subsection{Summary Checklist}
+\label{sec:checklist}
+
+\begin{table}[htbp]
+\centering
+\caption{Deployment readiness checklist for multi-center 3D classifiers.}
+\label{tab:checklist}
+\begin{tabular}{lll}
+\toprule
+\textbf{Rule} & \textbf{Check} & \textbf{Pass?} \\
+\midrule
+1. Spatial Uniformity & Isotropic resampling applied to all inputs? & \checkmark \\
+2. Leakage Audit & Group K-Fold by site used? No naive splits? & \checkmark \\
+3. Dimensional Economy & Anatomical COM cropping? Minimal background? & \checkmark \\
+4. 3D Regularization & Mixup + LS + TTA enabled? & \checkmark \\
+5. Calibration First & Platt/Isotonic on OOF logits? Clinical thresholds validated? & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}

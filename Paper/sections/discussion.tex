@@ -1,77 +1,73 @@
 \section{Discussion}
 \label{sec:discussion}
 
-\subsection{Key Findings}
-\label{sec:key_findings}
-
-Our systematic development cycle demonstrates that **deepening the 3D ResNet architecture** combined with **modern training techniques** (mixup, label smoothing, cosine annealing) yields substantial gains in DaT-SPECT classification, even on a challenging multi-site dataset with significant scanner heterogeneity. The final \vxxv\ model achieves \textbf{OOF LogLoss = 0.2453 (calibrated)} and \textbf{AUROC = 0.9610}, representing an 18.1\% LogLoss reduction and 2.1\% AUROC gain over the strong \vxxiv\ baseline.
-
-\subsection{Why Deeper Architecture Works}
+\subsection{Why Deeper Architecture Works for 3D Medical Imaging}
 \label{sec:why_deeper}
 
-The transition from 2 to 3 residual blocks + downsampling stages (effectively adding a third hierarchical level) allows the network to capture features at three spatial scales:
+The transition from 2 to 3 residual blocks + downsampling stages adds a third hierarchical level, enabling the network to capture features at three spatial scales that align with striatal anatomy:
 \begin{itemize}
-    \item Stage 1 (40$^3$): Local texture and edge detectors
-    \item Stage 2 (20$^3$): Striatal sub-region patterns (putamen vs caudate)
-    \item Stage 3 (10$^3$): Global uptake asymmetry and shape
+    \item \textbf{Stage 1 (40$^3$):} Local texture, edge detectors, voxel-level intensity patterns
+    \item \textbf{Stage 2 (20$^3$):} Striatal sub-region patterns -- putamen vs. caudate, anterior vs. posterior
+    \item \textbf{Stage 3 (10$^3$):} Global uptake asymmetry, whole-structure shape, left-right gradients
 \end{itemize}
 
-This mirrors the known anatomy: DaT-SPECT signal loss begins in the posterior putamen, spreads to anterior putamen and caudate, with characteristic left-right asymmetry patterns that require multi-scale integration.
+This mirrors the known pathophysiology: DaT-SPECT signal loss begins in posterior putamen, spreads to anterior putamen and caudate, with characteristic left-right asymmetry. The deeper hierarchy naturally captures this progression.
 
 \subsection{Scanner Heterogeneity Robustness}
-\label{sec:scanner_discussion}
+\label{sec:scanner_robustness}
 
-The largest \vxxv\ gains occur on lower-resolution scans (+2.3\% AUROC on 3.90~mm and other). This suggests that:
+The largest V3 gains occur on lower-resolution scans (+2.3\% AUROC on 3.90~mm and other). This demonstrates:
 \begin{enumerate}
-    \item The deeper architecture learns resolution-invariant features through mixup augmentation and multi-scale processing.
-    \item The coarse-to-fine alignment (rotation search $\pm$5$^\circ$ + translation $\pm$4 voxels) is more effective when the network itself is robust to misalignment.
-    \item Per-volume z-score normalization (vs. dataset-level) prevents scanner-specific intensity distributions from biasing the model.
+    \item The deeper architecture learns resolution-invariant features through Mixup augmentation and multi-scale processing.
+    \item Coarse-to-fine alignment (rotation $\pm$5$^\circ$ + translation $\pm$4 voxels) is more effective when the network itself is robust to residual misalignment.
+    \item Per-volume z-score normalization prevents scanner-specific intensity distributions from biasing the model.
 \end{enumerate}
 
-\subsection{Calibration for Clinical Deployment}
-\label{sec:cal_discussion}
+\subsection{Calibration for Clinical Decision Support}
+\label{sec:cal_clinical_discussion}
 
-The 57\% ECE reduction (0.0142 $\to$ 0.0061) via Platt scaling is critical for clinical use. In PD diagnosis, the predicted probability directly informs:
+The 57\% ECE reduction via Platt scaling is critical for clinical deployment:
 \begin{itemize}
-    \item **Risk stratification:** Patients with $p > 0.8$ may be fast-tracked for neurologist referral.
-    \item **Longitudinal monitoring:** Probability changes over time track disease progression.
-    \item **Trial enrichment:** Well-calibrated probabilities enable statistically valid cohort selection.
+    \item \textbf{Risk stratification ($p > 0.75$):} Neurologist referral decisions require reliable high-confidence estimates
+    \item \textbf{Trial enrichment ($p > 0.90$):} Calibrated TP rate increases from 76.3\% to 82.4\%
+    \item \textbf{Longitudinal monitoring:} Probability changes over time track disease progression
 \end{itemize}
 
-Uncalibrated models tend toward overconfidence (ECE=0.0142), which could lead to false certainty in borderline cases. Our calibrated probabilities maintain AUROC while providing reliable absolute risk estimates.
+Uncalibrated models exhibit overconfidence (ECE=0.0142), risking false certainty in borderline cases. Our calibrated probabilities maintain AUROC while providing reliable absolute risk estimates.
 
-\subsection{Computational Efficiency on 4GB VRAM}
-\label{sec:compute_discussion}
+\subsection{Computational Efficiency on Consumer Hardware}
+\label{sec:compute}
 
-Training 1.3M-parameter models on 4GB VRAM required several techniques:
+Training 1.3M-parameter 3D models on 4GB VRAM required careful engineering:
 \begin{itemize}
     \item Gradient accumulation ($\times$3) $\to$ effective batch 24
     \item Mixed precision (AMP) $\to$ 2$\times$ memory reduction
-    \item Per-volume loading (no cached batches) $\to$ minimal CPU RAM
-    \item Early stopping at epoch 60--80 $\to$ avoids overfitting and saves time
+    \item Per-volume loading $\to$ minimal CPU RAM
+    \item Early stopping (epoch 60--80) $\to$ avoids overfitting, saves time
+    \item $80^3$ crop $\to$ fits in VRAM; 96$^3$ OOM
 \end{itemize}
 
-This demonstrates that modern deep 3D CNNs are feasible on consumer hardware with proper engineering, democratizing medical AI research.
+This demonstrates that modern deep 3D CNNs are feasible on consumer hardware with proper engineering.
 
 \subsection{Limitations}
 \label{sec:limitations}
 
 \begin{enumerate}
-    \item \textbf{Single tracer:} All scans use $^{123}$I-FP-CIT (DaTSCAN). Generalization to other tracers (e.g., $^{99m}$Tc-TRODAT-1) is untested.
+    \item \textbf{Single tracer:} All scans use $^{123}$I-FP-CIT (DaTSCAN). Generalization to $^{99m}$Tc-TRODAT-1 or other tracers untested.
     \item \textbf{Binary classification only:} Does not differentiate PD from atypical parkinsonism (MSA, PSP) which also show dopaminergic deficit.
-    \item \textbf{No clinical metadata:} Age, sex, disease duration, and UPDRS scores could improve performance but were not available.
+    \item \textbf{No clinical metadata:} Age, sex, disease duration, UPDRS scores could improve performance but were unavailable.
     \item \textbf{Smoke test class shift:} 65\% positive vs 55\% training causes calibration mismatch on small test sets.
-    \item \textbf{No external validation:} All results are on the challenge dataset; independent multi-center validation is needed.
-    \item \textbf{Ensemble inference time:} 10 models $\times$ 15 TTA views = 150 forward passes ($\sim$8 sec/scan on RTX 3050 Ti). Distillation to a single model would accelerate deployment.
+    \item \textbf{No external validation:} All results on challenge dataset; independent multi-center validation needed.
+    \item \textbf{Inference time:} 10 models $\times$ 15 TTA = 150 forward passes ($\sim$8 sec/scan on RTX 3050 Ti). Distillation needed for real-time use.
 \end{enumerate}
 
 \subsection{Future Work}
-\label{sec:future_work}
+\label{sec:future}
 
 \begin{itemize}
     \item \textbf{Model distillation:} Compress 10-model ensemble into 1-2 models via knowledge distillation for real-time inference.
     \item \textbf{Multi-task learning:} Joint classification + SBR regression + striatal segmentation for interpretability.
-    \item \textbf{Domain adaptation:} Test on external datasets (PPMI, local hospital) with adaptive normalization.
-    \item \textbf{Uncertainty quantification:} Monte Carlo dropout or deep ensembles for epistemic uncertainty estimates.
+    \item \textbf{Domain adaptation:} Test on external datasets (PPMI, local hospitals) with adaptive normalization.
+    \item \textbf{Uncertainty quantification:} Monte Carlo dropout or deep ensembles for epistemic uncertainty.
     \item \textbf{Longitudinal modeling:} Incorporate serial scans for progression prediction.
 \end{itemize}

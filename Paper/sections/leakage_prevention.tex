@@ -1,0 +1,85 @@
+\section{Leakage-Free Validation by Acquisition Site}
+\label{sec:leakage}
+
+\subsection{The Domain Leakage Problem}
+\label{sec:leakage_problem}
+
+In multi-center medical imaging, scans from the same site share acquisition characteristics (vendor, reconstruction kernel, coil, protocol). Naive random splitting places scans from the same site in both training and validation sets, allowing the model to learn site-specific intensity distributions, background artifacts, and reconstruction signatures rather than true pathological features. This \textbf{domain leakage} artificially inflates performance estimates.
+
+\subsection{Site-Aware Group Cross-Validation}
+\label{sec:group_cv}
+
+We formalize \cvname~to prevent site-level leakage:
+
+\begin{algorithm}
+\caption{Site-Aware Stratified Group K-Fold}
+\begin{algorithmic}
+\STATE \textbf{Input:} Dataset $\mathcal{D} = \{(\mathbf{x}_i, y_i, g_i)\}_{i=1}^N$ where $g_i$ = acquisition site ID
+\STATE \textbf{Parameter:} $K$ folds (we use $K=5$)
+\STATE \textbf{Output:} $\{(\mathcal{D}_{\text{train}}^{(k)}, \mathcal{D}_{\text{val}}^{(k)})\}_{k=1}^K$
+\FOR{$k = 1$ to $K$}
+    \STATE Split sites $G = \{g_1, ..., g_{15}\}$ into $K$ disjoint groups $G^{(k)}_{\text{val}}, G^{(k)}_{\text{train}}$
+    \STATE $\mathcal{D}_{\text{val}}^{(k)} = \{(\mathbf{x}_i, y_i) : g_i \in G^{(k)}_{\text{val}}\}$
+    \STATE $\mathcal{D}_{\text{train}}^{(k)} = \{(\mathbf{x}_i, y_i) : g_i \in G^{(k)}_{\text{train}}\}$
+    \STATE \textit{Stratification:} Ensure class balance within each fold
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\begin{itemize}
+    \item \textbf{Groups:} 15 acquisition sites (derived from site metadata)
+    \item \textbf{Stratification:} Binary label (pathological/normal)
+    \item \textbf{Folds:} $K=5$, random\_state=42
+    \item \textbf{Fold sizes:} 272--273 validation / 1,089--1,090 training
+\end{itemize}
+
+\begin{table}[htbp]
+\centering
+\caption{Fold composition under site-aware group CV.}
+\label{tab:fold_composition}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{Fold} & \textbf{Train} & \textbf{Val} & \textbf{Pos\% (Train)} & \textbf{Pos\% (Val)} \\
+\midrule
+0 & 1,089 & 273 & 54.7\% & 54.9\% \\
+1 & 1,089 & 273 & 54.9\% & 54.2\% \\
+2 & 1,090 & 272 & 54.7\% & 55.5\% \\
+3 & 1,090 & 272 & 54.8\% & 55.1\% \\
+4 & 1,090 & 272 & 54.9\% & 54.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Leakage Benchmark: Naive CV vs. Group CV}
+\label{sec:leakage_benchmark}
+
+\begin{table}[htbp]
+\centering
+\caption{Naive random CV vs. Site-Aware Group CV (Net3dR-v25, seed 42, Fold 0).}
+\label{tab:leakage_benchmark}
+\begin{tabular}{lccc}
+\toprule
+\textbf{CV Strategy} & \textbf{Val LogLoss} & \textbf{Val AUROC} & \textbf{Inflation} \\
+\midrule
+Naive Random CV (5-fold) & 0.182 & 0.978 & -- \\
+Site-Aware Group CV (5-fold) & 0.265 & 0.959 & +0.083 LL, -0.019 AUC \\
+\midrule
+\textbf{Inflation Magnitude} & \textbf{+45.6\% LL} & \textbf{+1.9\% AUC} & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Naive CV inflates AUROC by $\sim$0.02 and underestimates LogLoss by $\sim$46\% because the model memorizes site-specific signatures. Group CV provides the true generalizable performance to unseen sites.
+
+\subsection{Fold-Isolated Preprocessing}
+\label{sec:fold_isolated}
+
+To fully prevent leakage, all preprocessing statistics are computed fold-isolated:
+\begin{itemize}
+    \item \textbf{Z-score normalization:} $\mu_v, \sigma_v$ computed per-volume (no dataset statistics)
+    \item \textbf{Feature selection:} Any feature selection (if used) performed only on training folds
+    \item \textbf{Hyperparameter tuning:} Fixed across versions (no validation-set tuning)
+    \item \textbf{Calibration:} Fit only on OOF ensemble predictions, never on test data
+\end{itemize}
+
+This ensures the validation set remains truly unseen throughout the entire pipeline.

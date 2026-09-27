@@ -1,3 +1,4 @@
+\appendix
 \section{Appendix}
 \label{sec:appendix}
 
@@ -6,15 +7,15 @@
 
 \begin{table}[htbp]
 \centering
-\caption{Complete hyperparameter configuration for \vxxv.}
+\caption{Complete hyperparameter configuration for V3.}
 \label{tab:hyperparams}
 \begin{tabular}{ll}
 \toprule
 \textbf{Parameter} & \textbf{Value} \\
 \midrule
 \textbf{Architecture} & \\
-\ \ Net3dR-v25 initial channels & 16 \\
-\ \ Net3dBig-v25 initial channels & 20 \\
+\ \ Net3dR-V3 initial channels & 16 \\
+\ \ Net3dBig-V3 initial channels & 20 \\
 \ \ Residual blocks per stage & 1 \\
 \ \ Downsampling stages & 3 \\
 \ \ MaxPool kernel & 2 \\
@@ -45,7 +46,7 @@
 \midrule
 \textbf{Cross-Validation} & \\
 \ \ Folds & 5 \\
-\ \ Group by & Scanner site (15 groups) \\
+\ \ Group by & Acquisition site (15 groups) \\
 \ \ Stratify by & Binary label \\
 \ \ Random state & 42 \\
 \midrule
@@ -65,7 +66,7 @@
 
 \begin{table}[htbp]
 \centering
-\caption{Compute requirements for \vxxv\ training.}
+\caption{Compute requirements for V3 training.}
 \label{tab:compute}
 \begin{tabular}{ll}
 \toprule
@@ -83,7 +84,7 @@ Inference time (15 TTA) & $\sim$8 sec/scan \\
 \end{tabular}
 \end{table}
 
-\subsection{Per-Fold Detailed Metrics}
+\subsection{Per-Fold Detailed Metrics with Confidence Intervals}
 \label{app:per_fold_detailed}
 
 \begin{table}[htbp]
@@ -128,7 +129,7 @@ where $\theta_{f}$ are the parameters of the best-epoch model for fold $f$. This
     \item Submission package: \texttt{submission\_v25.zip}
 \end{itemize}
 
-\subsection{Additional Figures}
+\subsection{Additional Visualizations}
 \label{app:additional_figs}
 
 \begin{figure}[htbp]

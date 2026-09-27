@@ -1,52 +1,52 @@
-\section{Ablation Study}
+\section{Ablation Studies}
 \label{sec:ablation}
 
-We systematically ablate key components of \vxxv\ to quantify their individual contributions. All ablations use the same 5-fold stratified group CV setup.
+We systematically ablate key components of V3 to quantify individual contributions. All ablations use the same 5-fold \cvname~setup.
 
-\subsection{Architecture Ablation}
+\subsection{Architecture Depth Ablation}
 \label{sec:arch_ablation}
 
 \begin{table}[htbp]
 \centering
-\caption{Architecture depth/width ablation. All trained with v25 training recipe (mixup, label smoothing, cosine annealing, 5 seeds).}
+\caption{Architecture depth/width ablation. All trained with V3 training recipe.}
 \label{tab:arch_ablation}
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Config} & \textbf{Blocks} & \textbf{Params} & \textbf{LL} & \textbf{AUC} \\
 \midrule
-Net3dR-v24 (2 blk, 2 down) & 2+2 & 280K & 0.312 & 0.938 \\
-Net3dR-v25 (3 blk, 3 down) & 3+3 & 845K & \textbf{0.268} & \textbf{0.958} \\
-Net3dBig-v24 (2 blk, 2 down) & 2+2 & 294K & 0.308 & 0.941 \\
-Net3dBig-v25 (3 blk, 3 down) & 3+3 & 1.3M & \textbf{0.259} & \textbf{0.962} \\
+Net3dR-V2 (2 blk, 2 down) & 2+2 & 280K & 0.312 & 0.938 \\
+Net3dR-V3 (3 blk, 3 down) & 3+3 & 845K & \textbf{0.268} & \textbf{0.958} \\
+Net3dBig-V2 (2 blk, 2 down) & 2+2 & 294K & 0.308 & 0.941 \\
+Net3dBig-V3 (3 blk, 3 down) & 3+3 & 1.3M & \textbf{0.259} & \textbf{0.962} \\
 \midrule
-Ensemble (5+5, v24 arch) & -- & -- & 0.2996 & 0.9411 \\
-Ensemble (5+5, v25 arch) & -- & -- & \textbf{0.2618} & \textbf{0.9610} \\
+Ensemble (5+5, V2 arch) & -- & -- & 0.2996 & 0.9411 \\
+Ensemble (5+5, V3 arch) & -- & -- & \textbf{0.2618} & \textbf{0.9610} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Finding:} Adding the 3rd residual block and 3rd downsampling stage (doubling parameters) improves LogLoss by 0.03--0.04 and AUC by 0.02. The deeper architecture better captures hierarchical striatal features.
+\textbf{Finding:} Adding the 3rd residual block and 3rd downsampling stage (3$\times$ parameters) improves LogLoss by 0.03--0.04 and AUC by 0.02. The deeper hierarchy better captures multi-scale striatal features.
 
 \subsection{Training Recipe Ablation}
 \label{sec:training_ablation}
 
 \begin{table}[htbp]
 \centering
-\caption{Training component ablation (Net3dR-v25, seed 42, Fold 0).}
+\caption{Training component ablation (Net3dR-V3, seed 42, Fold 0).}
 \label{tab:training_ablation}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Component} & \textbf{LL} & \textbf{AUC} & \textbf{$\Delta$LL} & \textbf{$\Delta$AUC} \\
+\textbf{Component Removed} & \textbf{LL} & \textbf{AUC} & \textbf{$\Delta$LL} & \textbf{$\Delta$AUC} \\
 \midrule
-Full recipe (mixup, LS, cosine, accum) & 0.265 & 0.959 & -- & -- \\
+Full recipe (Mixup, LS, Cosine, Accum) & 0.265 & 0.959 & -- & -- \\
 \hline
--- Mixup ($\alpha=0.2$) & 0.289 & 0.951 & +0.024 & -0.008 \\
--- Label Smoothing ($\epsilon=0.05$) & 0.278 & 0.953 & +0.013 & -0.006 \\
--- Cosine Annealing (fixed LR) & 0.281 & 0.952 & +0.016 & -0.007 \\
--- Gradient Accumulation (batch 8) & 0.272 & 0.955 & +0.007 & -0.004 \\
--- All augmentations (only flips) & 0.315 & 0.942 & +0.050 & -0.017 \\
+Mixup ($\alpha=0.2$) & 0.289 & 0.951 & +0.024 & -0.008 \\
+Label Smoothing ($\epsilon=0.05$) & 0.278 & 0.953 & +0.013 & -0.006 \\
+Cosine Annealing (fixed LR) & 0.281 & 0.952 & +0.016 & -0.007 \\
+Gradient Accumulation (batch 8) & 0.272 & 0.955 & +0.007 & -0.004 \\
+All augmentations (only flips) & 0.315 & 0.942 & +0.050 & -0.017 \\
 \hline
--- Early Stopping (full 100 ep) & 0.274 & 0.956 & +0.009 & -0.003 \\
+Early Stopping (full 100 ep) & 0.274 & 0.956 & +0.009 & -0.003 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -58,7 +58,7 @@ Full recipe (mixup, LS, cosine, accum) & 0.265 & 0.959 & -- & -- \\
 
 \begin{table}[htbp]
 \centering
-\caption{Ensemble size vs. performance (v25 architecture, OOF).}
+\caption{Ensemble size vs. performance (V3 architecture, OOF).}
 \label{tab:ensemble_ablation}
 \begin{tabular}{cccc}
 \toprule
@@ -73,14 +73,14 @@ Full recipe (mixup, LS, cosine, accum) & 0.265 & 0.959 & -- & -- \\
 \end{tabular}
 \end{table}
 
-\textbf{Finding:} Performance improves with ensemble size but shows diminishing returns after 6 models. 10 models (5 seeds per architecture) provides the best trade-off.
+\textbf{Finding:} Performance improves with ensemble size but shows diminishing returns after 6 models. 10 models (5 seeds per architecture) provides optimal trade-off.
 
-\subsection{TTA Ablation}
+\subsection{TTA Configuration Ablation}
 \label{sec:tta_ablation}
 
 \begin{table}[htbp]
 \centering
-\caption{TTA configuration ablation (v25 ensemble, OOF).}
+\caption{TTA configuration ablation (V3 ensemble, OOF).}
 \label{tab:tta_ablation}
 \begin{tabular}{lccc}
 \toprule
@@ -95,39 +95,39 @@ Translation + Rotation & 15 & \textbf{0.2618} & \textbf{0.9610} \\
 \end{tabular}
 \end{table}
 
-\textbf{Finding:} The full 15-view TTA (1 base + 6 translation + 8 rotation) provides the best performance. Adding axial rotations gives marginal improvement at 27\% more compute.
+\textbf{Finding:} Full 15-view TTA (1 base + 6 translation + 8 rotation) is optimal. Adding axial rotations gives marginal improvement at 27\% more compute.
 
-\subsection{Calibration Ablation}
+\subsection{Calibration Method Ablation}
 \label{sec:cal_ablation}
 
 \begin{table}[htbp]
 \centering
-\caption{Calibration method comparison (v25 OOF ensemble).}
+\caption{Calibration method comparison (V3 OOF ensemble).}
 \label{tab:cal_ablation}
-\begin{tabular}{lccc}
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Method} & \textbf{LL} & \textbf{AUC} & \textbf{ECE} \\
+\textbf{Method} & \textbf{LL} & \textbf{AUC} & \textbf{ECE} & \textbf{MCE} \\
 \midrule
-Uncalibrated & 0.2618 & 0.9610 & 0.0142 \\
-Platt Scaling & \textbf{0.2453} & 0.9610 & \textbf{0.0061} \\
-Isotonic Regression & 0.2461 & 0.9610 & 0.0068 \\
-Temperature Scaling & 0.2478 & 0.9610 & 0.0072 \\
+Uncalibrated & 0.2618 & 0.9610 & 0.0142 & 0.0418 \\
+Platt Scaling & \textbf{0.2453} & 0.9610 & \textbf{0.0061} & \textbf{0.0193} \\
+Isotonic Regression & 0.2461 & 0.9610 & 0.0068 & 0.0211 \\
+Temperature Scaling & 0.2478 & 0.9610 & 0.0072 & 0.0234 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Finding:} Platt scaling achieves the best LogLoss and ECE. Temperature scaling (single parameter) underfits; isotonic regression (non-parametric) overfits on 1,362 samples.
+\textbf{Finding:} Platt scaling achieves best LogLoss and ECE. Temperature scaling (single parameter) underfits; isotonic regression slightly overfits on 1,362 samples.
 
 \subsection{Input Resolution Ablation}
 \label{sec:res_ablation}
 
 \begin{table}[htbp]
 \centering
-\caption{Input grid size ablation (Net3dR-v25, Fold 0).}
+\caption{Input grid size ablation (Net3dR-V3, Fold 0).}
 \label{tab:res_ablation}
 \begin{tabular}{cccc}
 \toprule
-\textbf{Grid} & \textbf{Voxel (mm)} & \textbf{LL} & \textbf{AUC} \\
+\textbf{Grid} & \textbf{Voxel (\voxelunit)} & \textbf{LL} & \textbf{AUC} \\
 \midrule
 64$^3$ & 2.5 & 0.289 & 0.951 \\
 80$^3$ & 2.0 & \textbf{0.265} & \textbf{0.959} \\
@@ -136,9 +136,9 @@ Temperature Scaling & 0.2478 & 0.9610 & 0.0072 \\
 \end{tabular}
 \end{table}
 
-\textbf{Finding:} 80$^3$ at 2.0~mm is the sweet spot. 64$^3$ loses detail; 96$^3$ exceeds 4GB VRAM even with accumulation.
+\textbf{Finding:} 80$^3$ at 2.0~\voxelunit~is optimal. 64$^3$ loses detail; 96$^3$ exceeds 4GB VRAM.
 
-\subsection{Summary of Ablations}
+\subsection{Ablation Summary}
 \label{sec:ablation_summary}
 
 \begin{figure}[htbp]
@@ -147,11 +147,11 @@ Temperature Scaling & 0.2478 & 0.9610 & 0.0072 \\
     \includegraphics[width=0.45\linewidth]{figures/version_comparison.png} &
     \includegraphics[width=0.45\linewidth]{figures/architecture_comparison.png} \\
     \end{tabular}
-    \caption{Key ablation drivers: (Left) Version evolution shows cumulative gains. (Right) Architecture scaling from 280K to 1.3M params is the largest single factor.}
+    \caption{Key ablation drivers: (Left) Version evolution shows cumulative gains. (Right) Architecture scaling (280K $\to$ 845K/1.3M) is the largest single factor.}
     \label{fig:ablation_summary}
 \end{figure}
 
-The largest contributors to \vxxv's improvement over \vxxiv\ are:
+The largest contributors to V3's improvement over V2:
 \begin{enumerate}
     \item \textbf{Architecture scaling} (2$\to$3 blocks, 280K$\to$845K/1.3M): $\sim$0.035 LL, +0.020 AUC
     \item \textbf{Mixup + Label Smoothing}: $\sim$0.015 LL, +0.007 AUC
