@@ -1,0 +1,32 @@
+\section{Introduction}
+\label{sec:introduction}
+
+\noindent\textbf{DaT-SPECT Imaging in Parkinson's Disease.}
+Dopamine transporter single-photon emission computed tomography (DaT-SPECT) is a nuclear medicine imaging technique that visualizes the dopaminergic system in the striatum. Reduced radiotracer uptake in the putamen and caudate nuclei is a hallmark of Parkinson's disease (PD) and other parkinsonian syndromes, making DaT-SPECT a valuable biomarker for differential diagnosis~\cite{benamer2000dat,walker2007dat}. The European Association of Nuclear Medicine (EANM) and Society of Nuclear Medicine and Molecular Imaging (SNMMI) have established standardized acquisition and processing protocols, yet substantial variability persists across clinical sites due to differences in camera hardware, collimators, reconstruction algorithms, and radiotracer formulations~\cite{darcourt2010eanm}.
+
+\noindent\textbf{Machine Learning for DaT-SPECT Classification.}
+Traditional visual assessment of DaT-SPECT scans suffers from inter-reader variability and requires specialized expertise~\cite{vantaggi2018visual}. Automated machine learning approaches have shown promise for objective, reproducible classification. Early work employed handcrafted features such as specific binding ratios (SBR), putamen-to-caudate ratios, and texture descriptors~\cite{segovia2019dat,liu2020dat}. More recently, deep convolutional neural networks (CNNs) operating directly on 3D volumes have demonstrated superior performance by learning hierarchical representations of striatal uptake patterns~\cite{choi2018deep,kim2020deep}.
+
+\noindent\textbf{Challenges in Multi-Site DaT-SPECT Analysis.}
+Despite progress, several challenges hinder clinical deployment:
+\begin{enumerate}
+    \item \textbf{Scanner heterogeneity:} Multi-site datasets exhibit wide variation in voxel spacing (1.5--4.0~mm), matrix sizes (128--256), and slice counts (36--128), requiring robust spatial normalization.
+    \item \textbf{Label leakage risk:} Scans from the same site share acquisition characteristics; random splitting leaks site-specific information, inflating performance estimates~\cite{esteban2020leakage}.
+    \item \textbf{Calibration:} Clinical decision-making requires well-calibrated probabilities, not just ranking performance~\cite{guo2017calibration}.
+    \item \textbf{Computational constraints:} 3D CNNs demand significant GPU memory, limiting model depth on consumer hardware.
+\end{enumerate}
+
+\noindent\textbf{Our Contribution.}
+We present a systematic development cycle across three major versions (\vxxiii, \vxxiv, \vxxv) addressing these challenges on a 1,363-scan dataset from 15 scanner sites. Our contributions are:
+\begin{itemize}
+    \item \textbf{Leakage-safe evaluation:} Stratified group 5-fold cross-validation by scanner site (15 groups), preventing site-level data leakage.
+    \item \textbf{Systematic version progression:} From hybrid CNN+SBR/GBM (\vxxiii) to CNN-only (\vxxiv) to deep ResNet ensemble (\vxxv), with documented performance gains at each step.
+    \item \textbf{Deep ResNet architecture:} Net3dR-v25 (845K params) and Net3dBig-v25 (1.3M params) with 3 residual blocks + 3 downsampling stages, trained on full 80$^3$ volumes at 2.0~mm isotropic.
+    \item \textbf{Advanced training:} Mixup ($\alpha=0.2$), label smoothing ($\epsilon=0.05$), cosine annealing, gradient accumulation (effective batch 24 on 4GB VRAM).
+    \item \textbf{Calibration:} Platt scaling reduces LogLoss from 0.2618 to 0.2453 without affecting AUROC.
+    \item \textbf{Comprehensive benchmarking:} 9-figure analysis including per-fold OOF, per-scanner-tier, calibration curves, and training dynamics.
+    \item \textbf{Reproducibility:} Fixed seeds, public code, detailed hyperparameters.
+\end{itemize}
+
+\noindent\textbf{Paper Organization.}
+Section~\ref{sec:related_work} reviews related work. Section~\ref{sec:dataset} describes the dataset and preprocessing. Section~\ref{sec:methodology} details the model architectures, training, and inference. Section~\ref{sec:experiments} presents the experimental setup. Section~\ref{sec:results} reports results with statistical analysis. Section~\ref{sec:ablation} provides ablation studies. Section~\ref{sec:discussion} discusses limitations and clinical implications. Section~\ref{sec:conclusion} concludes.

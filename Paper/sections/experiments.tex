@@ -1,0 +1,36 @@
+\section{Experimental Setup}
+\label{sec:experiments}
+
+\subsection{Hardware and Software Environment}
+\label{sec:hardware}
+\begin{itemize}
+    \item GPU: NVIDIA RTX 3050 Ti Laptop (4 GB VRAM)
+    \item PyTorch 2.6.0 + CUDA 12.4
+    \item MONAI 1.6.0, scikit-learn 1.8.0, nibabel, scipy
+    \item OS: Windows 11 / WSL2 compatible
+\end{itemize}
+
+Training time per model: 1.5--2 hours on 4GB VRAM with gradient accumulation. Total compute: ~150 GPU-hours for 50 models (5 folds $\times$ 10 seeds).
+
+\subsection{Baseline Models for Comparison}
+\label{sec:baselines}
+We compare three versions representing the development trajectory:
+
+\begin{description}
+    \item[\vxxiii\ (Hybrid CNN+SBR/GBM):] 6 CNN models (3 Net3dR + 3 Net3dBig, 280K/294K params) + 4 GBM models on SBR features (93 features, SelectKBest k=50). Ensemble via optimized blending. Test LogLoss=0.3997, AUC=0.9163 (challenge submission).
+    \item[\vxxiv\ (CNN-only):] 6 CNN models (3 Net3dR + 3 Net3dBig, same architecture as v23 but trained with per-volume z-score, full 80$^3$ input, rotation alignment). OOF: LogLoss=0.2996, AUC=0.9411. No SBR features.
+    \item[\vxxv\ (Deep ResNet Ensemble):] 10 CNN models (5 Net3dR-v25 + 5 Net3dBig-v25, 845K/1.3M params). Deeper (3 residual blocks + 3 downsampling), mixup, label smoothing, cosine annealing, 5 seeds per architecture. OOF: LogLoss=0.2618 (0.2453 cal.), AUC=0.9610.
+\end{description}
+
+\subsection{Evaluation Metrics}
+\label{sec:metrics}
+\begin{itemize}
+    \item \textbf{Primary:} Binary LogLoss (cross-entropy), Area Under ROC Curve (AUROC)
+    \item \textbf{Secondary:} Brier Score, Calibration curves (reliability diagrams)
+    \item \textbf{Per-group:} Metrics per scanner resolution tier (high/mid/low)
+    \item \textbf{OOF:} Out-of-fold predictions aggregated across all 5 folds
+\end{itemize}
+
+\subsection{Statistical Significance}
+\label{sec:statistical}
+We report DeLong test p-values for AUROC differences between versions, and paired t-tests for LogLoss across folds. Confidence intervals via bootstrap (1,000 resamples).

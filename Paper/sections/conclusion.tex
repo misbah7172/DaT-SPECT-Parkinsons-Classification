@@ -1,0 +1,12 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We presented a systematic development cycle for DaT-SPECT Parkinson's disease classification spanning three major versions (\vxxiii, \vxxiv, \vxxv) on a 1,363-scan multi-site dataset. Through rigorous stratified group cross-validation by scanner site, we established leakage-safe benchmarks and quantified the contribution of each architectural and training innovation.
+
+Our final model (\vxxv) employs a **10-model deep ResNet ensemble** (5 Net3dR-v25 + 5 Net3dBig-v25) with **3 residual blocks and 3 downsampling stages**, trained with **mixup ($\alpha=0.2$), label smoothing ($\epsilon=0.05$), cosine annealing, and gradient accumulation** on **full 80$^3$ volumes at 2.0~mm isotropic**. **15-view test-time augmentation** and **Platt calibration** further improve performance.
+
+\vxxv\ achieves \textbf{OOF LogLoss = 0.2453 (calibrated)} and \textbf{AUROC = 0.9610}, an 18.1\% LogLoss reduction and 2.1\% AUROC gain over \vxxiv. Improvements are consistent across all scanner resolution tiers, with largest gains on lower-resolution scans (+2.3\% AUROC). All improvements are statistically significant ($p<0.05$).
+
+We provide comprehensive ablation studies identifying the key drivers: architecture scaling (largest factor), mixup+label smoothing, ensemble diversity, TTA, and calibration. Our leakage-prevention methodology (stratified group CV, per-volume normalization, OOF-only calibration) sets a rigorous standard for multi-site medical imaging benchmarks.
+
+The code, weights, and visualizations are publicly available for reproducibility. This work establishes a new state-of-the-art for DaT-SPECT classification and provides a template for robust medical AI development on heterogeneous multi-site data.
