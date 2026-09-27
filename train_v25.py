@@ -7,6 +7,7 @@ Improvements over v24:
 4. 5 seeds per architecture (10 total models)
 5. Cosine annealing LR
 6. Gradient accumulation (effective batch 24)
+7. TensorBoard logging for live monitoring
 """
 import os, sys, time, json, gc
 import numpy as np
@@ -14,6 +15,7 @@ import pandas as pd
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
+from torch.utils.tensorboard import SummaryWriter
 from sklearn.model_selection import StratifiedGroupKFold
 from sklearn.metrics import log_loss, roc_auc_score
 
@@ -22,7 +24,9 @@ sys.stdout.reconfigure(line_buffering=True)
 CACHE_DIR = "D:/DaT_cache/volumes_2mm"
 LABELS_PATH = "E:/DaT/Dataset/train_labels.csv"
 OUTPUT_DIR = "D:/DaT_cache/v25_models"
+LOG_DIR = "D:/DaT_cache/v25_logs"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(LOG_DIR, exist_ok=True)
 
 # ─── v25 Architecture: Deeper + Wider ────────────────────────────────────
 
@@ -132,7 +136,7 @@ class LabelSmoothingBCE(nn.Module):
 
 # ─── Training ────────────────────────────────────────────────────────────
 
-def train_model(model, train_loader, val_loader, device, epochs=100, lr=1e-4, accum_steps=2):
+def train_model(model, train_loader, val_loader, device, epochs=100, lr=1e-4, accum_steps=2, writer=None, tag=""):
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=1e-4)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
     criterion = LabelSmoothingBCE(smoothing=0.05)
@@ -200,6 +204,19 @@ def train_model(model, train_loader, val_loader, device, epochs=100, lr=1e-4, ac
         else:
             patience_counter += 1
 
+        # TensorBoard logging
+        if writer is not None:
+            writer.add_scalar(f'{tag}/Loss/train', avg_train_loss, epoch)
+            writer.add_scalar(f'{tag}/Loss/val', avg_val_loss, epoch)
+            writer.add_scalar(f'{tag}/Loss/best_val', best_val_loss, epoch)
+            writer.add_scalar(f'{tag}/LR', optimizer.param_groups[0]['lr'], epoch)
+            writer.add_scalar(f'{tag}/Patience', patience_counter, epoch)
+            try:
+                auc = roc_auc_score(np.array(val_true), np.array(val_preds))
+                writer.add_scalar(f'{tag}/AUC/val', auc, epoch)
+            except:
+                pass
+
         if (epoch + 1) % 10 == 0 or epoch == 0:
             try:
                 auc = roc_auc_score(np.array(val_true), np.array(val_preds))
@@ -263,9 +280,18 @@ def main():
             ld_tr = DataLoader(ds_tr, batch_size=8, shuffle=True, num_workers=0, pin_memory=True)
             ld_va = DataLoader(ds_va, batch_size=8, shuffle=False, num_workers=0, pin_memory=True)
 
+            # TensorBoard writer
+            log_path = os.path.join(LOG_DIR, f"fold{fold}", name)
+            os.makedirs(log_path, exist_ok=True)
+            writer = SummaryWriter(log_path)
+            writer.add_text('Config', f'arch={arch}, seed={seed}, fold={fold}, params={n_params:,}')
+            writer.add_text('Train/Val Size', f'train={len(t_uids)}, val={len(v_uids)}')
+
             t0 = time.time()
-            model, vl = train_model(model, ld_tr, ld_va, device, epochs=100, lr=1e-4, accum_steps=2)
+            model, vl = train_model(model, ld_tr, ld_va, device, epochs=100, lr=1e-4, accum_steps=2,
+                                     writer=writer, tag=f'fold{fold}/{name}')
             print(f"    Done: loss={vl:.4f} time={time.time()-t0:.0f}s", flush=True)
+            writer.close()
 
             # Save
             torch.save({"arch": arch, "state": model.state_dict()},
