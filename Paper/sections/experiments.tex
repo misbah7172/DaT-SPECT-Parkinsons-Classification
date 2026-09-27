@@ -13,18 +13,20 @@
 
 Training time: 1.5--2.0 hours per model on 4GB VRAM with gradient accumulation. Total compute: $\sim$150 GPU-hours for 50 models (5 folds $\times$ 10 seeds).
 
-\subsection{Model Versions for Comparison}
-\label{sec:versions}
+\subsection{Model Configurations for Comparison}
+\label{sec:configurations}
 
-We compare three progressive versions:
+We evaluate three progressively enhanced model configurations to isolate the contribution of each architectural and training innovation:
 
 \begin{description}
-    \item[\textbf{Version 1 -- Hybrid (CNN + Biomarkers):}] 6 CNN models (3 Net3dR + 3 Net3dBig, 280K/294K params) + 4 GBM models on 93 SBR features. Blended ensemble. Test LogLoss=0.3997, AUROC=0.9163.
+    \item[\textbf{Config A -- Hybrid Baseline (CNN + Biomarkers):}] 6 CNN models (3 Net3dR + 3 Net3dBig, 280K/294K params) + 4 gradient-boosted tree models on 93 quantitative SBR/asymmetry features. Weighted ensemble blending. Performance: Test LogLoss=0.3997, AUROC=0.9163. Represents a clinical biomarker + shallow CNN hybrid approach.
     
-    \item[\textbf{Version 2 -- CNN-only:}] 6 CNN models (same architecture as V1 but trained with per-volume z-score, full 80$^3$ input, rotation alignment). OOF: LogLoss=0.2996, AUROC=0.9411. No biomarker features.
+    \item[\textbf{Config B -- CNN-only Intermediate:}] 6 CNN models (same architecture as Config A but trained with per-volume z-score normalization, full 80$^3$ input volume, coarse rotation alignment). OOF: LogLoss=0.2996, AUROC=0.9411. Removes biomarker features; isolates the effect of spatial standardization and full-volume training.
     
-    \item[\textbf{Version 3 -- Deep ResNet Ensemble (Proposed):}] 10 CNN models (5 Net3dR-v25 + 5 Net3dBig-v25, 845K/1.3M params). 3 residual blocks + 3 downsampling stages, Mixup, Label Smoothing, Cosine Annealing, 5 seeds per architecture. OOF: LogLoss=0.2618 (0.2453 cal.), AUROC=0.9610.
+    \item[\textbf{Config C -- Deep ResNet Ensemble (Proposed Framework):}] 10 CNN models (5 Net3dR-v25 + 5 Net3dBig-v25, 845K/1.3M params). Architecture extended to 3 residual blocks + 3 downsampling stages. Trained with Mixup ($\alpha=0.2$), Label Smoothing ($\epsilon=0.05$), Cosine Annealing, 5 seeds per architecture. OOF: LogLoss=0.2618 (0.2453 calibrated), AUROC=0.9610.
 \end{description}
+
+This progressive comparison isolates the marginal contribution of: (1) spatial standardization + full-volume training (A$\to$B), (2) architecture depth + advanced regularization + ensemble diversity (B$\to$C).
 
 \subsection{Evaluation Metrics}
 \label{sec:metrics}

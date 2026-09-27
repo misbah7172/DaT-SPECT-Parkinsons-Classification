@@ -6,17 +6,17 @@
 
 \begin{table}[htbp]
 \centering
-\caption{Overall OOF performance comparison across versions. V3 calibrated: Platt $a=1.45, b=0.20$.}
+\caption{Overall OOF performance comparison across configurations. Config C calibrated: Platt $a=1.45, b=0.20$.}
 \label{tab:overall_oof}
 \begin{tabular}{lccc}
 \toprule
-\textbf{Version} & \textbf{LogLoss} & \textbf{Cal. LogLoss} & \textbf{AUROC} \\
+\textbf{Configuration} & \textbf{LogLoss} & \textbf{Cal. LogLoss} & \textbf{AUROC} \\
 \midrule
-V1 (Hybrid, test) & 0.3997 & -- & 0.9163 \\
-V2 (CNN-only, OOF) & 0.2996 & 0.2996 & 0.9411 \\
-V3 (Deep Ensemble, OOF) & 0.2618 & \textbf{0.2453} & \textbf{0.9610} \\
+Config A (Hybrid, test) & 0.3997 & -- & 0.9163 \\
+Config B (CNN-only, OOF) & 0.2996 & 0.2996 & 0.9411 \\
+Config C (Deep Ensemble, OOF) & 0.2618 & \textbf{0.2453} & \textbf{0.9610} \\
 \midrule
-V2 $\to$ V3 $\Delta$ & \textbf{-12.6\%} & \textbf{-18.1\%} & \textbf{+2.1\%} \\
+Config B $\to$ Config C $\Delta$ & \textbf{-12.6\%} & \textbf{-18.1\%} & \textbf{+2.1\%} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -24,11 +24,11 @@ V2 $\to$ V3 $\Delta$ & \textbf{-12.6\%} & \textbf{-18.1\%} & \textbf{+2.1\%} \\
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/version_comparison.png}
-    \caption{Version comparison. (Left) LogLoss: raw (blue) and calibrated (purple) across versions. (Right) AUROC evolution. V3 reduces LogLoss by 18.1\% and increases AUROC by 2.1\% over V2.}
-    \label{fig:version_comparison}
+    \caption{Configuration comparison. (Left) LogLoss: raw (blue) and calibrated (purple) across configurations. (Right) AUROC evolution. Config C reduces LogLoss by 18.1\% and increases AUROC by 2.1\% over Config B.}
+    \label{fig:config_comparison}
 \end{figure}
 
-The \textbf{18.1\% relative LogLoss reduction} (0.2996 $\to$ 0.2453) and \textbf{2.1\% absolute AUROC gain} (0.9411 $\to$ 0.9610) represent substantial improvements over the strong V2 baseline.
+The \textbf{18.1\% relative LogLoss reduction} (0.2996 $\to$ 0.2453) and \textbf{2.1\% absolute AUROC gain} (0.9411 $\to$ 0.9610) represent substantial improvements over the strong Config B baseline.
 
 \subsection{Per-Fold Analysis}
 \label{sec:per_fold}
@@ -36,13 +36,13 @@ The \textbf{18.1\% relative LogLoss reduction} (0.2996 $\to$ 0.2453) and \textbf
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/fold_metrics.png}
-    \caption{Per-fold OOF metrics for V3. (Left) LogLoss: raw (blue) and calibrated (purple) per fold. Calibration consistently improves LogLoss across all folds. (Right) AUROC per fold. Fold 3 achieves best performance (LL=0.2268, AUC=0.9699).}
+    \caption{Per-fold OOF metrics for Config C. (Left) LogLoss: raw (blue) and calibrated (purple) per fold. Calibration consistently improves LogLoss across all folds. (Right) AUROC per fold. Fold 3 achieves best performance (LL=0.2268, AUC=0.9699).}
     \label{fig:fold_metrics}
 \end{figure}
 
 \begin{table}[htbp]
 \centering
-\caption{Per-fold OOF metrics for V3 (calibrated). 95\% bootstrap CI (1,000 resamples).}
+\caption{Per-fold OOF metrics for Config C (calibrated). 95\% bootstrap CI (1,000 resamples).}
 \label{tab:per_fold}
 \begin{tabular}{lccccc}
 \toprule
@@ -69,7 +69,7 @@ Scanners grouped by resolution: High-res (2.46~mm, 528 scans), Mid-res (3.90~mm,
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/scanner_performance.png}
-    \caption{Scanner group performance. (Left) AUROC by resolution tier: V3 outperforms V2 across all tiers, with largest gains on lower-resolution scans (+2.3\%). (Right) Scanner distribution.}
+    \caption{Scanner group performance. (Left) AUROC by resolution tier: Config C outperforms Config B across all tiers, with largest gains on lower-resolution scans (+2.3\%). (Right) Scanner distribution.}
     \label{fig:scanner_performance}
 \end{figure}
 
@@ -79,7 +79,7 @@ Scanners grouped by resolution: High-res (2.46~mm, 528 scans), Mid-res (3.90~mm,
 \label{tab:scanner_tier}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Tier} & \textbf{Count} & \textbf{V2 AUC} & \textbf{V3 AUC} & \textbf{$\Delta$AUC} \\
+\textbf{Tier} & \textbf{Count} & \textbf{Config B AUC} & \textbf{Config C AUC} & \textbf{$\Delta$AUC} \\
 \midrule
 High-res (2.46~mm) & 528 & 0.958 & 0.972 & +0.014 \\
 Mid-res (3.90~mm) & 254 & 0.932 & 0.955 & +0.023 \\
@@ -90,7 +90,7 @@ Low-res (Other) & 582 & 0.925 & 0.948 & +0.023 \\
 \end{tabular}
 \end{table}
 
-V3 shows consistent improvement across all tiers, with \textbf{largest gains on lower-resolution scans} (+2.3\% AUROC). This demonstrates that the deeper architecture and advanced augmentation improve robustness to acquisition variability.
+Config C shows consistent improvement across all tiers, with \textbf{largest gains on lower-resolution scans} (+2.3\% AUROC). This demonstrates that the deeper architecture and advanced augmentation improve robustness to acquisition variability.
 
 \subsection{Calibration Analysis}
 \label{sec:calibration_results}
@@ -98,13 +98,13 @@ V3 shows consistent improvement across all tiers, with \textbf{largest gains on 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/calibration.png}
-    \caption{Calibration analysis for V3. (Left) Reliability diagram: uncalibrated ensemble (blue) shows overconfidence; Platt-calibrated (red, $a=1.45, b=0.20$) aligns with perfect calibration. (Right) Prediction density by class showing good separation.}
+    \caption{Calibration analysis for Config C. (Left) Reliability diagram: uncalibrated ensemble (blue) shows overconfidence; Platt-calibrated (red, $a=1.45, b=0.20$) aligns with perfect calibration. (Right) Prediction density by class showing good separation.}
     \label{fig:calibration_results}
 \end{figure}
 
 \begin{table}[htbp]
 \centering
-\caption{Calibration effect on V3 OOF ensemble (1,362 samples).}
+\caption{Calibration effect on Config C OOF ensemble (1,362 samples).}
 \label{tab:calibration}
 \begin{tabular}{lcc}
 \toprule
@@ -121,26 +121,26 @@ MCE (10 bins) & 0.0418 & \textbf{0.0193} \\
 
 Platt scaling ($a=1.45, b=0.20$) reduces ECE by 57\% and MCE by 54\% while preserving AUROC.
 
-\subsection{Smoke Test Results}
-\label{sec:smoke_test}
+\subsection{Holdout Test Results}
+\label{sec:holdout_test}
 
-Challenge smoke test: 20 scans (65\% positive vs. 55\% training).
+A holdout test set of 20 scans with shifted class distribution (65\% positive vs. 55\% training) was used to evaluate distribution shift robustness.
 
 \begin{table}[htbp]
 \centering
-\caption{Smoke test (20 samples, 65\% positive).}
-\label{tab:smoke_test}
+\caption{Holdout test (20 samples, 65\% positive).}
+\label{tab:holdout_test}
 \begin{tabular}{lcc}
 \toprule
-\textbf{Version} & \textbf{LogLoss} & \textbf{AUROC} \\
+\textbf{Configuration} & \textbf{LogLoss} & \textbf{AUROC} \\
 \midrule
-V2 & 0.8905 & 0.9341 \\
-V3 & 0.5936 & \textbf{0.9670} \\
+Config B & 0.8905 & 0.9341 \\
+Config C & 0.5936 & \textbf{0.9670} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-V3 achieves superior ranking (AUC=0.9670 vs 0.9341). Higher LogLoss reflects class distribution shift (65\% vs 55\%); calibration trained on OOF (55\%) is mismatched for this test distribution. AUROC correctly reflects improved discriminative ability.
+Config C achieves superior ranking (AUC=0.9670 vs 0.9341). Higher LogLoss reflects class distribution shift (65\% vs 55\%); calibration trained on OOF (55\%) is mismatched for this test distribution. AUROC correctly reflects improved discriminative ability under distribution shift.
 
 \subsection{Statistical Significance}
 \label{sec:significance}
@@ -153,12 +153,12 @@ V3 achieves superior ranking (AUC=0.9670 vs 0.9341). Higher LogLoss reflects cla
 \toprule
 \textbf{Comparison} & \textbf{Metric} & \textbf{p-value} & \textbf{Significant?} \\
 \midrule
-V2 vs V3 & AUROC (DeLong) & $<0.001$ & Yes \\
-V2 vs V3 & LogLoss (paired t-test) & 0.002 & Yes \\
-V2 vs V3 & Cal. LogLoss (paired t-test) & 0.001 & Yes \\
-V2 vs V3 & High-res AUC & 0.012 & Yes \\
-V2 vs V3 & Mid-res AUC & 0.003 & Yes \\
-V2 vs V3 & Low-res AUC & 0.001 & Yes \\
+Config B vs Config C & AUROC (DeLong) & $<0.001$ & Yes \\
+Config B vs Config C & LogLoss (paired t-test) & 0.002 & Yes \\
+Config B vs Config C & Cal. LogLoss (paired t-test) & 0.001 & Yes \\
+Config B vs Config C & High-res AUC & 0.012 & Yes \\
+Config B vs Config C & Mid-res AUC & 0.003 & Yes \\
+Config B vs Config C & Low-res AUC & 0.001 & Yes \\
 \bottomrule
 \end{tabular}
 \end{table}

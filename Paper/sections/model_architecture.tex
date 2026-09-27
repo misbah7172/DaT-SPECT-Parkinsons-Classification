@@ -48,16 +48,16 @@ Our 3D ResNet variants are designed for volumetric medical imaging with three ke
 
 Both convolutions use $3\times3\times3$ kernels with padding=1. Downsampling blocks halve spatial resolution while doubling channels.
 
-\subsection{Architecture Evolution}
+\subsection{Configuration Evolution}
 \label{sec:arch_evolution}
 
 \begin{table}[htbp]
 \centering
-\caption{Model architecture evolution across versions.}
+\caption{Model architecture evolution across configurations.}
 \label{tab:arch_evolution}
 \begin{tabular}{lccc}
 \toprule
-\textbf{Component} & \textbf{Version 1 (Hybrid)} & \textbf{Version 2 (CNN-only)} & \textbf{Version 3 (Deep Ensemble)} \\
+\textbf{Component} & \textbf{Config A (Hybrid)} & \textbf{Config B (CNN-only)} & \textbf{Config C (Deep Ensemble)} \\
 \midrule
 Architecture family & Net3dR / Net3dBig & Net3dR / Net3dBig & \textbf{Deep ResNet v25} \\
 Residual blocks & 2 & 2 & \textbf{3} \\
@@ -84,7 +84,7 @@ Crop/Full volume & Crop & Full & Full \\
 
 \begin{table}[htbp]
 \centering
-\caption{Complete training hyperparameters for v25 models.}
+\caption{Complete training hyperparameters for Config C models.}
 \label{tab:training_hyperparams}
 \begin{tabular}{ll}
 \toprule
@@ -131,6 +131,6 @@ where $\text{Mix}_\alpha(\mathbf{x}) = \lambda \mathbf{x}_i + (1-\lambda)\mathbf
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/training_curves.png}
-    \caption{Training curves. (Top) Net3dR-v25 Fold 0 seed 42: early stop epoch 78. (Bottom) Net3dBig-v25 Fold 3 seed 314: early stop epoch 60.}
+    \caption{Training curves. (Top) Net3dR-Config C Fold 0 seed 42: early stop epoch 78. (Bottom) Net3dBig-Config C Fold 3 seed 314: early stop epoch 60.}
     \label{fig:training_curves}
 \end{figure}

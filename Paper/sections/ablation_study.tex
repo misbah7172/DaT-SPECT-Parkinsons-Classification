@@ -1,26 +1,26 @@
 \section{Ablation Studies}
 \label{sec:ablation}
 
-We systematically ablate key components of V3 to quantify individual contributions. All ablations use the same 5-fold \cvname~setup.
+We systematically ablate key components of Config C to quantify individual contributions. All ablations use the same 5-fold \cvname~setup.
 
 \subsection{Architecture Depth Ablation}
 \label{sec:arch_ablation}
 
 \begin{table}[htbp]
 \centering
-\caption{Architecture depth/width ablation. All trained with V3 training recipe.}
+\caption{Architecture depth/width ablation. All trained with Config C training recipe.}
 \label{tab:arch_ablation}
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Config} & \textbf{Blocks} & \textbf{Params} & \textbf{LL} & \textbf{AUC} \\
 \midrule
-Net3dR-V2 (2 blk, 2 down) & 2+2 & 280K & 0.312 & 0.938 \\
-Net3dR-V3 (3 blk, 3 down) & 3+3 & 845K & \textbf{0.268} & \textbf{0.958} \\
-Net3dBig-V2 (2 blk, 2 down) & 2+2 & 294K & 0.308 & 0.941 \\
-Net3dBig-V3 (3 blk, 3 down) & 3+3 & 1.3M & \textbf{0.259} & \textbf{0.962} \\
+Net3dR-Config B (2 blk, 2 down) & 2+2 & 280K & 0.312 & 0.938 \\
+Net3dR-Config C (3 blk, 3 down) & 3+3 & 845K & \textbf{0.268} & \textbf{0.958} \\
+Net3dBig-Config B (2 blk, 2 down) & 2+2 & 294K & 0.308 & 0.941 \\
+Net3dBig-Config C (3 blk, 3 down) & 3+3 & 1.3M & \textbf{0.259} & \textbf{0.962} \\
 \midrule
-Ensemble (5+5, V2 arch) & -- & -- & 0.2996 & 0.9411 \\
-Ensemble (5+5, V3 arch) & -- & -- & \textbf{0.2618} & \textbf{0.9610} \\
+Ensemble (5+5, Config B arch) & -- & -- & 0.2996 & 0.9411 \\
+Ensemble (5+5, Config C arch) & -- & -- & \textbf{0.2618} & \textbf{0.9610} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -32,7 +32,7 @@ Ensemble (5+5, V3 arch) & -- & -- & \textbf{0.2618} & \textbf{0.9610} \\
 
 \begin{table}[htbp]
 \centering
-\caption{Training component ablation (Net3dR-V3, seed 42, Fold 0).}
+\caption{Training component ablation (Net3dR-Config C, seed 42, Fold 0).}
 \label{tab:training_ablation}
 \begin{tabular}{lcccc}
 \toprule
@@ -58,7 +58,7 @@ Early Stopping (full 100 ep) & 0.274 & 0.956 & +0.009 & -0.003 \\
 
 \begin{table}[htbp]
 \centering
-\caption{Ensemble size vs. performance (V3 architecture, OOF).}
+\caption{Ensemble size vs. performance (Config C architecture, OOF).}
 \label{tab:ensemble_ablation}
 \begin{tabular}{cccc}
 \toprule
@@ -80,7 +80,7 @@ Early Stopping (full 100 ep) & 0.274 & 0.956 & +0.009 & -0.003 \\
 
 \begin{table}[htbp]
 \centering
-\caption{TTA configuration ablation (V3 ensemble, OOF).}
+\caption{TTA configuration ablation (Config C ensemble, OOF).}
 \label{tab:tta_ablation}
 \begin{tabular}{lccc}
 \toprule
@@ -102,7 +102,7 @@ Translation + Rotation & 15 & \textbf{0.2618} & \textbf{0.9610} \\
 
 \begin{table}[htbp]
 \centering
-\caption{Calibration method comparison (V3 OOF ensemble).}
+\caption{Calibration method comparison (Config C OOF ensemble).}
 \label{tab:cal_ablation}
 \begin{tabular}{lcccc}
 \toprule
@@ -123,7 +123,7 @@ Temperature Scaling & 0.2478 & 0.9610 & 0.0072 & 0.0234 \\
 
 \begin{table}[htbp]
 \centering
-\caption{Input grid size ablation (Net3dR-V3, Fold 0).}
+\caption{Input grid size ablation (Net3dR-Config C, Fold 0).}
 \label{tab:res_ablation}
 \begin{tabular}{cccc}
 \toprule
@@ -147,11 +147,11 @@ Temperature Scaling & 0.2478 & 0.9610 & 0.0072 & 0.0234 \\
     \includegraphics[width=0.45\linewidth]{figures/version_comparison.png} &
     \includegraphics[width=0.45\linewidth]{figures/architecture_comparison.png} \\
     \end{tabular}
-    \caption{Key ablation drivers: (Left) Version evolution shows cumulative gains. (Right) Architecture scaling (280K $\to$ 845K/1.3M) is the largest single factor.}
+    \caption{Key ablation drivers: (Left) Configuration evolution shows cumulative gains. (Right) Architecture scaling (280K $\to$ 845K/1.3M) is the largest single factor.}
     \label{fig:ablation_summary}
 \end{figure}
 
-The largest contributors to V3's improvement over V2:
+The largest contributors to Config C's improvement over Config B:
 \begin{enumerate}
     \item \textbf{Architecture scaling} (2$\to$3 blocks, 280K$\to$845K/1.3M): $\sim$0.035 LL, +0.020 AUC
     \item \textbf{Mixup + Label Smoothing}: $\sim$0.015 LL, +0.007 AUC

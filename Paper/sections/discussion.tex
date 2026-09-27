@@ -16,7 +16,7 @@ This mirrors the known pathophysiology: DaT-SPECT signal loss begins in posterio
 \subsection{Scanner Heterogeneity Robustness}
 \label{sec:scanner_robustness}
 
-The largest V3 gains occur on lower-resolution scans (+2.3\% AUROC on 3.90~mm and other). This demonstrates:
+The largest Config C gains occur on lower-resolution scans (+2.3\% AUROC on 3.90~mm and other). This demonstrates:
 \begin{enumerate}
     \item The deeper architecture learns resolution-invariant features through Mixup augmentation and multi-scale processing.
     \item Coarse-to-fine alignment (rotation $\pm$5$^\circ$ + translation $\pm$4 voxels) is more effective when the network itself is robust to residual misalignment.
@@ -56,8 +56,8 @@ This demonstrates that modern deep 3D CNNs are feasible on consumer hardware wit
     \item \textbf{Single tracer:} All scans use $^{123}$I-FP-CIT (DaTSCAN). Generalization to $^{99m}$Tc-TRODAT-1 or other tracers untested.
     \item \textbf{Binary classification only:} Does not differentiate PD from atypical parkinsonism (MSA, PSP) which also show dopaminergic deficit.
     \item \textbf{No clinical metadata:} Age, sex, disease duration, UPDRS scores could improve performance but were unavailable.
-    \item \textbf{Smoke test class shift:} 65\% positive vs 55\% training causes calibration mismatch on small test sets.
-    \item \textbf{No external validation:} All results on challenge dataset; independent multi-center validation needed.
+    \item \textbf{Holdout test class shift:} 65\% positive vs 55\% training causes calibration mismatch on small test sets.
+    \item \textbf{No external validation:} All results on single dataset; independent multi-center validation needed.
     \item \textbf{Inference time:} 10 models $\times$ 15 TTA = 150 forward passes ($\sim$8 sec/scan on RTX 3050 Ti). Distillation needed for real-time use.
 \end{enumerate}
 
