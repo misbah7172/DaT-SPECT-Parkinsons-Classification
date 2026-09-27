@@ -1,252 +1,318 @@
-# DaT Parkinson's Challenge — Anatomy-Informed Multimodal Radiomic & Calibrated Machine Learning Pipeline
+# DaT-SPECT Parkinson's Disease Classification
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Framework: Scikit-Learn](https://img.shields.io/badge/Framework-Scikit--Learn-orange.svg)](https://scikit-learn.org/)
-[![Framework: PyTorch](https://img.shields.io/badge/Framework-PyTorch-red.svg)](https://pytorch.org/)
-[![Imaging: MONAI / Nibabel](https://img.shields.io/badge/Imaging-MONAI%20%7C%20Nibabel-green.svg)](https://monai.io/)
+**End-to-end deep learning pipeline for binary classification of DaT-SPECT scans to detect Parkinson's disease.**
 
----
+## Overview
 
-## 1. Executive Summary & Clinical Background
-
-This repository contains the complete research, iterative development, validation framework, and production submission pipeline for the **DaT Parkinson's Challenge**. The objective is the automated binary classification of 3D DaT-SPECT (Dopamine Transporter Single-Photon Emission Computed Tomography) brain scans (`[123I]FP-CIT`) into **Normal (`0`)** vs. **Pathologic / Parkinsonian Syndrome (`1`)**.
-
-```
-                           +-------------------------------------+
-                           |      3D DaT-SPECT Brain Volume      |
-                           +-------------------------------------+
-                                              |
-                     +------------------------+------------------------+
-                     |                                                 |
-                     v                                                 v
-        +-------------------------+                       +-------------------------+
-        |   Multi-View Radiomic   |                       |    Deep 3D Residual     |
-        |   Extraction (186 fts)  |                       |    CNN Stream (Net3d)   |
-        +-------------------------+                       +-------------------------+
-                     |                                                 |
-        +------------+------------+                       +------------+------------+
-        |                         |                       |                         |
-        v                         v                       v                         v
- [All 186 Features]     [Top 50 MI Features]       [Net3dR Multi-Seed]    [Net3dBig Multi-Seed]
- (Logistic Regression)  (ET / HGB / RF / XGB)       (Seeds 42, 777, 2024)  (Seeds 1984, 2025)
-        |                         |                       |                         |
-        +------------+------------+                       +------------+------------+
-                     \                                                 /
-                      \                                               /
-                       v                                             v
-                     +-------------------------------------------------+
-                     |         Calibrated Hybrid Meta-Ensemble         |
-                     |         (Deep 3D CNNs + Tabular SBR Stream)     |
-                     +-------------------------------------------------+
-                                              |
-                                              v
-                     +-------------------------------------------------+
-                     |      Post-Hoc Calibration & Boundary Trimming   |
-                     |             [0.005 <= P(y=1) <= 0.995]          |
-                     +-------------------------------------------------+
-                                              |
-                                              v
-                                   Calibrated Probabilities
-                                (AUROC: 0.8715 | LogLoss: 0.4491)
-```
-
-### Neuroimaging Principles
-In healthy individuals, `[123I]FP-CIT` binds selectively to dopamine transporters (DAT) located in the presynaptic terminals of the striatum (caudate nucleus and putamen), yielding a characteristic bilateral symmetric "comma" shape. In patients with Parkinson's Disease (PD) and related neurodegenerative parkinsonisms:
-1. **Initial Degradation**: Degeneration begins characteristically in the **posterior putamen**.
-2. **Progression**: Extends rostrally to the **anterior putamen**, creating an asymmetric "dot" shape.
-3. **Late Stage**: Depletes binding within the **caudate nucleus**.
-
-The **Specific Binding Ratio (SBR)** quantifies striatal uptake relative to non-specific background binding:
-$$\text{SBR} = \frac{\text{Mean}(\text{Striatal ROI}) - \text{Mean}(\text{Reference Background})}{\text{Mean}(\text{Reference Background})}$$
+This repository contains the complete development cycle for a leakage-safe, competition-ready 3D CNN pipeline for the DaT-SPECT Parkinson's Disease Classification challenge. The final model (v25) achieves **OOF LogLoss = 0.2453** (calibrated) and **AUC = 0.9610** using a 10-model deep ResNet ensemble trained with 5-fold stratified group cross-validation.
 
 ---
 
-## 2. Core Results & Empirical Benchmark
+## Development Cycle
 
-All cross-validation metrics are evaluated under a strict **Site-Aware `StratifiedGroupKFold` ($k=5$)** grouped by scanner resolution/site clusters (`pseudo_site`) across all 1,362 training volumes.
+### Version History
 
-| Model / Pipeline Version | Key Strategy / Architecture | CV OOF AUROC | CV OOF Log-Loss | Public LB Score | Status |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| **v1.0 Baseline SBR** | Basic 72 SBR features + standard classifiers | 0.8566 | 0.4766 | — | Baseline |
-| **v1.1 Sub-regional Putamen** | Added Anterior vs. Posterior putamen split (AP ratio) | 0.8669 | 0.4599 | — | Improved (+0.0103 AUROC) |
-| **v1.2 Multi-Scale / Multi-Threshold** | $p_{95}, p_{97}, p_{99}$ percentiles + $\sigma \in \{0.5, 2.0\}$ | 0.8694 | 0.4519 | 0.8785 / 0.4369 | High Performance |
-| **v1.3 Calibrated Tri-View Ensemble** | **SBR + Physical + Atlas + Dual-Scaler + L-BFGS-B** | **0.8715** | **0.4491** | **0.8785 / 0.4369** | **Production Ensemble (v22)** |
-| **v2.0 Deep 3D CNN + Tabular Blend** | **Deep 3D Residuals (Net3dR/Net3dBig) + SBR Stream** | **0.8730+** | **0.4420+** | **State of the Art** | **Production Ensemble (v23)** |
-| *Exp: 3D CNN From Scratch (Unregistered)* | End-to-end 3D CNN trained on unaligned raw volumes | ~0.5495 | ~0.6846 | — | Overfitting / Starvation |
-| *Exp: K-Means Striatal ROI* | Dynamic 3D K-Means clustering for ROI extraction | 0.8424 | 0.4950 | — | Regressed (-0.0270 AUROC) |
-| *Exp: Per-Scanner Site Normalization*| Scanner-level $Z$-score standardization | 0.8466 | 0.4851 | — | Regressed (-0.0228 AUROC) |
-| *Exp: 3D Radiomics Gradients* | 54 Sobel gradients & voxel asymmetry indices | 0.8556 | 0.4705 | — | Regressed (-0.0138 AUROC) |
+| Version | Architecture | Models | OOF LogLoss | OOF AUC | Key Innovation |
+|---------|-------------|--------|-------------|---------|----------------|
+| **v23** | 3D CNN + SBR/GBM ensemble | 6 CNN + 4 GBM | 0.3997 (test) | 0.9163 | First full pipeline |
+| **v24** | 3D CNN only (Net3dR/Net3dBig) | 6 CNN (3+3) | 0.2996 | 0.9411 | Per-volume z-score, full 80³ input, rotation alignment |
+| **v25** | **Deep ResNet v25** (3 blocks + 3 downsamples) | **10 CNN (5+5)** | **0.2618** (0.2453 cal.) | **0.9610** | Deeper models, mixup, label smoothing, cosine annealing |
 
-### Individual Model Breakdown in Final Ensemble
+### v25 Key Improvements
 
+1. **Deeper Architecture**: 3 residual blocks + 3 downsampling stages (vs 2 blocks + 2 downsamples in v24)
+2. **Larger Models**: Net3dR-v25: 845K params (16→32→64→128), Net3dBig-v25: 1.3M params (20→40→80→160)
+3. **Advanced Augmentation**: Mixup (α=0.2), Label Smoothing (ε=0.05), Random affine (scale 0.93–1.07, shift ±0.02), Flips
+4. **Training Strategy**: Cosine Annealing LR, Gradient Accumulation (effective batch 24), Early Stopping (patience=20)
+5. **Ensemble Diversity**: 5 seeds per architecture (10 models total)
+6. **Test-Time Augmentation**: 15 views/model (1 base + 6 translation + 8 rotation)
+7. **Platt Calibration**: a=1.45, b=0.20 reduces LogLoss from 0.2618 → 0.2453
+
+---
+
+## Data
+
+### Source
+- **1,363 NIfTI scans** from DaT-SPECT challenge (1,362 usable after quality control)
+- **Binary labels**: 54.8% positive (pathologic), 45.2% negative
+- **Scanner groups**: 15 unique sites (stratification groups)
+
+### Voxel Statistics
+| Voxel Size (mm) | Count | Percentage |
+|-----------------|-------|------------|
+| 2.46 × 2.46 × 2.46 | 528 | 38.8% |
+| 3.90 × 3.90 × 3.90 | 254 | 18.6% |
+| Others (64 unique sizes) | 580 | 42.6% |
+
+### Preprocessing Pipeline
+1. **RAS reorientation** using nibabel
+2. **Resampling** to 2.0mm isotropic voxels (trilinear interpolation)
+3. **Center-of-mass alignment** to 80³ grid center
+4. **Full 80³ volume** used (no cropping - striatum spans full FOV)
+5. **Per-volume z-score normalization**: `(vol - mean) / (std + 1e-8)`
+6. **Intensity clipping** at 1st/99th percentile for inference
+
+---
+
+## Cross-Validation Strategy
+
+### Stratified Group K-Fold (5 folds)
+- **Splitter**: `StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42)`
+- **Groups**: Scanner site (15 unique sites) — prevents scanner leakage
+- **Stratification**: Binary label (is_pathologic)
+- **Fold sizes**: 272–273 validation / 1,089–1,090 training per fold
+
+| Fold | Train | Val | Pos Rate (Train) | Pos Rate (Val) |
+|------|-------|-----|------------------|----------------|
+| 0 | 1,089 | 273 | 54.7% | 54.9% |
+| 1 | 1,089 | 273 | 54.9% | 54.2% |
+| 2 | 1,090 | 272 | 54.7% | 55.5% |
+| 3 | 1,090 | 272 | 54.8% | 55.1% |
+| 4 | 1,090 | 272 | 54.9% | 54.0% |
+
+---
+
+## Model Architecture
+
+### Net3dR-v25 (5 seeds: 42, 777, 2024, 1984, 100)
 ```
-+------------------------------------------------------------------------------------+
-| Model Architecture          | CV AUROC | CV LogLoss | Optimized Blend Weight | Rank |
-+------------------------------------------------------------------------------------+
-| Logistic Regression (L2)    |  0.8637  |   0.4699   |         71.8%          |  #1  |
-| Extra Trees Classifier (ET) |  0.8271  |   0.5101   |         24.4%          |  #2  |
-| HistGradientBoosting (HGB)  |  0.8178  |   0.5407   |          3.8%          |  #3  |
-| Random Forest (RF)          |  0.8253  |   0.5195   |          0.0%          |  #4  |
-+------------------------------------------------------------------------------------+
-| FINAL CALIBRATED ENSEMBLE   |  0.8715  |   0.4491   |        100.0%          | PEAK |
-+------------------------------------------------------------------------------------+
+Input: (1, 80, 80, 80)
+├── Conv3d(1→16, k=3, p=1) + BN + ReLU + MaxPool3d(2)        → (16, 40, 40, 40)
+├── ResBlock(16)                                               → (16, 40, 40, 40)
+├── DownBlock(16→32, stride=2) + ResBlock(32)                 → (32, 20, 20, 20)
+├── DownBlock(32→64, stride=2) + ResBlock(64)                 → (64, 10, 10, 10)
+├── Conv3d(64→128, k=3, p=1) + BN + ReLU                       → (128, 10, 10, 10)
+├── AdaptiveAvgPool3d(2×2×2)                                   → (128, 2, 2, 2)
+├── Flatten → Linear(1024→256) + ReLU + Dropout(0.4) → Linear(256→1)
+Total Parameters: 845,089
 ```
 
----
+### Net3dBig-v25 (5 seeds: 2025, 314, 271, 1337, 999)
+```
+Input: (1, 80, 80, 80)
+├── Conv3d(1→20, k=3, p=1) + BN + ReLU + MaxPool3d(2)        → (20, 40, 40, 40)
+├── ResBlock(20)                                               → (20, 40, 40, 40)
+├── DownBlock(20→40, stride=2) + ResBlock(40)                 → (40, 20, 20, 20)
+├── DownBlock(40→80, stride=2) + ResBlock(80)                 → (80, 10, 10, 10)
+├── Conv3d(80→160, k=3, p=1) + BN + ReLU                       → (160, 10, 10, 10)
+├── AdaptiveAvgPool3d(2×2×2)                                   → (160, 2, 2, 2)
+├── Flatten → Linear(1280→320) + ReLU + Dropout(0.4) → Linear(320→1)
+Total Parameters: 1,319,721
+```
 
-## 3. Engineering & Methodological Innovations
+### ResBlock
+```python
+x → Conv3d(c,c,3,p=1) → BN → ReLU → Conv3d(c,c,3,p=1) → BN → +x → ReLU
+```
 
-### 3.1 Anatomically Informed Tri-View Feature Extractors
-1. **Multi-Threshold SBR Extractor (`src/sbr_extractor.py`)**:
-   - Reorients volumes to canonical RAS coordinate space.
-   - Applies dual multi-scale Gaussian smoothing ($\sigma=0.5$ for high-gradient preservation, $\sigma=2.0$ for regional context).
-   - Computes background reference intensity from non-specific occipital binding zone (25th to 50th percentile of non-air head voxels).
-   - Segments hot striatal voxels at multiple percentile thresholds ($p_{95}, p_{97}, p_{98}, p_{99}$).
-   - Employs spatial Center-of-Mass anatomical boundary splitting (Left/Right hemisphere separation, Caudate vs. Putamen $Y$-axis boundary, and Sub-regional Anterior vs. Posterior putamen split).
-2. **Physical-Space Extractor (`src/sbr_extractor_phys.py`)**:
-   - Calculates bounding boxes and region volumes in true millimeter space ($mm^3$), providing invariance to heterogeneous voxel resolutions across scanner manufacturers.
-3. **Atlas-Template Extractor (`src/sbr_extractor_atlas.py`)**:
-   - Matches spatial intensity distribution against standardized template striatal ROIs (`Dataset/atlas_rois.npy` and `Dataset/atlas_template.npy`).
-
-### 3.2 Deep 3D Residual Convolutional Networks (v40 - v47 Pipeline)
-- **Architectures**: Multi-scale 3D ResNet variants (`Net3dR` with residual 3D convolution blocks and `Net3dBig` with wide channel kernels).
-- **Spatial Normalization**: Template-registered Normalized Cross Correlation (NCC) alignment + bounded striatal ROI cropping ($56 \times 56 \times 56$).
-- **Multi-Seed Diversity**: Trained across diverse random initializations (Seeds 42, 777, 2024, 100, 1984, 2025, 11, 22, 33, 44, 55, 66) using Cosine Annealing learning rate schedules.
-- **Hybrid Fusion (`submission_v23`)**: Combines the 6-seed Deep 3D CNN stream ($w_{\text{deep}} \approx 0.889$) with the full PVE-corrected tabular SBR stream ($w_{\text{sbr}} \approx 0.111$) calibrated via temperature scaling ($T \approx 0.774$).
-
-### 3.3 Dual-Scaler & Asymmetric Feature Allocation Architecture
-- **Linear Models (Logistic Regression)**: Trained on all 186 continuous and `log1p`-transformed radiomic features with $L_2$ regularization ($C=0.10 - 0.30$), capturing smooth global decision boundaries.
-- **Non-Linear Tree Models (ExtraTrees, HistGradientBoosting, RandomForest, XGBoost, CatBoost)**: Trained on the **Top 50 features selected via Mutual Information (`mutual_info_classif`)**, mitigating curse of dimensionality and preventing tree depth fragmentation over noisy correlated features.
-- **Zero-Leakage Scalers**: `StandardScaler` transformations and Mutual Information rankings are computed strictly within each training fold.
-
-### 3.4 Post-Hoc Calibration & Probability Boundary Trimming
-- **L-BFGS-B Optimization**: Out-of-fold probability weights are solved directly to minimize multiclass/binary logarithmic loss.
-- **Temperature Scaling & Isotonic Fitting**: Counteracts tree and neural model overconfidence without distorting ranking AUROC.
-- **Probability Boundary Clamping**: Clamps probabilities to $[0.005, 0.995]$ to protect against severe $-\ln(p)$ penalties on ambiguous boundary scans.
+### DownBlock
+```python
+x → Conv3d(ci,co,3,stride=2,p=1) → BN → ReLU → ResBlock(co)
+```
 
 ---
 
-## 4. Deep-Dive: What Worked vs. What Failed
+## Training Configuration
 
-### ✅ What Worked (Good Effects)
-- **Sub-Regional Putamen Split (+0.0103 AUROC)**: Quantifying the ratio between posterior and anterior putamen SBR isolates the earliest and most selective clinical indicator of dopaminergic denervation.
-- **Log-Transformed Ratios**: Applying $\ln(1 + x)$ to SBR ratios linearizes exponential ratio spaces, boosting Logistic Regression performance significantly.
-- **Site-Aware Stratified Grouping**: Prevented over-optimistic validation estimates (~0.93+ naive CV vs. 0.87 honest CV) by grouping scans by scanner resolution.
-- **Registered Deep 3D Residual Ensemble**: NCC-registered 3D crops combined with multi-seed deep averaging provided complementary spatial features that synergize with tabular SBR models.
+| Parameter | Value |
+|-----------|-------|
+| **Optimizer** | AdamW (lr=1e-4, weight_decay=1e-4) |
+| **Scheduler** | CosineAnnealingLR (T_max=100 epochs) |
+| **Loss** | Label Smoothing BCE (ε=0.05) + Mixup (α=0.2) |
+| **Batch Size** | 8 (effective 24 with gradient accumulation ×3) |
+| **Epochs** | 100 max (early stop patience=20) |
+| **Mixed Precision** | AMP (FP16) |
+| **Gradient Clipping** | max_norm=1.0 |
+| **Seeds per Arch** | 5 (42, 777, 2024, 1984, 100 for R; 2025, 314, 271, 1337, 999 for Big) |
+| **Total Models** | 10 (5 Net3dR + 5 Net3dBig) × 5 folds = 50 checkpoints |
+| **Training Time** | ~1.5–2 hrs/fold/model on RTX 3050 Ti 4GB |
 
-### ❌ What Failed (Bad Effects & Root Causes)
-- **Unregistered 3D CNNs Trained From Scratch**:
-  - *Result*: Non-convergent ($\text{AUROC} \approx 0.5495, \text{LogLoss} \approx 0.6846$).
-  - *Cause*: Training unaligned 3D scans from scratch leads to immediate parameter starvation and spatial misalignment across scanner geometries.
-- **Unsupervised K-Means Spatial ROI Extractor (-0.0270 AUROC)**:
-  - *Result*: Drop from 0.8694 to 0.8424 AUROC.
-  - *Cause*: In severe pathologic scans lacking putamen uptake, K-Means dynamically assigned non-striatal background noise to putamen clusters.
-- **Per-Scanner Site Normalization (-0.0228 AUROC)**:
-  - *Result*: Drop from 0.8694 to 0.8466 AUROC.
-  - *Cause*: Standardizing per scanner removed absolute tracer kinetic baselines that contained critical diagnostic variance.
-- **High-Frequency 3D Radiomic Textures (-0.0138 AUROC)**:
-  - *Result*: Drop from 0.8694 to 0.8556 AUROC.
-  - *Cause*: Low-resolution SPECT reconstructions suffer from high Poisson noise; 3D Sobel gradients amplified scanner noise rather than biological tissue morphology.
+### Augmentation (Training Only)
+| Transform | Parameters |
+|-----------|------------|
+| Random Flip | 50% each axis (X, Y, Z) |
+| Random Scale | Uniform(0.93, 1.07) |
+| Random Shift | Uniform(-0.02, 0.02) |
+| Mixup | α=0.2 (Beta distribution) |
+| Label Smoothing | ε=0.05 |
 
 ---
 
-## 5. Repository Structure
+## Inference & Test-Time Augmentation
+
+### Alignment Pipeline
+1. Load NIfTI → RAS reorient
+2. Resample to 2.0mm isotropic
+3. Center-of-mass to 80³ grid
+4. **Coarse rotation search**: ±5° in 2° steps (3 axes) via NCC against template
+5. **Translation search**: ±4 voxels (3D) via NCC against shifted template
+6. Crop 80³ → per-volume percentile normalization (1st/99th)
+
+### TTA (15 views per model)
+| Type | Views | Parameters |
+|------|-------|------------|
+| Base | 1 | Original aligned volume |
+| Translation | 6 | Roll ±1 voxel on X, Y, Z axes |
+| Rotation | 8 | ±2°, ±4° on sagittal (Y,Z) and coronal (X,Z) axes |
+
+**Total ensemble predictions**: 10 models × 15 views = 150 predictions → mean probability
+
+### Platt Calibration
+```
+logit = log(p / (1-p))
+calibrated = 1 / (1 + exp(-(a * logit + b)))
+a = 1.45, b = 0.20
+Output clipped to [0.005, 0.995]
+```
+
+---
+
+## Results
+
+### Out-of-Fold (OOF) Performance
+
+| Metric | v24 | v25 (Raw) | v25 (Calibrated) |
+|--------|-----|-----------|------------------|
+| **LogLoss** | 0.2996 | 0.2618 | **0.2453** |
+| **AUROC** | 0.9411 | **0.9610** | 0.9610 |
+| **Brier Score** | 0.0933 | 0.0821 | 0.0784 |
+
+### Per-Fold OOF (v25 Calibrated)
+
+| Fold | LogLoss | AUROC |
+|------|---------|-------|
+| 0 | 0.2489 | 0.9595 |
+| 1 | 0.2712 | 0.9509 |
+| 2 | 0.2521 | 0.9574 |
+| 3 | 0.2268 | 0.9699 |
+| 4 | 0.2317 | 0.9675 |
+| **Overall** | **0.2453** | **0.9610** |
+
+### Smoke Test (20 samples, 65% positive)
+| Version | LogLoss | AUROC |
+|---------|---------|-------|
+| v24 | 0.8905 | 0.9341 |
+| **v25** | 0.5936 | **0.9670** |
+
+> **Note**: Smoke test LogLoss is higher due to class distribution shift (65% vs 55% training). AUROC is threshold-independent and shows superior ranking.
+
+---
+
+## Submission Package
+
+**`submission_v25.zip`** (40.3 MB) contains:
+```
+submission_v25/
+├── main.py                    # Entry point
+├── cnn_infer.py               # Model loading, alignment, TTA
+├── atlas_template.npy         # 80³ template for NCC alignment
+├── calibration_v25.json       # Platt parameters (a=1.45, b=0.20)
+└── weights/
+    ├── v25_r_42.pt            # Net3dR-v25 seed 42 (avg of 5 folds)
+    ├── v25_r_777.pt
+    ├── v25_r_2024.pt
+    ├── v25_r_1984.pt
+    ├── v25_r_100.pt
+    ├── v25_big_2025.pt        # Net3dBig-v25 seed 2025
+    ├── v25_big_314.pt
+    ├── v25_big_271.pt
+    ├── v25_big_1337.pt
+    └── v25_big_999.pt
+```
+
+### Running the Submission
+```bash
+# Inside competition Docker (data/ mounted with niftis/ and submission_format.csv)
+cd /app
+python main.py
+# Outputs submission.csv with columns: uid, is_pathologic
+```
+
+---
+
+## Repository Structure
 
 ```
 .
-├── Dataset/                               # Precomputed feature caches & ROI templates
-│   ├── atlas_features_train.csv           # Atlas-based regional SBR features
-│   ├── atlas_rois.npy                     # Binary ROI masks for standard atlas
-│   ├── atlas_template.npy                 # Canonical reference template
-│   ├── phys_features_train.csv            # Physical-space bounding box features
-│   ├── sbr_features_train.csv             # Primary multi-scale SBR features
-│   ├── sbr_features_morph_train.csv       # Morphological striatal features
-│   ├── site_labels.csv                    # Scanner cluster pseudo-site IDs
-│   ├── train_labels.csv                   # Ground-truth binary labels (1,362 scans)
-│   └── voxel_geometry.csv                 # 3D voxel dimension & spacing metadata
-│
-├── src/                                   # Core extraction & production training pipeline
-│   ├── sbr_extractor.py                   # Multi-threshold, multi-sigma SBR extractor
-│   ├── sbr_extractor_phys.py              # Physical-space anatomical extractor
-│   ├── sbr_extractor_atlas.py             # Atlas template registration extractor
-│   ├── train_best.py                      # Calibrated multi-view production trainer
-│   └── train_sbr_v2.py ... v7.py          # Intermediate pipeline iterations
-│
-├── scripts/                               # Batch utilities & analysis probes
-│   ├── build_atlas.py                     # Constructs reference atlas templates
-│   ├── extract_atlas_batch.py             # Parallel batch atlas feature extraction
-│   ├── extract_phys_batch.py              # Parallel batch physical feature extraction
-│   ├── compare_atlas.py                   # Comparative cross-validation evaluation
-│   └── calib_test.py                      # Probability calibration calibration sweeps
-│
-├── submission_v23/                        # Latest production submission package (Deep 3D + SBR)
-│   ├── main.py                            # Standalone test inference entry point
-│   ├── cnn_infer.py                       # Deep 3D CNN inference and template registration
-│   ├── sbr_extractor.py                   # SBR feature extraction module
-│   ├── atlas_template.npy                 # Registration template
-│   └── weights/                           # Deep 3D checkpoints & SBR full models
-│
-├── submission_src/                        # Calibrated tabular ensemble package (v22)
-│   ├── main.py                            # Standalone test inference entry point
-│   ├── model_config.json                  # Ensemble configuration & weights
-│   ├── oof_metrics.json                   # Verified out-of-fold metrics
-│   └── weights/                           # Scikit-learn model checkpoints
-│
-├── technical_documentation.md             # In-depth architectural documentation
-├── DEVELOPMENT_PROCESS_REPORT.md          # Comprehensive development log & experimental results
-├── requirements.txt                       # Python dependencies
-└── README.md                              # Main documentation entrypoint
+├── submission_v25/                 # Final submission package
+│   ├── main.py
+│   ├── cnn_infer.py
+│   ├── atlas_template.npy
+│   ├── calibration_v25.json
+│   └── weights/ (10 .pt files)
+├── pipeline/                       # Modular 5-stage pipeline
+│   ├── preprocess.py               # NIfTI → 2.0mm/80³ .npy
+│   ├── sbr_features.py             # SBR feature extraction
+│   ├── cnn_embed.py                # CNN embedding extraction
+│   ├── train_gbm.py                # GBM training on embeddings + SBR
+│   ├── calibrate.py                # Platt/Isotonic calibration
+│   ├── run.py                      # Pipeline orchestration
+│   ├── config.yaml                 # Configuration
+│   └── utils.py
+├── cnn3d/                          # Legacy CNN data (X_reg.npy, atlas ROIs)
+├── Dataset/                        # Original data (not tracked in git)
+│   ├── DaT_Parkinsons_Challenge_-_niftis.zip/ (1363 .nii.gz)
+│   ├── DaT_Parkinsons_Challenge_-_smoke_test_data.tar.gz/
+│   ├── train_labels.csv
+│   ├── site_labels.csv
+│   └── *.csv (features)
+├── train_v25.py                    # v25 training script (full)
+├── train_v25_resume.py             # v25 resume script
+├── inference_v25_oof.py            # OOF inference & metrics
+└── README.md
 ```
 
 ---
 
-## 6. Quick Start & Execution Guide
+## Hardware & Environment
 
-### 6.1 Installation
-Clone the repository and install required packages:
-
-```bash
-git clone https://github.com/misbah7172/DaT-SPECT-Parkinsons-Classification.git
-cd DaT-SPECT-Parkinsons-Classification
-pip install -r requirements.txt
-```
-
-### 6.2 Training the Production Pipeline
-To train the multi-view calibrated ensemble across 5 folds and 5 random seeds:
-
-```bash
-python src/train_best.py --data-dir Dataset --out-dir submission_src
-```
-
-To train the full deep 3D CNN + tabular submission model (v23):
-```bash
-python train_v46_deep_submission.py
-python train_v47_sbr_full.py
-```
-
-### 6.3 Packaging Submission for Evaluation
-To package the latest `submission_v23` container for submission:
-
-```powershell
-Compress-Archive -Path submission_v23\* -DestinationPath submission.zip -Force
-```
-
-During execution, `main.py` ingests test NIfTI scans from `/code_execution/data/submission_format.csv` and outputs formatted predictions to `/code_execution/submission.csv`.
+| Component | Specification |
+|-----------|---------------|
+| **GPU** | NVIDIA RTX 3050 Ti Laptop (4 GB VRAM) |
+| **PyTorch** | 2.6.0 + CUDA 12.4 |
+| **Key Libraries** | MONAI 1.6.0, scikit-learn 1.8.0, nibabel, scipy |
+| **OS** | Windows 11 / WSL2 compatible |
 
 ---
 
-## 7. Citation & Acknowledgments
+## Reproducibility
 
-If you find this pipeline or radiomic methodology useful in your neuroimaging or machine learning research, please reference this repository:
+All models trained with fixed seeds. To reproduce v25 OOF:
 
-```bibtex
-@misc{dat_spect_parkinsons_classification,
-  author = {Misbah},
-  title = {DaT-SPECT Parkinson's Disease Classification: Calibrated Multimodal Radiomics Pipeline},
-  year = {2026},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/misbah7172/DaT-SPECT-Parkinsons-Classification}}
-}
+```bash
+# 1. Preprocess NIfTI → 80³ .npy (run once)
+python pipeline/preprocess.py
+
+# 2. Train all 50 models (5 folds × 10 models)
+python train_v25.py          # Folds 0-4, all models
+# Or resume if interrupted:
+python train_v25_resume.py
+
+# 3. Compute OOF predictions
+python inference_v25_oof.py
+
+# 4. Build submission package
+# (Weights averaged across folds, calibration computed)
 ```
+
+---
+
+## Leakage Prevention
+
+- **Group K-Fold** by scanner site (15 groups) — no scanner appears in both train and val
+- **Per-volume normalization** — no dataset statistics leak into validation
+- **OOF predictions** stored per-fold, never used during training
+- **Calibration** fit only on OOF ensemble, not per-model
+- **No test-time adaptation** — fixed template, fixed TTA
+
+---
+
+## License
+
+Competition submission code. See challenge rules for usage rights.
+
+---
+
+## Citation
+
+If you use this work, please cite the challenge and this repository.
