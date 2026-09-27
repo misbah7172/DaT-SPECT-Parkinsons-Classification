@@ -79,6 +79,8 @@ Crop/Full volume & Crop & Full & Full \\
     \label{fig:arch_comparison}
 \end{figure}
 
+Manca~\cite{manca2024dat} used a 48$^3$ crop 3D CNN with 4 residual blocks (988K params) and 8-view TTA, achieving 0.9410 AUROC. Shawki et al.~\cite{shawki2024dat} found 3D CNNs underperformed 2D EfficientNet-B0 slabs + BiGRU slice-sequence models, but used dual-normalized channels and strong blur/noise augmentation for robustness. Our Config C extends the 3D ResNet to 3 downsampling stages (80$^3$ input) with Mixup, label smoothing, and 15-view TTA, achieving 0.9610 AUROC.
+
 \subsection{Training Configuration}
 \label{sec:training_config}
 
@@ -133,4 +135,3 @@ where $\text{Mix}_\alpha(\mathbf{x}) = \lambda \mathbf{x}_i + (1-\lambda)\mathbf
     \includegraphics[width=0.95\linewidth]{figures/training_curves.png}
     \caption{Training curves. (Top) Net3dR-Config C Fold 0 seed 42: early stop epoch 78. (Bottom) Net3dBig-Config C Fold 3 seed 314: early stop epoch 60.}
     \label{fig:training_curves}
-\end{figure}
