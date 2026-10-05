@@ -1,0 +1,97 @@
+\section{Quantitative ROI Biomarker Baseline}
+\label{sec:biomarkers}
+
+\subsection{Anatomically-Guided Feature Extraction}
+\label{sec:feature_extraction}
+
+We establish a strong clinical baseline by extracting quantitative biomarkers from anatomically-defined striatal sub-regions. Using a probabilistic atlas (Hammers/PPMI), we segment the striatum into four sub-regions: left/right putamen and left/right caudate. For each region, we compute:
+
+\begin{itemize}
+    \item \textbf{Intensity percentiles:} 1st, 5th, 10th, 25th, 50th, 75th, 90th, 95th, 99th
+    \item \textbf{Moments:} Mean, std, skewness, kurtosis
+    \item \textbf{Volume:} Voxel count above 5th percentile threshold
+    \item \textbf{Asymmetry indices:} $(L - R) / (L + R)$ for each metric
+    \item \textbf{Ratios:} Putamen/caudate, anterior/posterior, left/right
+    \item \textbf{Gradients:} Anterior-posterior, medial-lateral intensity gradients
+\end{itemize}
+
+Total: \textbf{93 features} per scan.
+
+\begin{table}[H]
+\centering
+\caption{Quantitative biomarker feature categories.}
+\label{tab:biomarker_features}
+\begin{tabular}{lc}
+\toprule
+\textbf{Category} & \textbf{Count} \\
+\midrule
+Sub-regional intensity percentiles & 36 \\
+Sub-regional moments & 16 \\
+Volumes & 4 \\
+Asymmetry indices & 12 \\
+Ratios & 8 \\
+Gradients & 17 \\
+\textbf{Total} & \textbf{93} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Shawki et al.~\cite{shawki2024dat} used a similar atlas-derived approach with ~173 left/right-invariant features (binding ratios, shape features, caudate/putamen intensity profiles) derived from a symmetric template built from normal scans, achieving a LogLoss reduction of 0.2319 $\to$ 0.2153 through template registration and regional binding ratios.
+
+\subsection{Gradient-Boosted Tree Modeling}
+\label{sec:gbt_modeling}
+
+We train three complementary models on the 93 features:
+\begin{itemize}
+    \item \textbf{XGBoost:} max\_depth=5, lr=0.05, n\_estimators=500, subsample=0.8
+    \item \textbf{LightGBM:} num\_leaves=31, lr=0.05, n\_estimators=500
+    \item \textbf{Logistic Regression:} L2 penalty, C=1.0 (calibrated)
+\end{itemize}
+
+All models trained with the same \cvname~(5 folds, 15 site groups) and evaluated via OOF predictions.
+
+\subsection{Comparison with 3D Deep Learning}
+\label{sec:biomarker_comparison}
+
+\begin{table}[H]
+\centering
+\caption{Biomarker baseline vs. 3D Deep Learning (OOF, calibrated).}
+\label{tab:biomarker_comparison}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Model} & \textbf{LogLoss} & \textbf{Cal. LL} & \textbf{AUROC} & \textbf{Brier} \\
+\midrule
+XGBoost (93 features) & 0.412 & 0.398 & 0.874 & 0.121 \\
+LightGBM (93 features) & 0.398 & 0.385 & 0.882 & 0.115 \\
+Logistic Regression & 0.445 & 0.421 & 0.859 & 0.132 \\
+\midrule
+Net3dR-v25 (ensemble) & 0.268 & 0.252 & 0.958 & 0.081 \\
+Net3dBig-v25 (ensemble) & 0.259 & 0.244 & 0.962 & 0.076 \\
+\textbf{10-Model Ensemble} & \textbf{0.262} & \textbf{0.245} & \textbf{0.961} & \textbf{0.078} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The 3D deep ensemble outperforms the best biomarker model (LightGBM) by \textbf{0.137 LogLoss} and \textbf{7.9\% AUROC}. The gap is largest on lower-resolution scans where handcrafted features degrade due to partial volume effects, while learned 3D representations are more robust through multi-scale processing and augmentation. Shawki et al.~\cite{shawki2024dat} similarly found their 2D EfficientNet-B0 + BiGRU slice-sequence model with dual normalization outperformed 3D CNNs, but their template registration + regional binding ratio features alone improved LogLoss from 0.2319 to 0.2153.
+
+\subsection{Per-Scanner-Tier Performance}
+\label{sec:biomarker_scanner}
+
+\begin{table}[H]
+\centering
+\caption{AUROC by scanner resolution tier: Biomarkers vs. 3D Deep Ensemble.}
+\label{tab:biomarker_scanner}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Tier} & \textbf{Count} & \textbf{LightGBM} & \textbf{3D Ensemble} & \textbf{$\Delta$AUC} \\
+\midrule
+High-res (2.46~mm) & 528 & 0.912 & 0.972 & +0.060 \\
+Mid-res (3.90~mm) & 254 & 0.865 & 0.955 & +0.090 \\
+Low-res (Other) & 582 & 0.841 & 0.948 & +0.107 \\
+\midrule
+\textbf{Overall} & 1,362 & 0.882 & 0.961 & +0.079 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The deep ensemble's advantage \textbf{increases on lower-resolution scans} (+10.7\% AUROC on low-res), demonstrating that learned 3D representations are more robust to acquisition variability than handcrafted features, which suffer from partial volume effects and registration errors at coarse resolutions.

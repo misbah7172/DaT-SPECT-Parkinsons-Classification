@@ -1,0 +1,75 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Why Deeper Architecture Works for 3D Medical Imaging}
+\label{sec:why_deeper}
+
+The transition from 2 to 3 residual blocks + downsampling stages adds a third hierarchical level, enabling the network to capture features at three spatial scales that align with striatal anatomy:
+\begin{itemize}
+    \item \textbf{Stage 1 (40$^3$):} Local texture, edge detectors, voxel-level intensity patterns
+    \item \textbf{Stage 2 (20$^3$):} Striatal sub-region patterns -- putamen vs. caudate, anterior vs. posterior
+    \item \textbf{Stage 3 (10$^3$):} Global uptake asymmetry, whole-structure shape, left-right gradients
+\end{itemize}
+
+This mirrors the known pathophysiology: DaT-SPECT signal loss begins in posterior putamen, spreads to anterior putamen and caudate, with characteristic left-right asymmetry. The deeper hierarchy naturally captures this progression. Shawki et al.~\cite{shawki2024dat} found that a slice-sequence BiGRU with gated attention (preserving superior-inferior profile) outperformed 3D CNNs and slab averaging, suggesting the superior-inferior profile is critical -- our third hierarchical level captures this.
+
+\subsection{Scanner Heterogeneity Robustness}
+\label{sec:scanner_robustness}
+
+The largest Config C gains occur on lower-resolution scans (+2.3\% AUROC on 3.90~mm and other). This demonstrates:
+\begin{enumerate}
+    \item The deeper architecture learns resolution-invariant features through Mixup augmentation and multi-scale processing.
+    \item Coarse-to-fine alignment (rotation $\pm$5$^\circ$ + translation $\pm$4 voxels) is more effective when the network itself is robust to residual misalignment.
+    \item Per-volume z-score normalization prevents scanner-specific intensity distributions from biasing the model.
+\end{enumerate}
+
+Shawki et al.~\cite{shawki2024dat} found strong blur/noise augmentation (Buddenkotte \& Buchert 2024~\cite{buddenkotte2024augmentation}) reduced CNN error on unseen scanners from 0.3529 to 0.2716 LogLoss, making CNNs indifferent to camera resolution and noise. Manca~\cite{manca2024dat} showed random CV inflates AUROC by +0.10 vs grouped CV, and the head-centered crop fix (correcting a geometric-center crop defect affecting 530/1362 scans) delivered >100\% of its predicted gain, confirming that fixing data-correctness issues transfers better than model refinements.
+
+\subsection{Calibration for Clinical Decision Support}
+\label{sec:cal_clinical_discussion}
+
+The 57\% ECE reduction via Platt scaling is critical for clinical deployment:
+\begin{itemize}
+    \item \textbf{Risk stratification ($p > 0.75$):} Neurologist referral decisions require reliable high-confidence estimates
+    \item \textbf{Trial enrichment ($p > 0.90$):} Calibrated TP rate increases from 76.3\% to 82.4\%
+    \item \textbf{Longitudinal monitoring:} Probability changes over time track disease progression
+\end{itemize}
+
+Uncalibrated models exhibit overconfidence (ECE=0.0142), risking false certainty in borderline cases. Our calibrated probabilities maintain AUROC while providing reliable absolute risk estimates. Shawki et al.~\cite{shawki2024dat} and Paul Bd~\cite{paulbd2024dat} both measured calibration slope decay (1.036 $\to$ 0.85 $\to$ 0.74) and recommended shipping calibration brackets rather than fixing at in-distribution optimum.
+
+\subsection{Computational Efficiency on Consumer Hardware}
+\label{sec:compute}
+
+Training 1.3M-parameter 3D models on 4GB VRAM required careful engineering:
+\begin{itemize}
+    \item Gradient accumulation ($\times$3) $\to$ effective batch 24
+    \item Mixed precision (AMP) $\to$ 2$\times$ memory reduction
+    \item Per-volume loading $\to$ minimal CPU RAM
+    \item Early stopping (epoch 60--80) $\to$ avoids overfitting, saves time
+    \item $80^3$ crop $\to$ fits in VRAM; 96$^3$ OOM
+\end{itemize}
+
+This demonstrates that modern deep 3D CNNs are feasible on consumer hardware with proper engineering. Manca~\cite{manca2024dat} achieved competitive results (LogLoss 0.3008) with a CPU-only pipeline (~100h compute), demonstrating that careful engineering can compensate for hardware constraints.
+
+\subsection{Limitations}
+\label{sec:limitations}
+
+\begin{enumerate}
+    \item \textbf{Single tracer:} All scans use $^{123}$I-FP-CIT (DaTSCAN). Generalization to $^{99m}$Tc-TRODAT-1 or other tracers untested.
+    \item \textbf{Binary classification only:} Does not differentiate PD from atypical parkinsonism (MSA, PSP) which also show dopaminergic deficit.
+    \item \textbf{No clinical metadata:} Age, sex, disease duration, UPDRS scores could improve performance but were unavailable.
+    \item \textbf{Holdout test class shift:} 65\% positive vs 55\% training causes calibration mismatch on small test sets.
+    \item \textbf{No external validation:} All results on single dataset; independent multi-center validation needed.
+    \item \textbf{Inference time:} 10 models $\times$ 15 TTA = 150 forward passes ($\sim$8 sec/scan on RTX 3050 Ti). Distillation needed for real-time use.
+\end{enumerate}
+
+\subsection{Future Work}
+\label{sec:future}
+
+\begin{itemize}
+    \item \textbf{Model distillation:} Compress 10-model ensemble into 1-2 models via knowledge distillation for real-time inference.
+    \item \textbf{Multi-task learning:} Joint classification + SBR regression + striatal segmentation for interpretability.
+    \item \textbf{Domain adaptation:} Test on external datasets (PPMI, local hospitals) with adaptive normalization.
+    \item \textbf{Uncertainty quantification:} Monte Carlo dropout or deep ensembles for epistemic uncertainty.
+    \item \textbf{Longitudinal modeling:} Incorporate serial scans for progression prediction.
+\end{itemize}

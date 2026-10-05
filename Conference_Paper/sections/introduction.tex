@@ -1,0 +1,36 @@
+\section{Introduction}
+\label{sec:introduction}
+
+\noindent\textbf{The Multi-Center Deployment Gap.}
+Machine learning models for medical image classification have achieved remarkable performance on curated single-center datasets. However, translation to real-world clinical environments remains limited by a fundamental challenge: \textbf{multi-center scanner heterogeneity}. Hospitals and imaging centers employ diverse hardware (different vendors, field strengths, detector types), acquisition protocols (varying voxel sizes, matrix dimensions, slice thicknesses), and reconstruction algorithms. A model trained on data from one scanner often fails to generalize to another because it learns scanner-specific intensity distributions and background artifacts rather than true pathological biomarkers~\cite{esteban2020leakage,roberts2021common}. Recent work on the DaT-SPECT Parkinson's Disease dataset has empirically demonstrated this gap: Manca~\cite{manca2024dat} showed random cross-validation inflates AUROC by ~0.10 over grouped cross-validation across 131 scanner groups, while Shawki et al.~\cite{shawki2024dat} achieved 10th place (LogLoss 0.2760, AUROC 0.9551) with a pipeline emphasizing template registration and strong blur/noise augmentation for scanner invariance.
+
+\noindent\textbf{DaT-SPECT as a Case Study.}
+Dopamine transporter single-photon emission computed tomography (DaT-SPECT) visualizes the dopaminergic system and is a validated biomarker for Parkinson's disease (PD) and atypical parkinsonism~\cite{benamer2000dat,darcourt2010eanm}. Despite standardized acquisition guidelines from EANM/SNMMI~\cite{darcourt2010eanm}, substantial variability persists: voxel sizes range from 1.47--3.90~\voxelunit, matrix sizes from 128--256, and slice counts from 36--128 across clinical sites. This makes DaT-SPECT an ideal testbed for developing generalizable multi-center 3D classification frameworks.
+
+\noindent\textbf{Three Critical Barriers to Clinical Deployment.}
+\begin{enumerate}
+    \item \textbf{Scanner Heterogeneity:} Varying voxel resolutions and fields-of-view require spatial standardization that preserves anatomically critical structures while reducing memory footprint.
+    \item \textbf{Domain Leakage:} Scans from the same site share acquisition signatures. Naive random splitting leaks site-specific information, artificially inflating performance estimates by $\sim$0.15 AUROC~\cite{esteban2020leakage}. Manca~\cite{manca2024dat} empirically showed random CV inflates AUROC by +0.10 vs grouped CV across 131 scanner groups.
+    \item \textbf{Probability Calibration:} Raw neural network outputs are often overconfident~\cite{guo2017calibration}. Clinical decision-making (risk stratification, trial enrichment, longitudinal monitoring) requires well-calibrated probabilities, not just ranking performance. Shawki et al.~\cite{shawki2024dat} demonstrated calibration slope decays from 1.036 (in-distribution) to ~0.74 (out-of-distribution), recommending calibration brackets.
+\end{enumerate}
+
+\noindent\textbf{Our Contribution: A Generalized Blueprint.}
+We present a systematic, end-to-end framework for robust 3D medical image classification across heterogeneous scanners, demonstrated on a 1,362-scan DaT-SPECT cohort across 15 acquisition centers. Our contributions are:
+
+\begin{itemize}
+    \item \textbf{Stage 1 -- Spatial Standardization:} A universal preprocessing pipeline: RAS reorientation $\to$ 2.0~\voxelunit~isotropic resampling $\to$ center-of-mass aligned $80^3$ bounding box cropping $\to$ per-volume z-score normalization. This reduces 66 unique voxel sizes/shapes to a uniform representation while preserving striatal signal.
+    
+    \item \textbf{Stage 2 -- Leakage-Free Validation:} We formalize \cvname~(\cvname) by acquisition site (15 groups), proving that naive random CV inflates AUROC by $\sim$0.15. Group CV provides unbiased generalization estimates to unseen sites.
+    
+    \item \textbf{Stage 3 -- Model Comparison:} We benchmark end-to-end 3D deep ResNets (Net3dR-v25: 845K params; Net3dBig-v25: 1.3M params; 3 residual blocks + 3 downsampling stages) against quantitative ROI biomarkers (93 SBR/asymmetry features + gradient-boosted trees). The deep ensemble outperforms biomarkers, with largest gains on lower-resolution scans.
+    
+    \item \textbf{Stage 4 -- Regularization \& Augmentation:} Mixup ($\alpha=0.2$), label smoothing ($\epsilon=0.05$), cosine annealing, gradient accumulation (effective batch 24 on 4GB VRAM), and 15-view test-time augmentation (1 base + 6 translations + 8 rotations).
+    
+    \item \textbf{Stage 5 -- Probability Calibration:} Platt scaling ($a=1.45, b=0.20$) on out-of-fold logits reduces Expected Calibration Error by 57\% (0.0142 $\to$ 0.0061) and LogLoss from 0.2618 to \textbf{0.2453} while preserving AUROC (0.9610).
+\end{itemize}
+
+\noindent\textbf{Actionable Guidelines.}
+We distill our findings into \textbf{five actionable rules} for medical ML practitioners (Section~\ref{sec:guidelines}), providing a practical checklist for deploying 3D classifiers in multi-center clinical environments.
+
+\noindent\textbf{Paper Organization.}
+Section~\ref{sec:framework} presents the 4-stage methodological framework. Sections~\ref{sec:spatial}--\ref{sec:calibration} detail each stage. Section~\ref{sec:experiments} describes the experimental setup. Section~\ref{sec:results} reports comprehensive results. Section~\ref{sec:ablation} provides ablation studies. Section~\ref{sec:guidelines} presents the five actionable rules. Section~\ref{sec:discussion} discusses limitations and future work. Section~\ref{sec:conclusion} concludes.
