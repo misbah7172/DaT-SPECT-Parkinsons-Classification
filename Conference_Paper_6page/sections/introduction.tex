@@ -1,7 +1,0 @@
-\section{Introduction}
-\label{sec:introduction}
-
-Multi-center 3D medical imaging faces three deployment barriers: (1) \textbf{scanner heterogeneity}---voxel sizes span 1.47--3.90~mm$^3$ across 15 sites; (2) \textbf{domain leakage}---naive random CV inflates AUROC by $\sim$0.15 by memorizing site-specific signatures~\cite{esteban2020leakage,manca2024dat}; (3) \textbf{miscalibration}---raw neural outputs are overconfident (ECE=0.0142), risking unsafe clinical decisions~\cite{guo2017calibration,shawki2024dat,paulbd2024dat}.
-
-We address these on a 1,362-scan DaT-SPECT Parkinson's dataset (15 sites, 66 voxel sizes). Contributions: (1) Spatial standardization to isotropic 2.0~mm$^3$ $80^3$ volumes with per-volume z-score normalization; (2) Site-aware group CV (\cvname) by acquisition site (15 groups); (3) Deep 3D ResNet ensemble (Config C: 10 models, 3 residual blocks, 845K/1.3M params) vs. 93-feature ROI biomarkers; (4) Mixup ($\alpha=0.2$), label smoothing ($\epsilon=0.05$), cosine annealing, 15-view TTA; (3) Platt calibration on OOF logits. Config C achieves OOF LogLoss=0.2453 (calibrated), AUROC=0.9610 (18.1\% LogLoss reduction, +2.1\% AUROC over baseline), with largest gains on low-resolution scans (+2.3\% AUROC). Five actionable rules for robust multi-center 3D classification are distilled.
-\end{input>

@@ -1,7 +1,0 @@
-\section{Conclusion}
-\label{sec:conclusion}
-
-We presented a leakage-free framework for multi-center 3D DaT-SPECT classification demonstrated on 1,362 scans across 15 sites. Our Config C (10-model deep ResNet ensemble, 3 residual blocks, Mixup/LS/cosine/accum, 15-view TTA, Platt calibration) achieves OOF LogLoss=0.2453 (cal.) and AUROC=0.9610, an 18.1\% LogLoss reduction and 2.1\% AUROC gain over CNN-only baseline, with largest gains on low-resolution scans (+2.3\% AUROC). All improvements statistically significant ($p<0.05$).
-
-Key contributions: (1) Spatial standardization pipeline reducing 66 voxel sizes to 2.0~mm$^3$ $80^3$; (2) Site-aware group CV preventing leakage (naive CV inflates AUC +0.15); (3) Deep ResNet ensemble (3 blocks, 10 models) outperforming ROI biomarkers; (2) Mixup+LS+15-view TTA regularization; (5) Platt calibration reducing ECE 57\%. Five actionable rules for multi-center 3D classification: (1) Spatial uniformity via isotropic resampling; (2) Leakage audit via group CV; (3) Dimensional economy via COM cropping; (4) 3D regularization via Mixup+TTA; (5) Calibration-first via Platt scaling on OOF logits. Code and weights available for reproducibility.
-\end{input>

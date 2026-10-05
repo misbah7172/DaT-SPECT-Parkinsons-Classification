@@ -1,49 +1,18 @@
-\section{Experimental Setup}
+\section{Experiments \& Benchmark Setup}
 \label{sec:experiments}
 
-\subsection{Hardware and Software Environment}
-\label{sec:hardware}
+\subsection{Multi-Site Dataset Characteristics}
+Our benchmark evaluates 1,362 3D volumetric scans across 15 acquisition centers. Voxel dimensions span 66 unique resolutions, dominated by $2.46~\text{mm}^3$ ($38.8\%$) and $3.90~\text{mm}^3$ ($18.6\%$). Class distribution is balanced ($54.8\%$ positive, $45.2\%$ negative).
 
-\begin{itemize}
-    \item \textbf{GPU:} NVIDIA RTX 3050 Ti Laptop (4 GB VRAM)
-    \item \textbf{Framework:} PyTorch 2.6.0 + CUDA 12.4
-    \item \textbf{Libraries:} MONAI 1.6.0, scikit-learn 1.8.0, nibabel, scipy, XGBoost 2.0, LightGBM 3.3
-    \item \textbf{OS:} Windows 11 / WSL2 compatible
-\end{itemize}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/voxel_distribution.png}
+    \caption{Distribution of raw voxel resolutions across acquisition sites.}
+    \label{fig:voxel_dist}
+\end{figure}
 
-Training time: 1.5--2.0 hours per model on 4GB VRAM with gradient accumulation. Total compute: $\sim$150 GPU-hours for 50 models (5 folds $\times$ 10 seeds).
-
-\subsection{Model Configurations for Comparison}
-\label{sec:configurations}
-
-We evaluate three progressively enhanced model configurations to isolate the contribution of each architectural and training innovation:
-
-\begin{description}
-    \item[\textbf{Config A -- Hybrid Baseline (CNN + Biomarkers):}] 6 CNN models (3 Net3dR + 3 Net3dBig, 280K/294K params) + 4 gradient-boosted tree models on 93 quantitative SBR/asymmetry features. Weighted ensemble blending. Performance: Test LogLoss=0.3997, AUROC=0.9163. Represents a clinical biomarker + shallow CNN hybrid approach.
-    
-    \item[\textbf{Config B -- CNN-only Intermediate:}] 6 CNN models (same architecture as Config A but trained with per-volume z-score normalization, full 80$^3$ input volume, rotation alignment). OOF: LogLoss=0.2996, AUROC=0.9411. Removes biomarker features; isolates the effect of spatial standardization and full-volume training.
-    
-    \item[\textbf{Config C -- Deep ResNet Ensemble (Proposed Framework):}] 10 CNN models (5 Net3dR-v25 + 5 Net3dBig-v25, 845K/1.3M params). Architecture extended to 3 residual blocks + 3 downsampling stages. Trained with Mixup ($\alpha=0.2$), Label Smoothing ($\epsilon=0.05$), Cosine Annealing, 5 seeds per architecture. OOF: LogLoss=0.2618 (0.2453 calibrated), AUROC=0.9610.
-\end{description}
-
-This progressive comparison isolates the marginal contribution of: (1) spatial standardization + full-volume training (A$\to$B), (2) architecture depth + advanced regularization + ensemble diversity (B$\to$C).
+\subsection{Quantitative ROI Biomarker Baseline}
+As a clinical baseline, we extract 186 quantitative ROI features including percentile intensity thresholds ($p95, p97, p99$), sub-regional anatomical splits, asymmetry indices, and background-normalized ratios. Features are classified using an ensemble of XGBoost, LightGBM, ExtraTrees, and Logistic Regression under identical 5-fold site-aware CV.
 
 \subsection{Evaluation Metrics}
-\label{sec:metrics}
-
-\begin{itemize}
-    \item \textbf{Primary:} Binary LogLoss (cross-entropy), Area Under ROC Curve (AUROC)
-    \item \textbf{Secondary:} Brier Score, Expected Calibration Error (ECE), Maximum Calibration Error (MCE)
-    \item \textbf{Per-group:} Metrics per scanner resolution tier (high/mid/low)
-    \item \textbf{Validation:} Out-of-fold (OOF) predictions aggregated across all 5 folds
-\end{itemize}
-
-\subsection{Statistical Significance Testing}
-\label{sec:statistical}
-
-\begin{itemize}
-    \item \textbf{AUROC:} DeLong test for correlated ROC curves
-    \item \textbf{LogLoss:} Paired t-test across 5 folds
-    \item \textbf{Confidence intervals:} Bootstrap (1,000 resamples) at 95\%
-    \item \textbf{Significance threshold:} $p < 0.05$
-\end{itemize}
+Models are evaluated using out-of-fold (OOF) metrics: LogLoss ($\LL$), Area Under ROC Curve ($\AUC$), Brier Score, Expected Calibration Error (ECE, 10 bins), and Maximum Calibration Error (MCE).
