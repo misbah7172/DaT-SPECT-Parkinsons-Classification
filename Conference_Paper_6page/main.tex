@@ -1,0 +1,59 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{makecell}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{adjustbox}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{balance}
+
+\newcommand{\cvname}{Site-Aware Group CV}
+\newcommand{\voxelunit}{\ensuremath{\text{mm}^3}}
+\newcommand{\AUC}{\text{AUC}}
+\newcommand{\LL}{\mathcal{L}_{\text{LogLoss}}}
+
+\begin{document}
+
+\title{A Robust Blueprint for 3D Neuroimaging Classification Across Heterogeneous Scanners: Spatial Standardization, Leakage-Free Validation, and Probability Calibration}
+
+\author{
+\IEEEauthorblockN{Misbah Uddin}
+\IEEEauthorblockA{
+Independent Researcher\\
+Dhaka, Bangladesh\\
+misbah7172@example.com
+}
+}
+
+\maketitle
+
+\begin{abstract}
+Multi-center 3D medical imaging suffers from scanner heterogeneity (66 voxel sizes across 15 sites) and domain leakage from naive cross-validation. We present a leakage-free framework for DaT-SPECT Parkinson's classification combining: (1) spatial standardization to isotropic 2.0~mm$^3$ $80^3$ volumes; (2) site-aware group cross-validation preventing scanner-signature leakage; (3) 3D deep ResNet ensemble (Config C: 10 models, 3 residual blocks, 845K/1.3M params) versus quantitative ROI biomarkers (93 features); (4) Mixup ($\alpha=0.2$), label smoothing ($\epsilon=0.05$), and 15-view test-time augmentation; (5) Platt calibration on out-of-fold logits. Config C achieves OOF LogLoss=0.2453 (calibrated) and AUROC=0.9610, an 18.1\% LogLoss reduction over CNN-only baseline. Largest gains on low-resolution scans (+2.3\% AUROC). Platt scaling reduces ECE by 57\%. We distill five actionable rules for robust multi-center 3D classification.
+\end{abstract}
+
+\begin{IEEEkeywords}
+3D medical image classification, multi-center scanner heterogeneity, domain leakage, probability calibration, 3D deep learning, test-time augmentation, clinical deployment
+\end{IEEEkeywords}
+
+\input{sections/introduction}
+\input{sections/methodology}
+\input{sections/experiments}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

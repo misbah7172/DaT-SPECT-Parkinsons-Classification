@@ -1,0 +1,15 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\textbf{Why Deeper Works:} Three hierarchical levels capture striatal anatomy: local texture (40$^3$), sub-region patterns (20$^3$), global asymmetry (10$^3$). Matches pathophysiology: signal loss starts in posterior putamen, spreads anteriorly with left-right asymmetry.
+
+\textbf{Scanner Robustness:} Largest gains on low-res scans (+2.3\% AUROC). Deeper architecture learns resolution-invariant features via Mixup and multi-scale processing. Shawki et al.~\cite{shawki2024dat} showed blur/noise augmentation reduces CNN error on unseen scanners 0.3529$\to$0.2716. Manca~\cite{manca2024dat} showed head-centered crop fix (fixing geometric-center defect on 530/1362 scans) delivered >100\% predicted gain, confirming data-correctness fixes transfer better than model refinements.
+
+\textbf{Calibration for Clinical Use:} 57\% ECE reduction critical for risk stratification ($p>0.75$), trial enrichment ($p>0.90$: TP 76.3\%$\to$82.4\%), longitudinal monitoring. Shawki~\cite{shawki2024dat} and Paul Bd~\cite{paulbd2024dat} measured calibration slope decay (1.036$\to$0.85$\to$0.74) and recommend calibration brackets.
+
+\textbf{Compute Efficiency:} 1.3M-parameter models on 4GB VRAM via gradient accumulation ($\times$3 $\to$ batch 24), AMP, per-volume loading, early stopping (ep 60-80), $80^3$ crop. Manca achieved competitive results (LL=0.3008) CPU-only (~100h).
+
+\textbf{Limitations:} Single tracer ($^{123}$I-FP-CIT); binary only (no MSA/PSP differentiation); no clinical metadata; holdout class shift (65\% vs 55\%; no external validation; inference ~8 sec/scan (10$\times$15 TTA), distillation needed.
+
+\textbf{Future Work:} Model distillation; multi-task (classification + SBR + segmentation); external validation (PPMI); uncertainty quantification; longitudinal modeling.
+\end{input>
