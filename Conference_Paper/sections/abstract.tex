@@ -1,0 +1,11 @@
+\begin{abstract}
+\noindent\textbf{Background:} Multi-center 3D medical imaging datasets suffer from scanner disparities, resolution heterogeneity, and site-dependent artifacts that impede clinical model deployment. 
+
+\noindent\textbf{Objective:} We establish a standardized, leakage-free framework for 3D medical image classification comparing 3D deep neural networks against quantitative anatomical biomarkers, and optimizing probability calibration for clinical decision support.
+
+\noindent\textbf{Methods:} We evaluate our framework on a multi-site cohort of 1,362 3D volumetric scans across 15 acquisition centers with 66 unique voxel resolutions ($1.47\text{--}3.90~\text{mm}^3$). The pipeline comprises: (1) spatial standardization via RAS reorientation, $2.0~\text{mm}^3$ isotropic resampling, and center-of-mass aligned $80^3$ grid cropping; (2) leakage-free validation via site-aware stratified group cross-validation; (3) 3D deep ResNet ensembles (845K--1.3M parameters) vs quantitative ROI biomarkers with gradient-boosted trees; (4) regularization via Mixup ($\alpha=0.2$), label smoothing ($\epsilon=0.05$), and 15-view test-time augmentation (TTA); (5) post-hoc Platt scaling calibration.
+
+\noindent\textbf{Results:} Naive cross-validation inflates AUROC by $\sim$0.15 due to scanner-signature leakage. Site-aware group cross-validation reveals true generalizable performance. Our calibrated 3D deep ResNet ensemble achieves OOF LogLoss = 0.2453 and AUROC = 0.9610. Platt scaling reduces Expected Calibration Error by 57\% ($0.0142 \to 0.0061$) while preserving AUROC.
+
+\noindent\textbf{Conclusion:} We present five actionable rules for multi-center 3D medical image classification: spatial uniformity, site-aware validation, dimensional economy, 3D regularization, and calibration-first deployment.
+\end{abstract}
